@@ -1,0 +1,134 @@
+# LIOS Portfolio State — SYNTHETIC EXAMPLE
+# Version: 3.0
+# Generated: 2026-01-01
+#
+# ⚠️  SYNTHETIC — NOT A RECOMMENDATION
+# All tickers below are fake (EXAMPLE-A through EXAMPLE-D). Dollar amounts
+# are round synthetic figures. This file exists to demonstrate the LIOS
+# framework end-to-end against a runnable portfolio. Copy it, swap in your
+# real state, then delete this banner.
+#
+# See state.schema.yaml for the empty contract with TODO placeholders.
+
+date: "2026-01-01"
+version: "3.0"
+
+nlv: 1000000.00
+ibkr_nlv: 999995.00
+ibkr_gpv: 950000.00
+source: "Synthetic example data"
+
+cash:
+  balance: 275500.00          # NLV target $1M − Σ position MV $724,500
+  strategic_reserve: 50000.00
+  kelly_reserve: 25500.00
+  dca_undeployed: 0.00
+  free_tactical: 200000.00
+
+positions:
+  # ── Sleeve A: Core Compounding ──
+  - ticker: EXAMPLE-A1
+    shares: 1000.0
+    avg_cost: 90.00
+    sleeve: A
+    market_price: 100.00
+    market_value: 100000.00
+
+  - ticker: EXAMPLE-A2
+    shares: 500.0
+    avg_cost: 180.00
+    sleeve: A
+    market_price: 200.00
+    market_value: 100000.00
+
+  - ticker: EXAMPLE-A3
+    shares: 1000.0
+    avg_cost: 95.00
+    sleeve: A
+    market_price: 100.00
+    market_value: 100000.00
+
+  # ── Sleeve B: Proven Alpha ──
+  - ticker: EXAMPLE-B1
+    shares: 1000.0
+    avg_cost: 150.00
+    sleeve: B
+    market_price: 180.00
+    market_value: 180000.00
+
+  - ticker: EXAMPLE-B2
+    shares: 200.0
+    avg_cost: 400.00
+    sleeve: B
+    market_price: 500.00
+    market_value: 100000.00
+
+  - ticker: EXAMPLE-B3
+    shares: 400.0
+    avg_cost: 200.00
+    sleeve: B
+    market_price: 250.00
+    market_value: 100000.00
+
+  # ── Sleeve D: Frontier Innovation ──
+  - ticker: EXAMPLE-D1
+    shares: 100.0
+    avg_cost: 100.00
+    sleeve: D
+    stage: 3
+    market_price: 120.00
+    market_value: 12000.00
+
+  - ticker: EXAMPLE-D2
+    shares: 200.0
+    avg_cost: 50.00
+    sleeve: D
+    stage: 3
+    market_price: 60.00
+    market_value: 12000.00
+
+  - ticker: EXAMPLE-D3
+    shares: 300.0
+    avg_cost: 30.00
+    sleeve: D
+    stage: 2
+    market_price: 35.00
+    market_value: 10500.00
+
+sleeve_a:
+  target_base_pct: 75
+  allocation:
+    - ticker: EXAMPLE-A1
+      target_pct: 50
+      role: "All-world equity (developed + emerging)"
+    - ticker: EXAMPLE-A2
+      target_pct: 30
+      role: "S&P 500 concentration"
+    - ticker: EXAMPLE-A3
+      target_pct: 20
+      role: "Short-duration Treasury ETF — cash-like yield buffer"
+  permanently_exited:
+    - EXAMPLE-EX1   # synthetic exited name (re-entry requires major bump)
+
+sleeve_b_caps:
+  - ticker: EXAMPLE-B1
+    cap_pct: 20
+    note: "Cap = both buying-pause AND trim trigger"
+  - ticker: EXAMPLE-B2
+    cap_pct: 5
+    note: ""
+  - ticker: EXAMPLE-B3
+    cap_pct: 6
+    note: ""
+
+sleeve_c:
+  target_pct_of_abc: 5
+
+sleeve_d:
+  target_pct_of_total_nlv: 5
+
+monthly_dca: 1500
+
+portfolio_total: 1000000.00
+reconciliation_delta: 0.00
+ibkr_nlv_gap: -5.00

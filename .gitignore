@@ -1,0 +1,17 @@
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor / IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Session state (not part of repo — internal runtime only)
+.omo/
+.codegraph/
+
+# Build / temp
+*.tmp
+*.bak
