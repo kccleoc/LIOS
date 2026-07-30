@@ -5,7 +5,16 @@ LIOS follows semver: major bumps only on Locked Decision changes.
 
 ---
 
-## [3.0.0] — 2026-07-30 — Current
+## [3.0.1] — 2026-07-31
+
+### Patch — Flow-UP infrastructure
+
+- Added `bin/push-framework.sh` (clone-in-tempdir, PRIVATE-FORK-aware, symmetric with pull-framework.sh).
+- Added ADR-004 (Flow-UP design — clone-in-tempdir rationale, PRIVATE-FORK inversion rule, tag-safety refusals, post-push auto-re-pin). Closes the Flow-UNKNOWN gap documented in ADR-003 §B-negative.
+- Root README.md + AGENTS.md for LIOS-mine workspace re-orientation.
+- Decision: ADR-004.
+
+## [3.0.0] — 2026-07-30
 
 ### Major — Open-Source Bifurcation
 
