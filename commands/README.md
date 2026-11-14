@@ -8,8 +8,8 @@ full Health Check. Each file is paste-ready.
 ## How to Use
 
 1. Open a new AI chat session
-2. Paste `lios/v3.0.md` first (full initialization)
-3. Wait for the AI to acknowledge LIOS v3.0
+2. Paste `lios/v4.1.md` first (full initialization)
+3. Wait for the AI to acknowledge LIOS v4.1
 4. Paste your **live state file** and your snapshot
 5. Paste the desired command file from this directory
 

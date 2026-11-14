@@ -1,4 +1,4 @@
-# LIOS v3.0 Event Pipeline
+# LIOS v4.1 Event Pipeline
 
 **Version:** 3.0
 **Last updated:** 2026-11-14
@@ -191,6 +191,6 @@ Agents SHALL NOT:
 
 ---
 
-*This pipeline is the official LIOS v3.0 workflow. All steps reference
+*This pipeline is the official LIOS v4.1 workflow. All steps reference
 `portfolio/state/portfolio.yaml` as the canonical source. No step independently
 calculates positions.*

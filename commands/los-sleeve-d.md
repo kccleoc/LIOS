@@ -1,4 +1,4 @@
-# `/los-sleeve-d` — RETIRED in LIOS v3.0
+# `/los-sleeve-d` — RETIRED in LIOS v4.1
 
 **Status:** Superseded. Do not use.
 

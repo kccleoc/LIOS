@@ -22,7 +22,7 @@ are the same number** — there is one calculation, not two.
 ---
 
 ```
-Produce the LIOS v3.0 gap / drift report.
+Produce the LIOS v4.1 gap / drift report.
 
 State:
 <paste state.yaml here>

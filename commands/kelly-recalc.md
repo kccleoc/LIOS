@@ -1,4 +1,4 @@
-# `/kelly-recalc` — RETIRED in LIOS v3.0
+# `/kelly-recalc` — RETIRED in LIOS v4.1
 
 **Status:** Superseded. Do not use.
 

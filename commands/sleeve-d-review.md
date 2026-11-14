@@ -1,4 +1,4 @@
-# `/sleeve-d-review` — RETIRED in LIOS v3.0
+# `/sleeve-d-review` — RETIRED in LIOS v4.1
 
 **Status:** Superseded. Do not use.
 

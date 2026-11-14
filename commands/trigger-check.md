@@ -1,4 +1,4 @@
-> **RETIRED in LIOS v3.0.** L6 (Strategic Reserve) is repealed. The trigger
+> **RETIRED in LIOS v4.1.** L6 (Strategic Reserve) is repealed. The trigger
 > ladder is replaced by the rebalance band in `core/deployment.md` Rule 2.
 > This file is retained for historical reference only.
 

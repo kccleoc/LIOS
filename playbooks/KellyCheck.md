@@ -1,4 +1,4 @@
-# Playbook: KellyCheck — RETIRED in LIOS v3.0
+# Playbook: KellyCheck — RETIRED in LIOS v4.1
 
 **Status:** Superseded. Do not use.
 

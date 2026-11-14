@@ -1,7 +1,7 @@
-> **v3.0 conformance note.** Written for LIOS v2.x. In v3.0 the sleeves are
+> **v4.1 conformance note.** Written for LIOS v2.x. In v4.1 the sleeves are
 > **A/B/C/D/Z** measured against NLV, the Kelly Factor is replaced by the
 > **Regime Index**, and the Strategic Reserve is repealed. Where this file
-> and `lios/v3.0.md` disagree, v3.0 wins.
+> and `lios/v4.1.md` disagree, v3.0 wins.
 
 
 # `/portfolio-print` — Canonical Portfolio Export
@@ -52,7 +52,7 @@ Obtain from your connected brokerage (IBKR or equivalent):
 
 ### Step 2 — Confirm cash
 
-LIOS v3.0 has one cash sleeve. Do not ask for sub-buckets.
+LIOS v4.1 has one cash sleeve. Do not ask for sub-buckets.
 
 ```
 Cash (Sleeve Z): $____

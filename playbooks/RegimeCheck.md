@@ -5,7 +5,7 @@ Score the Regime Index and record the band. This is a reporting workflow. It has
 no effect on allocation.
 
 ## Prerequisites
-- LIOS v3.0 acknowledged
+- LIOS v4.1 acknowledged
 - Live state file loaded
 - Prior cycle's scores for comparison
 

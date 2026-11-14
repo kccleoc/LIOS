@@ -1,4 +1,4 @@
-> RETIRED in LIOS v3.0 — see scores/Regime.md
+> RETIRED in LIOS v4.1 — see scores/Regime.md
 
 # Kelly Model — RETIRED
 

@@ -1,4 +1,4 @@
-> **RETIRED in LIOS v3.0.** L6 (Strategic Reserve) is repealed and no reserve
+> **RETIRED in LIOS v4.1.** L6 (Strategic Reserve) is repealed and no reserve
 > exists. Discretionary deployments are governed by `core/deployment.md` Rule 3.
 > This file is retained for historical reference only.
 

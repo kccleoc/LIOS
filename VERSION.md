@@ -1,2 +1,2 @@
-4.1.0
-LIOS v3.0 methodology, framework release 4.1.0. Constitution reduced from 20 live rules to 8 Portfolio Rules (P1-P8); method split into constitution/method.md and editable without a version bump. Two operations only: Top-up and Rebalance. Per-sleeve bands replace the single absolute 8pp band. Rebalance direction limited (never A -> D/Z). Sleeve B exits only via a 30-day P5 review. Regime index demoted to dashboard with zero mechanical effect. L19 and L21 merged or deleted; Rule 3 deleted. ADR-006, RFC-004.
+4.1.1
+Methodology and framework now share one version number: LIOS v4.1. lios/v3.0.md renamed to lios/v4.1.md (same content, divergent label retired). Constitution: eight Portfolio Rules P1-P8. Two operations: Top-up and Rebalance. Per-sleeve bands. Regime index is a dashboard. ADR-006, RFC-004.

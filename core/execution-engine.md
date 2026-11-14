@@ -1,7 +1,7 @@
-> **v3.0 conformance note.** Written for LIOS v2.x. In v3.0 the sleeves are
+> **v4.1 conformance note.** Written for LIOS v2.x. In v4.1 the sleeves are
 > **A/B/C/D/Z** measured against NLV, the Kelly Factor is replaced by the
 > **Regime Index**, and the Strategic Reserve is repealed. Where this file
-> and `lios/v3.0.md` disagree, v3.0 wins.
+> and `lios/v4.1.md` disagree, v4.1 wins.
 
 
 > **Source:** Extracted verbatim from LIOS v1.5. Method content, consolidated in constitution/method.md in v4.1. Describes the PCI execution layer — how LOS, LFS and sleeves integrate.
@@ -264,7 +264,7 @@ Execution
 - A candidate with LOS < 70 does not advance to LFS evaluation.
 - The research-layer method is unaffected.
 
-### Deployment (v3.0 — replaces Kelly Factor)
+### Deployment (v4.1 — replaces Kelly Factor)
 - The Kelly Model and its Factor are repealed. Deployment is governed by
   `core/deployment.md`: **Top-up** (monthly, gap-driven, never sells) and
   **Rebalance** (on band or cap breach, sells, direction-limited by P4).

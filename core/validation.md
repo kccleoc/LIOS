@@ -1,4 +1,4 @@
-# LIOS v3.0 Auto-Validation Rules
+# LIOS v4.1 Auto-Validation Rules
 
 **Version:** 3.0
 **Last updated:** 2026-11-14

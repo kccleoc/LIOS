@@ -1,4 +1,4 @@
-# Strategic Reserve — RETIRED in LIOS v3.0
+# Strategic Reserve — RETIRED in LIOS v4.1
 
 **Status:** Superseded. Do not use.
 

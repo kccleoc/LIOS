@@ -31,7 +31,7 @@ The system is executed in parallel across any LLM. Every session reads the same 
 
 | What you want to do | Go to |
 |---|---|
-| Initialize a new AI session | [`lios/v3.0.md`](./lios/v3.0.md) — paste the entire file |
+| Initialize a new AI session | [`lios/v4.1.md`](./lios/v4.1.md) — paste the entire file |
 | Set up your own portfolio | Copy [`examples/state.example.yaml`](./examples/state.example.yaml) → rename → swap tickers → save as your `state.yaml` |
 | Understand the state contract | [`examples/state.schema.yaml`](./examples/state.schema.yaml) — every field with `# TODO` descriptions |
 | See a demo snapshot | [`examples/snapshots/2026-01-01_portfolio.md`](./examples/snapshots/2026-01-01_portfolio.md) — synthetic example |
@@ -68,9 +68,9 @@ Your `state.yaml` defines:
 - `monthly_dca` — your monthly contribution
 
 ### 4. Paste the init prompt + your snapshot
-Open a fresh AI chat, paste `lios/v3.0.md` as the first message,
+Open a fresh AI chat, paste `lios/v4.1.md` as the first message,
 then paste your snapshot (generated or hand-crafted from your state).
-The AI acknowledges LIOS v3.0 and loads your holdings. Then paste any
+The AI acknowledges LIOS v4.1 and loads your holdings. Then paste any
 command from `commands/`.
 
 ### 5. Keep your personal data private
@@ -115,9 +115,9 @@ LIOS/                              ← public framework repo
 │   ├── state.example.yaml         Fully synthetic populated demo
 │   └── snapshots/                 Generated synthetic snapshot
 ├── lios/                          Paste-ready init prompts
-│   ├── v3.0.md                    Current init (v3.0)
-│   ├── v2.1.md                    Frozen history — not referenced by v3.0
-│   ├── v2.0.md                    Frozen history — not referenced by v3.0
+│   ├── v4.1.md                    Current init (v4.1)
+│   ├── v2.1.md                    Frozen history — not referenced by v4.1
+│   ├── v2.0.md                    Frozen history — not referenced by v4.1
 │   └── components/                Modular reference docs
 ├── commands/                      Paste-ready command library
 ├── scores/                        Quick-reference score methodology cards
@@ -160,8 +160,8 @@ act.
 ## LIOS Playbook
 
 ### Play 1 — Initialize (start every new session here)
-Open any AI chat and paste `lios/v3.0.md` as the **first message**.
-The AI acknowledges LIOS v3.0. Without this, the AI has no framework,
+Open any AI chat and paste `lios/v4.1.md` as the **first message**.
+The AI acknowledges LIOS v4.1. Without this, the AI has no framework,
 no rules, and will hallucinate.
 
 ### Play 2 — Load Your Portfolio
@@ -248,4 +248,4 @@ See [`CHANGELOG.md`](./CHANGELOG.md) for the full history.
 
 ## Owner
 
-Created by Lc / Leo — self-directed investor. LIOS v3.0 is open-source (MIT); use the framework for your own portfolio, adapt it, contribute back. This repo contains no financial advice and no real portfolio data.
+Created by Lc / Leo — self-directed investor. LIOS v4.1 is open-source (MIT); use the framework for your own portfolio, adapt it, contribute back. This repo contains no financial advice and no real portfolio data.

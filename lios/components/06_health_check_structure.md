@@ -1,6 +1,6 @@
 # 06 · Health Check Structure (16 Sections)
 
-**Component version:** v3.0
+**Component version:** v4.1
 **Status:** Constitutional (P8) — structure; method — content
 **Last updated:** 2026-11-14
 

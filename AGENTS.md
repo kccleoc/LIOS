@@ -53,7 +53,7 @@ or build artifacts — there are none. Adjust expectations.
 |---|---|---|
 | Constitutional | `constitution/*.md` — rarely changed, requires major bump | `constitution/constitution.md` |
 | Core framework | `core/*.md` — rarely changed, requires major bump | `core/deployment.md` |
-| Init prompts | `lios/vX.Y.md` — paste-ready initialization files | `lios/v3.0.md` |
+| Init prompts | `lios/vX.Y.md` — paste-ready initialization files | `lios/v4.1.md` |
 | Components | `lios/components/*.md` — modular reference docs | `lios/components/02_capital_architecture.md` |
 | Commands | `commands/*.md` — paste-ready prompts | `commands/health-check.md` |
 | Scores | `scores/*.md` — quick reference score methodology | `scores/LOS.md` |
@@ -67,7 +67,7 @@ or build artifacts — there are none. Adjust expectations.
 
 **Never rename or delete `lios/v1.X.md` or `archive/v1.X/` files** — they are the
 historical record (preserved in `kccleoc/LIOS-archive`, frozen). This public repo
-carries `lios/v3.0.md` as current, with `v2.0.md` and `v2.1.md` frozen and
+carries `lios/v4.1.md` as current, with `v2.0.md` and `v2.1.md` frozen and
 unreferenced. CHANGELOG.md marks supersession.
 
 ---

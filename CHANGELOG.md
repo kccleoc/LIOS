@@ -5,6 +5,29 @@ LIOS follows semver: major bumps only on Locked Decision changes.
 
 ---
 
+## [4.1.1] — 2026-11-15
+
+### Patch — one version number for methodology and framework
+
+`lios/v3.0.md` renamed to **`lios/v4.1.md`** (same content). From 4.1.0 onward the
+methodology carries the framework release number, so there is exactly one answer
+to "what version of LIOS am I running."
+
+**Why.** The prompt file was named v3.0 during the constitutional rewrite while
+the repo version kept incrementing independently — 4.0.0, 4.0.1, 4.0.2, 4.1.0 —
+because a repo major bump is required whenever the constitution changes. Two
+numbering systems for one concept, which is the same class of confusion the 4.1.0
+release removed from the rule set.
+
+**Changed.** 24 references updated across the framework and the commands.
+`VERSION.md`, the README tree and `AGENTS.md` now point at `lios/v4.1.md`.
+
+**Unchanged.** `lios/v2.0.md` and `lios/v2.1.md` stay frozen as history. The
+4.1.0 entry above still says `lios/v3.0.md` because that was the filename at the
+time.
+
+---
+
 ## [4.1.0] — 2026-11-15
 
 ### Major — Constitution reduced from 20 rules to 8

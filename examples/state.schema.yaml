@@ -1,4 +1,4 @@
-# LIOS v3.0 — State Contract
+# LIOS v4.1 — State Contract
 # Every field marked # TODO must be populated by the user.
 # This file is the schema. Copy examples/state.example.yaml for a populated demo.
 # NEVER commit a real state file to the public framework repo.

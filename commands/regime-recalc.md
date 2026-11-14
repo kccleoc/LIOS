@@ -22,7 +22,7 @@ no target, and gates no operation.
 ---
 
 ```
-Recompute the LIOS v3.0 Regime Index.
+Recompute the LIOS v4.1 Regime Index.
 
 State:
 <paste state.yaml here>
