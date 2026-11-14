@@ -5,6 +5,19 @@ LIOS follows semver: major bumps only on Locked Decision changes.
 
 ---
 
+## [4.1.2] — 2026-11-15
+
+### Patch — remove the renamed file
+
+`framework/lios/v3.0.md` deleted. It was renamed to `lios/v4.1.md` in 4.1.1, but
+`bin/push-framework.sh` copies changed files and cannot propagate deletions, so
+the old path survived upstream with stale content. Removed directly on the public
+repo and in the vendored copy.
+
+The repo now carries exactly one current init prompt: `lios/v4.1.md`.
+
+---
+
 ## [4.1.1] — 2026-11-15
 
 ### Patch — one version number for methodology and framework
