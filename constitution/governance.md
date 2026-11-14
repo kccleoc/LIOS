@@ -26,7 +26,7 @@ modified across versions**.
 |---|---|---|
 | Five-layer capital architecture (A/B/C/D/SR) | Sleeves, funding sources | **No.** Requires major version bump + IC vote. |
 | Sleeve A targets (form, L2) | Sleeve A holds permanent broad-index-ETF allocation with fixed within-Sleeve weights summing to 100% | **No.** (form); values for specific ETFs/weights live in `state.yaml: sleeve_a.allocation` |
-| Sleeve B per-position caps (form, L3) | Each Sleeve B holding carries a binding per-position NLV cap (buying-pause + trim) | **No.** (form); ticker+cap values live in `state.yaml: sleeve_b_caps` |
+| Sleeve B per-position caps (form, L3) | Each Sleeve B holding carries a binding per-position NLV cap (buying-pause + trim) | **No.** (form); ticker+cap values live in `state.yaml: sleeves.b.caps` |
 | Kelly Model v2.0 five dimensions | The five dimensions and weights | **No.** |
 | Replacement Index metrics | Three metrics and weights | **No.** |
 | SR funding/deployment rules | Whitelist funding sources, deployment hierarchy | **No.** |
@@ -39,9 +39,9 @@ modified across versions**.
 |---|---|---|
 | "Hold a Sleeve B name at current weight" | A specific position recommendation | **Yes.** Re-evaluate every cycle. |
 | "Trim a Sleeve B name at $X" | A specific trim recommendation | **Yes.** |
-| "Deploy SR into a Sleeve B name" | A specific SR deployment | **Yes.** Subject to current triggers. |
-| "Sleeve D surgery: exit `<TICKER-A>`, enter `<TICKER-B>`" | A specific surgery | **Yes.** Re-validate via Replacement Index. |
-| "Kelly Factor this month = 0.50" | A specific Kelly call | **Yes.** Recalculate when conditions change. |
+| "Deploy a sleeve because its gap is positive" | A specific deployment | **Yes.** Mechanical under Rule 1. |
+| "Sleeve C surgery: exit `<TICKER-A>`, enter `<TICKER-B>`" | A specific surgery | **Yes.** Re-validate via Replacement Index. |
+| "BBI band this month = Cautious" | A specific regime reading | **Yes.** Recalculate when conditions change. |
 
 ---
 
@@ -87,9 +87,9 @@ All recommendations produced by LIOS are advisory. The IC has final decision aut
 |---|---|
 | Modify Locked Decisions | **No** (requires major version bump) |
 | Approve/reject trade recommendations | **Yes** |
-| Approve SR deployment | **Yes** (sole authority) |
+| Approve a Rule 3 discretionary event | **Yes** (≤1/quarter, ≤3% NLV, from D or Z) |
 | Add new Sleeve B names | **Yes** (rare) |
-| Modify Kelly Factor this cycle | **Yes** |
+| Re-score the BBI this cycle | **Yes** |
 | Run Replacement Index surgery | **Yes** (must follow framework) |
 | Override a framework output with rationale | **Yes** (must document why) |
 

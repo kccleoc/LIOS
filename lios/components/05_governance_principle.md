@@ -30,7 +30,7 @@ modified across versions**.
 |---|---|---|
 | Five-layer capital architecture (A/B/C/D/SR) | Sleeves, funding sources | **No.** Requires major version bump + IC vote. |
 | Sleeve A targets (form, L2) | Sleeve A holds permanent broad-index-ETF allocation with fixed within-Sleeve weights summing to 100% | **No.** (form); values for specific ETFs/weights live in `state.yaml: sleeve_a.allocation` |
-| Sleeve B per-position caps (form, L3) | Each Sleeve B holding carries a binding per-position NLV cap (buying-pause + trim) | **No.** (form); ticker+cap values live in `state.yaml: sleeve_b_caps` |
+| Sleeve B per-position caps (form, L3) | Each Sleeve B holding carries a binding per-position NLV cap (buying-pause + trim) | **No.** (form); ticker+cap values live in `state.yaml: sleeves.b.caps` |
 | Kelly Model v2.0 five dimensions | The five dimensions and weights | **No.** |
 | Replacement Index metrics | Three metrics and weights | **No.** |
 | SR funding/deployment rules | Whitelist funding sources, deployment hierarchy | **No.** |

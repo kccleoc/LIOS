@@ -34,6 +34,7 @@ Every command respects:
 | [`lfs.md`](./lfs.md) | Portfolio-fit evaluation | — |
 | [`los-lfs.md`](./los-lfs.md) | Combined decision matrix | — |
 | [`portfolio-rotation.md`](./portfolio-rotation.md) | Sleeve C rotation review | — |
+| [`sleeve-c-review.md`](./sleeve-c-review.md) | Sleeve C detail review | `sleeve-d-review` |
 | [`replacement-candidates.md`](./replacement-candidates.md) | Replacement Index screen | — |
 
 ## Retired
@@ -43,6 +44,7 @@ Every command respects:
 | `kelly-recalc.md` | Retired | `regime-recalc.md` |
 | `sr-rank.md` | Retired (L6 repealed) | `core/deployment.md` Rule 2/3 |
 | `trigger-check.md` | Retired (L6 repealed) | `core/deployment.md` Rule 2 |
+| `sleeve-d-review.md` | Retired (sleeve letters changed) | `sleeve-c-review.md` |
 
 Retired files are retained for historical reference and carry a banner. Do not
 invoke them.

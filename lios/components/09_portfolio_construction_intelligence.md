@@ -256,10 +256,13 @@ Execution
 - A candidate with LOS < 70 does not advance to LFS evaluation.
 - v1.4 L11–L14 locked decisions unaffected.
 
-### Kelly (v1.3 — unchanged)
-- Kelly v2.0 (L4) unchanged. Kelly still decides **how much**.
-- LFS informs **priority ranking** among LOS-qualified candidates but does not directly affect Kelly Factor.
-- When multiple LOS-qualified candidates compete for capital, higher LFS should receive capital first.
+### Deployment (v3.0 — replaces Kelly Factor)
+- Kelly Model v2.0 and its Factor are repealed (L4). Sizing is gap-driven:
+  `core/deployment.md` Rule 1.
+- LFS informs **priority ranking** among LOS-qualified candidates. It does not
+  size the contribution.
+- When multiple LOS-qualified candidates compete for capital, higher LFS receives
+  capital first.
 
 ### Sleeves (v1.3 — unchanged)
 - Sleeve targets and caps (L2, L3) unchanged.

@@ -1,156 +1,193 @@
-> **v3.0 conformance note.** Written for LIOS v2.x. In v3.0 the sleeves are
-> **A/B/C/D/Z** measured against NLV, the Kelly Factor is replaced by the
-> **Bull–Bear Index**, and the Strategic Reserve is repealed. Where this file
-> and `lios/v3.0.md` disagree, v3.0 wins.
+# LIOS v3.0 Auto-Validation Rules
 
+**Version:** 3.0
+**Last updated:** 2026-11-14
 
-# LIOS Auto-Validation Rules
-# Version: 2.1.0
-#
-# ⚠️  Every report generation runs these 9 checks against portfolio/state/portfolio.yaml.
-# If ANY check fails, generation is ABORTED.
+Every report generation runs these **9 checks** against
+`portfolio/state/portfolio.yaml`. If any check fails, generation is aborted.
 
 ## Validation Pipeline
 
-All checks execute in order. Each check reads from `portfolio/state/portfolio.yaml`.
-Failure at any check halts the pipeline and reports the failure with details.
+All checks execute in order. Each reads from `portfolio/state/portfolio.yaml`.
+A failure halts the pipeline and reports the failure with details.
 
 ---
 
-### Check 1: Position Count Validation
+### Check 1 · Position Count
 
-**What it verifies:** The number of positions matches the expected count.
+**Verifies:** the number of positions matches the last known valid count.
 
-**Source:** `portfolio/state/portfolio.yaml` → `positions` array length
+**Source:** `positions` array length
 
-**Failure condition:** Position count differs from last known valid count (or is zero).
+**Failure:** count differs from last valid count, or is zero.
 
-**Abort behavior:** Stop generation. Report: "Validation failed: unexpected position count (got X, expected Y)."
-
----
-
-### Check 2: Share Count Validation
-
-**What it verifies:** Every position has a positive, non-zero share count.
-
-**Source:** `portfolio/state/portfolio.yaml` → `positions[].shares`
-
-**Failure condition:** Any position has shares ≤ 0 or shares is not a number.
-
-**Abort behavior:** Stop generation. Report: "Validation failed: invalid share count for [TICKER]."
+**Abort:** "Validation failed: unexpected position count (got X, expected Y)."
 
 ---
 
-### Check 3: Average Cost Validation
+### Check 2 · Share Count
 
-**What it verifies:** Every position has a valid average cost.
+**Verifies:** every position has a positive, numeric share count.
 
-**Source:** `portfolio/state/portfolio.yaml` → `positions[].avg_cost`
+**Source:** `positions[].shares`
 
-**Failure condition:** Any position has avg_cost ≤ 0 or avg_cost is not a number.
+**Failure:** any `shares ≤ 0`, or not a number.
 
-**Abort behavior:** Stop generation. Report: "Validation failed: invalid average cost for [TICKER]."
-
----
-
-### Check 4: Sleeve Validation
-
-**What it verifies:** Every position is assigned to a valid sleeve.
-
-**Source:** `portfolio/state/portfolio.yaml` → `positions[].sleeve`
-
-**Failure condition:** Any position has a sleeve value not in {A, B, C, D}.
-
-**Abort behavior:** Stop generation. Report: "Validation failed: invalid sleeve assignment for [TICKER]."
+**Abort:** "Validation failed: invalid share count for [TICKER]."
 
 ---
 
-### Check 5: Cash Validation
+### Check 3 · Average Cost
 
-**What it verifies:** Cash balance is consistent with sub-buckets.
+**Verifies:** every position has a positive, numeric average cost.
 
-**Source:** `portfolio/state/portfolio.yaml` → `cash`
+**Source:** `positions[].avg_cost`
 
-**Failure condition:** 
-- `cash.balance` is negative
-- `cash.free_tactical` ≠ `cash.balance` − `cash.strategic_reserve` − `cash.kelly_reserve` − `cash.dca_undeployed`
+**Failure:** any `avg_cost ≤ 0`, or not a number.
 
-**Abort behavior:** Stop generation. Report: "Validation failed: cash sub-buckets do not reconcile with total balance."
+**Abort:** "Validation failed: invalid average cost for [TICKER]."
 
 ---
 
-### Check 6: Strategic Reserve Validation
+### Check 4 · Sleeve Assignment
 
-**What it verifies:** SR value is valid and non-negative.
+**Verifies:** every position is assigned to a valid v3 sleeve.
 
-**Source:** `portfolio/state/portfolio.yaml` → `cash.strategic_reserve`
+**Source:** `positions[].sleeve`
 
-**Failure condition:** SR is negative or not a number.
+**Failure:** any sleeve value not in `{a, b, c, d, z}`.
 
-**Abort behavior:** Stop generation. Report: "Validation failed: invalid Strategic Reserve value."
+**Abort:** "Validation failed: invalid sleeve assignment for [TICKER]."
 
----
-
-### Check 7: Kelly Reserve Validation
-
-**What it verifies:** KR value is valid and non-negative.
-
-**Source:** `portfolio/state/portfolio.yaml` → `cash.kelly_reserve`
-
-**Failure condition:** KR is negative or not a number.
-
-**Abort behavior:** Stop generation. Report: "Validation failed: invalid Kelly Reserve value."
+**Note:** the v3 sleeve set is **A, B, C, D, Z**. `sleeve: sr` is invalid —
+the Strategic Reserve was repealed in v3.0.
 
 ---
 
-### Check 8: Market Value Validation
+### Check 5 · Sleeve Targets Sum to 100
 
-**What it verifies:** Every position has a valid, positive market value.
+**Verifies:** target percentages are internally consistent and match the age
+band in `glidepath`.
 
-**Source:** `portfolio/state/portfolio.yaml` → `positions[].market_value`
+**Source:** `sleeves.a.target_pct` … `sleeves.z.target_pct`, `glidepath.bands`
 
-**Failure condition:** Any position has market_value ≤ 0 or market_value is not a number.
+**Failure:**
+- targets do not sum to 100 (±0.1)
+- the target set does not equal the glidepath band for the investor's age
+- `A + B + C` falls outside `constraints.risky_min_pct` … `risky_max_pct`
 
-**Abort behavior:** Stop generation. Report: "Validation failed: invalid market value for [TICKER]."
+**Abort:** "Validation failed: sleeve targets sum to X, expected 100."
 
 ---
 
-### Check 9: Portfolio Total vs NLV Reconciliation
+### Check 6 · Sleeve Risk-Factor Purity
 
-**What it verifies:** Authoritative NLV equals the sum of position market values plus cash (internal consistency). IBKR Reported NLV is reference only.
+**Verifies:** each sleeve holds instruments consistent with its definition.
 
-**Source:** `portfolio/state/portfolio.yaml` → `nlv`, `portfolio_total`, optional `ibkr_nlv`
+**Source:** `positions[]` joined with instrument metadata
 
-**NLV policy (v2.1.2):**
-- `nlv` MUST be set to `Σ(position.market_value) + cash.balance` (computed / real-time).
-- `ibkr_nlv` (if present) is IBKR Reported NLV — reference only; API/time lag is expected.
-- All LIOS calculations use `nlv`, never `ibkr_nlv`.
+**Failure:**
+- a cash-like instrument (duration < 1y) assigned to sleeve `a` or `d`
+- a duration-bearing instrument (duration > 3y) assigned to sleeve `z`
+- an individual equity assigned to sleeve `a`
+- a broad-index ETF assigned to sleeve `b`
 
-**Failure condition:** |nlv − portfolio_total| > $1.00. No exceptions. No soft-pass.
+**Abort:** "Validation failed: [TICKER] violates the risk-factor definition of
+sleeve [X]."
 
-**Non-failure (INFO only):** |ibkr_nlv − nlv| may exceed $1.00. Log the gap in validation detail. Do not abort.
+**Note:** this is the check that prevents the v2.x error of booking a 0–1y
+Treasury fund as a bond sleeve. Duration is the test, not the issuer.
 
-**Abort behavior:** Stop generation. Report: "RECONCILIATION FAILED. Delta: $X.XX. See reports/reconciliation.md." Do not generate any further reports until state is corrected and all 9 checks pass.
+---
+
+### Check 7 · Bull–Bear Index Validity
+
+**Verifies:** the index is computed, complete and consistent with its band.
+
+**Source:** `bbi.*`
+
+**Failure:**
+- any dimension missing, or outside 0–100
+- `weighted` does not equal `0.30·MV + 0.25·PV + 0.20·ML + 0.15·T + 0.10·O`
+  (within 0.1)
+- `band` does not match the weighted value
+  (0–35 Risk-On / 36–50 Constructive / 51–65 Cautious / 66–100 Defensive)
+- more than one band step versus the prior cycle
+
+**Abort:** "Validation failed: BBI inconsistent (weighted X, band Y)."
+
+**Note:** a second band step in the same quarter is a rule violation (L21), not
+a data error. Report it as a compliance failure, not an abort if the data is
+otherwise sound.
+
+---
+
+### Check 8 · Market Value
+
+**Verifies:** every position has a valid, positive market value.
+
+**Source:** `positions[].market_value`
+
+**Failure:** any `market_value ≤ 0`, or not a number.
+
+**Abort:** "Validation failed: invalid market value for [TICKER]."
+
+---
+
+### Check 9 · NLV Reconciliation
+
+**Verifies:** authoritative NLV equals the sum of position market values plus
+cash.
+
+**Source:** `nlv`, `portfolio_total`, optional `ibkr_nlv`
+
+**NLV policy (v3.0):**
+- `nlv` must equal `Σ(positions[].market_value) + cash.balance` — computed
+- `ibkr_nlv`, if present, is broker-reported and is **reference only**
+- every LIOS calculation uses `nlv`, never `ibkr_nlv`
+- there is one denominator. `ABC` does not exist in v3.0
+
+**Failure:** `|nlv − portfolio_total| > $1.00`. No exceptions, no soft pass.
+
+**Non-failure (INFO only):** `|ibkr_nlv − nlv|` may exceed $1.00. Log the gap, do
+not abort.
+
+**Abort:** "RECONCILIATION FAILED. Delta: $X.XX. Do not generate reports until
+state is corrected and all 9 checks pass."
 
 ---
 
 ## Validation Log
 
-Every successful or failed validation is recorded in `logs/validation/` with:
-- Timestamp
-- Snapshot reference
-- NLV
-- Portfolio total
-- Reconciliation delta
-- Validation status (PASSED / FAILED)
-- Per-check results with details
+Every run records, in `logs/validation/`:
+
+- timestamp
+- snapshot reference
+- NLV and portfolio total
+- reconciliation delta
+- validation status (PASSED / FAILED)
+- per-check results with details
 
 ## Agent Instructions
 
-Before generating ANY report:
+Before generating any report:
+
 1. Load `portfolio/state/portfolio.yaml`
 2. Run all 9 checks in order
-3. If any check fails → abort, record in `logs/validation/`, report failure
-4. If all checks pass → record in `logs/validation/`, proceed with generation
+3. If any check fails → abort, record in `logs/validation/`, report the failure
+4. If all pass → record, proceed
 
 Never generate a report from an unvalidated or failed state.
+
+---
+
+## Removed in v3.0
+
+| v2.x check | Fate |
+|---|---|
+| Strategic Reserve non-negative | Deleted — no SR exists |
+| Kelly Reserve non-negative | Deleted — no KR exists |
+| Cash sub-bucket reconciliation (SR/KR/TC/DCA) | Deleted — one cash balance, one Z sleeve |
+
+Replaced by Check 5 (target consistency) and Check 6 (risk-factor purity), which
+catch the class of error the old cash checks could not see.

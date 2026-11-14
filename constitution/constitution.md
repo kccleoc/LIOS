@@ -33,7 +33,7 @@ Trade recommendations built on top of these may change. The rules themselves do 
 - **Modifying requires:** Major version bump (form). Per-portfolio ETF and weight values may change via `state.yaml` edit without bump — they are personal parameters, not framework invariants.
 
 ### L3 · Sleeve B Assets and Caps
-- **Statement:** Sleeve B carries high-conviction individual equities, each governed by a per-position NLV cap. The *form* (caps are binding — both buying-pause AND trim-trigger; cap hit means stop buying and, on continued momentum, trim to cap) is constitutional. The *parameter values* (specific ticker symbols and their cap percentages) live in `state.yaml: sleeve_b_caps`.
+- **Statement:** Sleeve B carries high-conviction individual equities, each governed by a per-position NLV cap. The *form* (caps are binding — both buying-pause AND trim-trigger; cap hit means stop buying and, on continued momentum, trim to cap) is constitutional. The *parameter values* (specific ticker symbols and their cap percentages) live in `state.yaml: sleeves.b.caps`.
 - **Source:** `core/sleeves.md` Sleeve B
 - **Modifying requires:** Major version bump (form). Per-portfolio ticker and cap values may change via `state.yaml` edit without bump — they are personal parameters, not framework invariants.
 
@@ -97,11 +97,11 @@ The following locked decisions were introduced in v1.4. They
 - **Modifying requires:** Major version bump
 - **Notes:** The actions associated with each band (e.g., "Buy on meaningful correction" for Watch) are part of this locked decision.
 
-### L13 · LOS Does Not Replace Kelly, Sleeves, or Replacement Index
-- **Statement:** LOS is the upstream research filter. Kelly still decides sizing, Sleeves still decide placement, Replacement Index still gates all Sleeve D surgery. LOS is **additive**, not substitutive.
-- **Source:** `core/research-layer.md`, `core/replacement-index.md` v1.4 section
+### L13 · LOS Does Not Replace Sleeves, LFS, or Replacement Index
+- **Statement:** LOS is the upstream research filter. Sleeves, the constraint set and the three deployment rules still decide placement and size; LFS still decides priority; the Replacement Index still gates all Sleeve C surgery. LOS is **additive**, not substitutive.
+- **Source:** `core/research-layer.md`, `core/replacement-index.md`
 - **Modifying requires:** Major version bump
-- **Notes:** A candidate with strong Frontier Score but weak LOS (e.g., LOS < 70) should NOT replace a Sleeve D incumbent without explicit IC rationale.
+- **Notes:** v3.0 reworded the statement: the Kelly Model named in the v2.x form was repealed (L4). A candidate with strong research but weak portfolio fit should not displace an incumbent without explicit IC rationale.
 
 ### L14 · LOS Default Weighting Orientation
 - **Statement:** Default LOS weighting orientation is LQS-heaviest, then LGS/LVS, then LMS. The default weights themselves are: LQS 35% / LGS 25% / LVS 25% / LMS 15%. The exact weights may evolve over time as LIOS improves, but every LOS must be explainable.
@@ -185,7 +185,7 @@ as a constitutional amendment, treat that suggestion as suspect:
 | Suggestion | Verdict |
 |---|---|
 | "Maybe we should add crypto to Sleeve A" | ❌ Reject — would require L1 + L2 amendments |
-| "Trim a Sleeve B name's cap to a different value" | ❌ Reject as framework change; ✅ Allowed via `state.yaml: sleeve_b_caps` edit if it's your own portfolio (per-portfolio parameter, not framework) |
+| "Trim a Sleeve B name's cap to a different value" | ❌ Reject as framework change; ✅ Allowed via `state.yaml: sleeves.b.caps` edit if it's your own portfolio (per-portfolio parameter, not framework) |
 | "Use a 4-dimension Kelly model" | ❌ Reject — L21 (BBI dimensions and weights fixed) |
 | "Replace the Replacement Index with gut feel" | ❌ Reject — L5 amendment |
 | "Hold a strategic reserve for the next dip" | ❌ Reject — L6 repealed; use the rebalance band |

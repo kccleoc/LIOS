@@ -39,9 +39,9 @@ LOS — Is the company exceptional?
     ↓
 LFS — Does it improve the portfolio?
     ↓
-Kelly — How much capital?
+Deployment rules — How much capital, and to which sleeve?
     ↓
-Sleeves — Where does it belong?
+Sleeves — Where does it live?
     ↓
 Execution
 ```
@@ -247,7 +247,7 @@ Generate LFS
   ↓
 Evaluate Decision Matrix (LOS + LFS)
   ↓
-Kelly sizing
+Deployment plan (Rule 1 — gap-driven)
   ↓
 Sleeve assignment
   ↓
@@ -264,10 +264,14 @@ Execution
 - A candidate with LOS < 70 does not advance to LFS evaluation.
 - v1.4 L11–L14 locked decisions unaffected.
 
-### Kelly (v1.3 — unchanged)
-- Kelly v2.0 (L4) unchanged. Kelly still decides **how much**.
-- LFS informs **priority ranking** among LOS-qualified candidates but does not directly affect Kelly Factor.
-- When multiple LOS-qualified candidates compete for capital, higher LFS should receive capital first.
+### Deployment (v3.0 — replaces Kelly Factor)
+- The Kelly Model and its Factor are repealed (L4). Deployment is governed by
+  `core/deployment.md`: Rule 1 (DCA waterfall, gap-driven, never sells),
+  Rule 2 (rebalance band), Rule 3 (discretionary channel).
+- LFS informs **priority ranking** among LOS-qualified candidates. It does not
+  size the contribution — the gap does.
+- When multiple LOS-qualified candidates compete for capital, higher LFS receives
+  capital first.
 
 ### Sleeves (v1.3 — unchanged)
 - Sleeve targets and caps (L2, L3) unchanged.

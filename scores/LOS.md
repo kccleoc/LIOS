@@ -62,7 +62,7 @@ Confidence: <XX>%
 ```
 Discover Candidate → Generate LOS → LOS < 70 → STOP
                                     → LOS 70-79 → WATCHLIST
-                                    → LOS 80+ → DEEP RESEARCH → Kelly → Execution
+                                    → LOS 80+ → DEEP RESEARCH → Deployment → Execution
 ```
 
 Core: core/research-layer.md | Playbook: playbooks/ResearchWorkflow.md

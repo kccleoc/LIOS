@@ -10,7 +10,7 @@
 
 Walk one or more new idea(s) through the standard LIOS candidate
 research workflow: Discover → LOS → Watchlist / Deep Research →
-Kelly → Execution.
+Deployment → Execution.
 
 ## When to use
 
@@ -49,7 +49,7 @@ Step 2: For LOS 80+ candidates, additional checks:
   - Catalyst: what's the entry trigger?
 
 Step 3: For LOS 80+ candidates passing Step 2:
-  - Recommend: "Run /kelly-recalc for sizing decision"
+  - Recommend: "Run /regime-recalc for sizing decision"
   - Or: "Hold for IC review"
 
 Output format:
@@ -78,9 +78,9 @@ Per-candidate workflow status + next-step directives.
 
 | Candidate | LOS | Band | Workflow Step | Action | Confidence |
 |---|---:|---|---|---|---|
-| AVGO | 85 | Buy | Deep Research | Sleeve B fit; run /kelly-recalc | 75% |
-| TSLA | 58 | Pass | STOP | Do not pursue | 90% |
-| SNOW | 78 | Watch | Watchlist | Add to los-watchlist | 70% |
+| EXAMPLE-T2 | 85 | Buy | Deep Research | Sleeve B fit; run /regime-recalc | 75% |
+| EXAMPLE-T1 | 58 | Pass | STOP | Do not pursue | 90% |
+| EXAMPLE-T3 | 78 | Watch | Watchlist | Add to los-watchlist | 70% |
 | XYZ (quantum) | 82 | Buy | Deep Research | Sleeve D Stage 1 candidate; needs RI check | 65% |
 
 ## Discipline reminders

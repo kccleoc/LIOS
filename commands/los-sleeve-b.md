@@ -64,7 +64,7 @@ Per-name Sleeve B LOS review with cap-relative action recommendations.
 | EXAMPLE-B2 | 200.00 | $100,000 | 17.00% | 5% | −$95,000 | 87 | Buy | **Trim** | Currently over 5% cap — trim to cap |
 | EXAMPLE-B3 | 400.00 | $100,000 | 12.00% | 6% | −$40,000 | 91 | Elite | **Trim** | Currently over 6% cap — trim to cap |
 
-**Verdict**: EXAMPLE-B1 near cap — discipline test. EXAMPLE-B2 and EXAMPLE-B3 over cap — trim recommended. Re-add only when within `state.yaml: sleeve_b_caps`.
+**Verdict**: EXAMPLE-B1 near cap — discipline test. EXAMPLE-B2 and EXAMPLE-B3 over cap — trim recommended. Re-add only when within `state.yaml: sleeves.b.caps`.
 
 Confidence: 82%.
 

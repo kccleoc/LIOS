@@ -1,79 +1,88 @@
-# `/drift-check` — Sleeve Drift Audit
+# `/drift-check` — Gap & Drift Report
 
 ## Purpose
 
-Quantify how far each sleeve has drifted from its targets and
-recommend rebalance actions if drift exceeds thresholds.
+Report the distance between each sleeve and its target. In v3.0 **gap and drift
+are the same number** — there is one calculation, not two.
 
 ## When to use
 
-- **Weekly** as a fast situational read
-- After any sleeve rebalance
-- After Sleeve D surgery
-- Before any IC decision
+- Monthly, before the DCA
+- After any trade or large price move
+- Before invoking Rule 2
 
-## Inputs required
+## Inputs
 
-Live portfolio snapshot only.
+1. `portfolio/state/portfolio.yaml`
+2. Sleeve targets from the glidepath band for the current age
+3. `constraints.rebalance_band_pct` (default 8)
 
 ## Command
 
 ---
 
 ```
-Run a LIOS drift check on my portfolio.
+Produce the LIOS v3.0 gap / drift report.
 
-Snapshot:
-<paste live snapshot here>
+State:
+<paste state.yaml here>
 
-Output a drift table per sleeve:
-- Sleeve
-- Target (%)
-- Actual (%)
-- Drift ($, always first)
-- Drift (%)
-- Action needed
+One denominator only: NLV. There is no ABC base, no Strategic Reserve line,
+no Kelly Reserve line.
 
-Thresholds:
-- < 2% from target → no action
-- 2-5% → flag for next cycle
-- > 5% → recommend rebalance or trim
+For each sleeve in A, B, C, D, Z:
+  value ($ and % of NLV)
+  target ($ and % of NLV)
+  gap ($) = target $ − value $
+  gap (pp) = target % − actual %
+  band status: inside / breach (± the rebalance band)
 
-For Sleeve A: per-holding drift (per `state.yaml: positions` filtered to sleeve: A) against A-base targets.
-For Sleeve B: per-name check against `state.yaml: sleeve_b_caps`.
-For Sleeve D: per-name check against D target + per-name caps if any.
-For Sleeve C: actual % vs `state.yaml: sleeve_c.target_pct_of_abc` of (A+B+C) target.
-For SR: balance + funded-by-source compliance check (verify
-         it was NOT funded from DCA / Sleeve A sales / Kelly Reserve).
+Then:
+1. Confirm Σ gaps = 0
+2. Name every sleeve that breaches the band
+3. If any breach: state that Rule 2 is triggered and give the proceed sizes
+   (sell overweight to target, buy underweight pro-rata, Z never below floor)
+4. Within-A weight drift against the within-A allocation
+5. Within-B slot drift against the equal-weight slot bands
 
 Rules:
-- Dollar amounts always first, percentages second.
-- Explicit directives (Rebalance / Hold / Trim) with Confidence %.
-- Flag any Drift Check that would require modifying a Locked Decision.
+- Dollars first, percentages second
+- Gap and drift are the same number — do not compute them twice
+- Definitions: a 0–1y Treasury instrument is Z, never A or D
+- Explicit directive per sleeve: no action / flag / rebalance
+- Confidence % on the rebalance recommendation
 
 Begin.
 ```
 
 ---
 
-## What you get back
+## Definitions
 
-A drift table + rebalance directives. Fast — usually under 5 minutes.
+```
+G_s = w_s × (NLV + DCA) − V_s
+```
 
-## Example output shape
+Positive = underweight. Negative = overweight.
 
-| Sleeve | Target | Actual | Drift ($) | Drift (%) | Action | Confidence |
-|---|---|---|---|---|---|---|
-| A (of A-base) | 100% | 100% | $0 | 0% | Hold | 99% |
-| A: EXAMPLE-A1 | 50% | 51.2% | +$234 | +1.2% | Hold | 95% |
-| A: EXAMPLE-A2 | 30% | 28.9% | −$213 | −1.1% | Hold | 95% |
-| A: EXAMPLE-A3 | 20% | 19.9% | −$21 | −0.1% | Hold | 99% |
-| B: EXAMPLE-B1 (cap) | ≤20% | 17.0% | OK | OK | Hold | 99% |
-| C (of A+B+C) | ~5% | 4.9% | −$50 | −0.1% | Hold | 95% |
-| D (of NLV) | 5% | 3.8% | −$2,419 | −1.2% | Hold | 90% |
-| SR (existence check) | n/a | $X,XXX | n/a | n/a | Funded-by-source: ✅ | n/a |
+| Sleeve | Definition |
+|---|---|
+| A | Broad-index ETFs only |
+| B | Individual equities, 1–4, equal weight at entry |
+| C | Satellite / rotation, winner-weighted, ceiling 7% |
+| D | Duration > 3y, hedged |
+| Z | Duration ≈ 0, floor 3%, ceiling 8% |
+
+## Thresholds
+
+| Gap | Action |
+|---|---|
+| Inside the band | none |
+| Band breach (default 8pp) | Rule 2 rebalance |
+| D +25% relative to target | Rule 2 rebalance |
 
 ## Related
 
-- See `../lios/components/02_capital_architecture.md` — target definitions
-- See `../lios/components/07_locked_decisions.md` — L2, L3 are the binding targets/caps
+- `../core/deployment.md`
+- `../core/sleeves.md`
+- `../commands/health-check.md` §2

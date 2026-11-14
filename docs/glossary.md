@@ -17,7 +17,7 @@ If momentum continues, escalate to trim trigger.
 ## C
 
 ### Cap (Sleeve B)
-**Definition:** Maximum % of NLV a Sleeve B name may occupy. Caps are binding — both buying-pause AND trim triggers. The *form* (caps are binding) is constitutional per Locked Decision L3. The *parameter values* (specific tickers and their cap percentages) live in `state.yaml: sleeve_b_caps`.
+**Definition:** Maximum % of NLV a Sleeve B name may occupy. Caps are binding — both buying-pause AND trim triggers. The *form* (caps are binding) is constitutional per Locked Decision L3. The *parameter values* (specific tickers and their cap percentages) live in `state.yaml: sleeves.b.caps`.
 **Used in:** Locked Decision L3, `02_capital_architecture.md` Sleeve B
 
 ### Candidate
@@ -366,7 +366,7 @@ See `07_locked_decisions.md`, `09_portfolio_construction_intelligence.md`.
 
 ### Locked Decision parameters
 **Definition:** The bound values referenced by a Locked Decision form — the portfolio-local content that varies per user. Examples: the specific ticker+cap pairs that populate L3's form (e.g., `<TICKER>` at 20% NLV, etc.), the specific ETF tickers and weights that populate L2's form. Live in `state.yaml` under the v3.0 bifurcation.
-**Used in:** ADR-003 §C; `state.yaml: sleeve_a.allocation`, `state.yaml: sleeve_b_caps`, `state.yaml: sleeve_a.permanently_exited`
+**Used in:** ADR-003 §C; `state.yaml: sleeve_a.allocation`, `state.yaml: sleeves.b.caps`, `state.yaml: sleeve_a.permanently_exited`
 ---
 
 # v3.0 — Additions and Supersessions

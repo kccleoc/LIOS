@@ -15,20 +15,24 @@ or build artifacts — there are none. Adjust expectations.
 - **No commit without explicit user request.** Lc has a strict
   no-auto-commit rule. Stage freely (`git add`), but never run
   `git commit` or `git push` unless explicitly asked.
-- **Locked Decisions L1–L18 are constitutional** (see
+- **Locked Decisions L1–L23 are constitutional** (see
   `constitution/constitution.md`). Do not propose changes
-  that violate them without flagging as a major version bump
-  (v3.0+).
-  - **L2 form:** "Sleeve A has permanent target allocation" — constitutional.
-    ETF tickers+weights live in `state.yaml: sleeve_a.allocation` (personal parameters).
-  - **L3 form:** "Sleeve B per-position NLV caps are binding" — constitutional.
-    Ticker+cap values live in `state.yaml: sleeve_b_caps` (personal parameters).
-  - **L7:** removed in v3.0 (was Leo-specific exited-name discipline, not
-    framework invariant). L-number gapped per no-renumber rule. Concept lives in
-    `state.yaml: sleeve_a.permanently_exited`.
+  that violate them without flagging as a major version bump.
+  - **L2 form:** "Sleeve A has a permanent target allocation of broad-index ETFs
+    at fixed within-sleeve weights" — constitutional. ETF tickers+weights live in
+    `state.yaml: sleeves.a.allocation` (personal parameters).
+  - **L3 form:** "Sleeve B per-position caps are binding" — constitutional.
+    Ticker+cap values live in `state.yaml: sleeve_b.caps` (personal parameters).
+  - **L4:** repealed in v3.0 (Kelly Model v2.0 — not the Kelly criterion).
+  - **L6:** repealed in v3.0 (Strategic Reserve — negative EV and duplicate of
+    the rebalance band).
+  - **L7:** removed in v3.0 (was Leo-specific exited-name discipline, not a
+    framework invariant).
+  - L-numbers are **never renumbered**. Repealed decisions keep their number,
+    gapped.
   - Changing Locked Decision *parameters* in `state.yaml` does NOT require a
     version bump. Changing Locked Decision *forms* in `constitution/` or `core/`
-    DOES require a major version bump (v3.0+).
+    DOES require a major version bump.
 - **Two file roles, two rules:**
   - **`lios/v*.md` and `commands/*.md`** = paste-ready prompts.
     They get pasted into fresh AI sessions with no other context.
@@ -51,8 +55,8 @@ or build artifacts — there are none. Adjust expectations.
 | Type | Pattern | Example |
 |---|---|---|
 | Constitutional | `constitution/*.md` — rarely changed, requires major bump | `constitution/constitution.md` |
-| Core framework | `core/*.md` — rarely changed, requires major bump | `core/kelly.md` |
-| Init prompts | `lios/v2.X.md` — paste-ready initialization files | `lios/v2.1.md` |
+| Core framework | `core/*.md` — rarely changed, requires major bump | `core/deployment.md` |
+| Init prompts | `lios/vX.Y.md` — paste-ready initialization files | `lios/v3.0.md` |
 | Components | `lios/components/*.md` — modular reference docs | `lios/components/02_capital_architecture.md` |
 | Commands | `commands/*.md` — paste-ready prompts | `commands/health-check.md` |
 | Scores | `scores/*.md` — quick reference score methodology | `scores/LOS.md` |
@@ -66,7 +70,8 @@ or build artifacts — there are none. Adjust expectations.
 
 **Never rename or delete `lios/v1.X.md` or `archive/v1.X/` files** — they are the
 historical record (preserved in `kccleoc/LIOS-archive`, frozen). This public repo
-carries only `lios/v2.0.md` + `lios/v2.1.md`. CHANGELOG.md marks supersession.
+carries `lios/v3.0.md` as current, with `v2.0.md` and `v2.1.md` frozen and
+unreferenced. CHANGELOG.md marks supersession.
 
 ---
 
@@ -74,9 +79,9 @@ carries only `lios/v2.0.md` + `lios/v2.1.md`. CHANGELOG.md marks supersession.
 
 | Bump type | When | Required actions |
 |---|---|---|---|
-| **Minor (v2.X)** | New module, new commands, refined docs, snapshot updates | 1. RFC in `rfcs/`  2. CHANGELOG entry  3. Update affected files  4. Update `constitution/constitution.md` if new L-number added |
-| **Major (v3.0+)** | Locked Decision (L1–L18) changes | Same as minor + ADR in `decisions/` + constitutional amendment note in CHANGELOG |
-| **Patch (v2.0.X)** | Typo fixes, small corrections | CHANGELOG entry only |
+| **Minor** | New module, new commands, refined docs, snapshot updates | 1. RFC in `rfcs/`  2. CHANGELOG entry  3. Update affected files  4. Update `constitution/constitution.md` if a new L-number is added |
+| **Major** | Locked Decision (L1–L23) changes | Same as minor + ADR in `decisions/` + constitutional amendment note in CHANGELOG |
+| **Patch** | Typo fixes, small corrections | CHANGELOG entry only |
 
 ---
 

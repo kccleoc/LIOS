@@ -69,12 +69,12 @@ Watchlist table + management summary.
 
 | Ticker | LOS | Band | Date Added | Theme | Next Action |
 |---|---:|---|---|---|---|
-| TSLA | 58 | Pass | 2026-06-10 | EV / autonomy | ❌ Dropped (LOS < 70) |
-| SNOW | 78 | Watch | 2026-07-15 | Data cloud | Monitor for correction |
-| AVGO | 85 | Buy | 2026-07-22 | Semis / AI | Deep research → Kelly |
-| CRDO | 72 | Watch | 2026-05-30 | Credit | Re-score after Q2 earnings |
+| EXAMPLE-T1 | 58 | Pass | 2026-06-10 | Theme A | ❌ Dropped (LOS < 70) |
+| EXAMPLE-T2 | 78 | Watch | 2026-07-15 | Theme B | Monitor for correction |
+| EXAMPLE-T3 | 85 | Buy | 2026-07-22 | Theme C | Deep research → deployment |
+| EXAMPLE-T4 | 72 | Watch | 2026-05-30 | Theme D | Re-score after Q2 earnings |
 
-**Summary**: 6 names active. 2 in Buy band (eligible for Kelly). 1 stale (>90 days).
+**Summary**: 6 names active. 2 in Buy band (eligible for deployment). 1 stale (>90 days).
 
 ## Discipline reminders
 

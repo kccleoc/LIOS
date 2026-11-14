@@ -99,7 +99,7 @@ Full portfolio LOS dashboard — copy/paste-ready for Health Check or snapshot a
 ### D. Recommendations
 
 - **EXAMPLE-D3** at LOS 74 — Watch band, near Pass threshold. Re-evaluate next cycle; if drops below 70, evaluate replacement via `/los-replace`.
-- **EXAMPLE-B1** at LOS 94, near Sleeve B cap. Conviction intact; no add until trim or cap revision (which is an L3 form amendment, requiring a major bump — the cap values in `state.yaml: sleeve_b_caps` are portfolio-local parameters).
+- **EXAMPLE-B1** at LOS 94, near Sleeve B cap. Conviction intact; no add until trim or cap revision (which is an L3 form amendment, requiring a major bump — the cap values in `state.yaml: sleeves.b.caps` are portfolio-local parameters).
 
 ### E. Date-stamped
 

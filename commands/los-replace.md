@@ -101,7 +101,7 @@ Gate 2 — RI:
       ❌ Wave conviction roughly equal
   → 2 of 4 conditions met ✅
 
-Gate 3 — Funding source: ✅ External capital used (not DCA / Kelly)
+Gate 3 — Funding source: ✅ External capital used (not DCA / other sleeves)
         Staging: candidate would enter Stage 1 → 2 → 3
 
 Verdict: REPLACE. Confidence: 80%.

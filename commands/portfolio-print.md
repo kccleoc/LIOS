@@ -50,33 +50,33 @@ Obtain from your connected brokerage (IBKR or equivalent):
     - Market Value
     - Unrealized P/L (if available)
 
-### Step 2 — Ask for cash allocation
+### Step 2 — Confirm cash
 
-Prompt the user:
+LIOS v3.0 has one cash sleeve. Do not ask for sub-buckets.
 
-LIOS Cash Allocation
-Please provide:
-  Strategic Reserve (SR): $
-  Kelly Reserve (KR):    $
-  Current Month
-  Undeployed DCA:        $
+```
+Cash (Sleeve Z): $____
+Z vehicle(s):    ____   (duration ≈ 0 only)
+```
 
-Never assume these values. Always ask.
+Never assume the value. Always ask.
 
-### Step 3 — Validate cash allocation
+### Step 3 — Validate cash
 
-Free Tactical Cash = Broker Cash - SR - KR - Current Month Undeployed DCA
+`Z` is the entire uninvested balance plus any duration-≈-0 ETF position. There is
+no Strategic Reserve, no Kelly Reserve and no free-tactical bucket in v3.0. If a
+sub-bucket split is offered, reject it and restate that cash is one sleeve.
 
-If allocation exceeds available cash: STOP and report the discrepancy.
-Otherwise calculate Free Tactical Cash automatically.
+If `Z` exceeds its ceiling (default 8% of NLV): flag it. The fix is a Rule 2
+rebalance, not a relabelling.
 
 ### Step 4 — Classify every holding into its LIOS sleeve
 
-Sleeve A — Core Compounding:
-  (tickers from `state.yaml: positions` filtered to sleeve: A)
+Sleeve A — Core Index:
+  (positions filtered to sleeve: a — broad-index ETFs only, duration ≥ 1y)
 
-Sleeve B — Proven Alpha:
-  (tickers from `state.yaml: positions` filtered to sleeve: B)
+Sleeve B — Conviction:
+  (positions filtered to sleeve: b — individual equities)
 
 Sleeve D — Frontier Innovation:
   (tickers from `state.yaml: positions` filtered to sleeve: D; include `stage` field)

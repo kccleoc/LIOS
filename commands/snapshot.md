@@ -1,58 +1,49 @@
-> **v3.0 conformance note.** Written for LIOS v2.x. In v3.0 the sleeves are
-> **A/B/C/D/Z** measured against NLV, the Kelly Factor is replaced by the
-> **Bull–Bear Index**, and the Strategic Reserve is repealed. Where this file
-> and `lios/v3.0.md` disagree, v3.0 wins.
-
-
-# `/snapshot` — Standardize Live Portfolio Snapshot
+# `/snapshot` — Generate a Dated Snapshot
 
 ## Purpose
 
-Convert raw portfolio data (from IBKR, spreadsheet, etc.) into the
-canonical LIOS snapshot format. Every command that takes a snapshot
-as input expects this format.
+Produce a point-in-time snapshot from `portfolio/state/portfolio.yaml`. No
+analysis, no recommendations — a faithful render of state.
 
 ## When to use
 
-- After any trade execution (so the snapshot stays current)
-- Before pasting a snapshot into any command
-- Whenever Lc is unsure whether the snapshot is in the right shape
+- After any state update
+- Before an Investment Committee decision
+- At the end of a monthly cycle
+- Before a specific event, so there is a "before" to diff against
+
+## Inputs
+
+1. `portfolio/state/portfolio.yaml` (never a pasted print, unless no state exists)
+2. Price date
 
 ## Command
 
 ---
 
 ```
-Standardize my portfolio data into the LIOS snapshot format.
+Generate a LIOS v3.0 portfolio snapshot from this state file.
 
-Raw portfolio data:
-<paste raw holdings — IBKR export, list of tickers+shares+prices,
-or anything you have>
+State:
+<paste state.yaml here>
 
-Output a snapshot table in this exact format:
+Output the snapshot template with:
+1. Account summary: NLV, gross position value, cash
+2. Holdings: ticker, shares, price, market value, sleeve
+3. Totals: gross position value, cash, NLV
+4. Sleeve breakdown against targets:
+     A core index | B conviction | C satellite | D duration | Z cash
+   Show MV, % of NLV, target %, delta pp
+5. Constraint snapshot:
+     effective single-name exposure, factor, duration, total risky, US-situs
+6. BBI line: weighted value, band, date scored
 
-| Ticker | Shares | Price | Market Value |
-
-Then compute:
-- Gross Position Value (sum of Market Values)
-- Cash (from IBKR)
-- Net Liquidation Value (Gross + Cash)
-
-Then output the sleeve classification:
-
-| Sleeve | Tickers | Sub-total |
-|---|---|---|---|
-| A | (from `state.yaml: positions` filtered to sleeve: A) | $X |
-| B | (from `state.yaml: positions` filtered to sleeve: B) | $X |
-| C | (Kelly Reserve + tactical) | $X |
-| D | (from `state.yaml: positions` filtered to sleeve: D) | $X |
-| SR | (cash held for deployment triggers) | $X |
-
-Sanity checks:
-- Sum of sleeves + cash = NLV
-- No ticker appears in two sleeves
-- `state.yaml: sleeve_a.permanently_exited` list checked — no banned tickers present
-- Any unknown ticker: flag for classification
+Rules:
+- Sleeves are A/B/C/D/Z. There is no SR, no ABC denominator
+- Z is cash equivalents only (duration ≈ 0)
+- All percentages are of NLV
+- If a field is unavailable in state, write "not in state" — never estimate
+- No recommendations. This is a render, not an opinion
 
 Begin.
 ```
@@ -61,46 +52,11 @@ Begin.
 
 ## What you get back
 
-A standardized snapshot table + sleeve classification + sanity
-check confirmation. Drop this directly into any LIOS command.
-
-## Example output
-
-**Snapshot — example (synthetic data)**
-
-| Ticker | Shares | Price | Market Value | Sleeve |
-|---|---|---|---|---|
-| EXAMPLE-A1 | 1,000.0000 | $100.00 | $100,000 | A |
-| EXAMPLE-A2 | 500.0000 | $200.00 | $100,000 | A |
-| EXAMPLE-A3 | 1,000.0000 | $100.00 | $100,000 | A |
-| EXAMPLE-B1 | 1,000.0000 | $180.00 | $180,000 | B |
-| EXAMPLE-B2 | 200.0000 | $500.00 | $100,000 | B |
-| EXAMPLE-B3 | 400.0000 | $250.00 | $100,000 | B |
-| EXAMPLE-D1 | 100.0000 | $120.00 | $12,000 | D |
-| EXAMPLE-D2 | 200.0000 | $60.00 | $12,000 | D |
-| EXAMPLE-D3 | 300.0000 | $35.00 | $10,500 | D |
-
-Gross Position Value: $714,500
-Cash (incl. Kelly Reserve + SR): $275,500
-**Net Liquidation Value: $990,000**
-
-Sleeve Breakdown:
-- A: $300,000 (30.3% NLV)
-- B: $380,000 (38.4% NLV)
-- C: TBD (Kelly Reserve)
-- D: $34,500 (3.5% NLV)
-- SR: TBD
-
-Sanity checks: ✅ All tickers classified. ✅ `state.yaml: sleeve_a.permanently_exited` checked — no banned tickers present. ✅ No duplicates.
-
-## Discipline reminders
-
-- Always include **cash**, not just positions — Kelly Reserve and SR live in cash.
-- Sleeve classification must be explicit; no "leftover" holdings.
-- If a holding doesn't fit any sleeve, flag for IC review (could be a new Sleeve D candidate or a misclassified asset).
+A dated file matching `templates/Snapshot.md`, suitable for
+`portfolio/snapshots/YYYY-MM-DD_portfolio.md`.
 
 ## Related
 
-- See `../snapshots/` — saved snapshots for reference
-- See `commands/drift-check.md` — primary consumer of snapshots
-- See `commands/health-check.md` — full Health Check expects a snapshot as input
+- `../templates/Snapshot.md`
+- `../core/sleeves.md`
+- `../core/validation.md`

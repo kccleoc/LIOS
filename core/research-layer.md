@@ -262,11 +262,11 @@ across all three, but different other dimensions:
 | EXAMPLE-X1 | 55 | 92 | 92 | 88 | 84 | **Buy** — premium quality + growth, valuation is the only friction |
 | TXN | 82 | 72 | 95 | 64 | 81 | **Buy** — quality compounder, fair valuation, sluggish tape |
 | INTU | 70 | 78 | 90 | 75 | 80 | **Buy** — quality + steady growth, modest multiple |
-| TSLA | 30 | 75 | 60 | 70 | 58 | **Pass** — quality concerns + stretched valuation offset growth story |
+| EXAMPLE-T1 | 30 | 75 | 60 | 70 | 58 | **Pass** — quality concerns + stretched valuation offset growth story |
 
-All three "Buy" names eligible for Kelly allocation. TSLA flagged
+All three "Buy" names eligible for Kelly allocation. EXAMPLE-T1 flagged
 for replacement if currently owned. None of this overrides the
-Sleeve B per-position cap rules (see `state.yaml: sleeve_b_caps` — caps are binding per L3 form).
+Sleeve B per-position cap rules (see `state.yaml: sleeves.b.caps` — caps are binding per L3 form).
 
 ---
 

@@ -99,25 +99,24 @@ Before the 16 sections, output a **Changes Since Snapshot** block:
 === PHASE 4 — 16-SECTION HEALTH CHECK ===
 
 Output the complete 16-section report using live prices and fresh context.
-Follow the canonical order and format from
-`../lios/components/06_health_check_structure.md`.
+Follow the canonical order and format from `../core/health-check.md`.
 
 Sections:
 1. Portfolio Health — summary table + 3-line headline (live NLV, what changed, what matters)
-2. Drift Check — table with live drift $ and %, flag >2%
-3. Kelly Dashboard — five-dimension scores + Kelly Factor (incorporate fresh macro)
-4. Trigger Check — S&P/Nasdaq correction scan (use live ^GSPC, ^IXIC), other triggers
-5. Sleeve A Review — live MV, drift, `state.yaml: sleeve_a.permanently_exited` flag (was L7), no LOS/LFS (index ETFs)
-6. Sleeve B Review — live MV, %NLV, cap proximity, LOS, LFS, Decision Matrix, directive
-7. Sleeve C Review — Kelly Reserve, tactical deployments, drift
-8. Sleeve D Review — stage, Replacement Index, LOS, LFS, Decision Matrix, verdict
-9. Strategic Reserve Review — balance, last deployment, opportunity set
-10. SR Opportunity Ranking — table with Expected Return, Kelly Edge, Valuation, Diversification, LOS, LFS, Action
-11. Frontier Scoreboard — all D + watchlist, RI composite, LOS, LFS
-12. Technology Wave Map — active waves, exposure via B+D, gaps
-13. Execution Calendar — upcoming earnings (B/D), macro events (next 30 days)
-14. Execution Plan — BUY/HOLD/REDUCE/EXIT with $, Confidence %, rationale
-15. Risk Assessment — concentration, correlation, economic engine gaps, scenario stress
+2. Gap & Drift — one table; gap and drift are the same number
+3. Bull–Bear Index — five dimension scores + band (incorporate fresh macro)
+4. Constraint Check — single name effective, factor, duration, total risky, US-situs
+5. Sleeve A Review — live MV, within-A weight drift, `state.yaml: sleeves.a.permanently_exited` flag (was L7), no LOS/LFS (index ETFs)
+6. Sleeve B Review — live MV, % NLV, slot drift vs band, LOS, LFS, Decision Matrix, thesis-exit status, directive
+7. Sleeve C Review — rotation ranking, ceiling status, laggard cut list
+8. Sleeve D Review — duration, currency hedge, ammunition available for Rule 2
+9. Sleeve Z Review — floor 3%, ceiling 8%, duration ≈ 0 only
+10. Deployment Plan — Rule 1 output in dollars; Rule 2 flag if any sleeve breaches the band
+11. Discretionary Channel — open/closed, remaining 3% budget
+12. Frontier Scoreboard — all C names + watchlist, RI composite, LOS, LFS
+13. Execution Calendar — upcoming earnings (B/C), macro events (next 30 days)
+14. Execution Plan — BUY/HOLD/REDUCE/EXIT with dollars, confidence %, rationale
+15. Risk Assessment — constraints, concentration, economic-engine gaps, drawdown ladder in dollars
 16. CIO Resolution — one paragraph, conclusions first, dollars, confidence
 
 
@@ -145,7 +144,7 @@ the command runs. Section 14 (Execution Plan) is the actionable core.
 
 Every directive in section 14 must respect:
 - Sleeve A targets (L2 form; values in `state.yaml: sleeve_a.allocation`)
-- Sleeve B per-position caps (L3 form; values in `state.yaml: sleeve_b_caps`)
+- Sleeve B per-position caps (L3 form; values in `state.yaml: sleeves.b.caps`)
 - Kelly v2.0 framework (L4)
 - Replacement Index for D (L5)
 - SR funding/deployment rules (L6)
