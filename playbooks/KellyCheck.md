@@ -1,17 +1,8 @@
-# Playbook: KellyCheck
+# Playbook: KellyCheck — RETIRED in LIOS v3.0
 
-## Purpose
-TBD — agent-native workflow definition.
+**Status:** Superseded. Do not use.
 
-## Prerequisites
-- LIOS v2.0 framework acknowledged
-- Live portfolio snapshot loaded
+The Kelly Factor no longer exists. Use `RegimeCheck.md` (Bull–Bear Index) for
+the gauge and `HealthCheck.md` §10 for the deployment plan.
 
-## Procedure
-1. TBD
-
-## Output Format
-TBD
-
-## Related Commands
-TBD
+See `../core/regime-index.md` and `../core/deployment.md`.

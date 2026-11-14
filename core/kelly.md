@@ -1,125 +1,49 @@
-> **Source:** Extracted verbatim from LIOS v1.5. L4 — Kelly Model v2.0 is a Locked Decision.
+# Kelly Model v2.0 — RETIRED in LIOS v3.0
 
-# Kelly Model v2.0 — Five-Dimension Scoring
-
-**Component version:** v1.3
-**Status:** Locked Decision (framework) / Dynamic (scores)
-**Last updated:** 2026-07-25
+**Status:** Superseded. Do not use.
 
 ---
 
-## Purpose
+## What this file was
 
-Kelly Model v2.0 produces a single 0-1 fraction — the **Kelly Factor** —
-that governs what portion of the monthly DCA (`state.yaml: monthly_dca`; $1,500 default) gets deployed.
-The undeployed portion sits in Sleeve C as Kelly Reserve until
-either Kelly increases or a separate trigger fires.
+`core/kelly.md` defined the Kelly Model v2.0: five 0–100 dimensions, a weighted
+score, and a six-tier mapping to a **Kelly Factor** in the range 0.00–1.00. That
+factor multiplied the monthly DCA.
 
-The model converts five orthogonal market/portfolio inputs into one
-deployable number. It is not a market-timing tool in the discretionary
-sense — it is a structured overlay.
+The file was removed in v3.0 because the model was not the Kelly criterion.
+It computed no edge, no payoff ratio, and no bankroll term. It applied a
+fraction of a *flow* rather than a fraction of *wealth*, and it ignored the
+distance between the portfolio and its target.
 
----
+A Kelly Factor of 0.25 on a book of roughly 200,000 with a monthly contribution
+of 1,500 deployed 375 — about 1/139th of what a genuine 0.25 Kelly fraction of
+the same book would imply. The name was doing no mathematical work.
 
-## Five Dimensions
+## What replaced it
 
-Each dimension is scored 0-100 by the AI based on current data.
-Higher score = worse conditions for deployment (more conservative).
-Lower score = better conditions (more aggressive).
-
-| # | Dimension | Weight | What it measures |
-|---|---|---|---|
-| 1 | **Market Valuation** | 30% | Broad equity valuations — P/E, CAPE, equity risk premium, breadth |
-| 2 | **Portfolio Valuation** | 25% | Valuation of Lc's specific holdings — P/E vs own history, growth durability |
-| 3 | **Macro & Liquidity** | 20% | Rates, credit spreads, liquidity conditions, Fed posture, USD |
-| 4 | **Technical Conditions** | 15% | Trend, momentum, breadth, volatility regime, drawdown depth |
-| 5 | **Opportunity Set** | 10% | Quality of buying opportunities available *now* (catalysts, valuations, gaps) |
-
-### Scoring guidance
-
-- **0–20:** Excellent conditions. Add aggressively.
-- **21–35:** Good conditions. Add on schedule.
-- **36–50:** Mixed. Half pace.
-- **51–65:** Cautious. Reduce adds.
-- **66–80:** Defensive. Pause adds.
-- **81–100:** Avoid adds. Capital preservation mode.
-
-Each dimension's score must come with a **one-line rationale** citing
-the specific data point driving it.
-
----
-
-## Weighted Score → Kelly Factor
-
-```
-weighted_score = 0.30*market_val
-               + 0.25*portfolio_val
-               + 0.20*macro_liq
-               + 0.15*technical
-               + 0.10*opportunity
-```
-
-| Weighted Score | Kelly Factor | DCA Action (multiply by `state.yaml: monthly_dca`) |
-|---|---|---|
-| 0–20 | **1.00** | Deploy 100% of monthly DCA |
-| 21–35 | **0.75** | Deploy 75% of monthly DCA |
-| 36–50 | **0.50** | Deploy 50% of monthly DCA |
-| 51–65 | **0.25** | Deploy 25% of monthly DCA |
-| 66–80 | **0.10** | Deploy 10% of monthly DCA |
-| 81–100 | **0.00** | Deploy 0% — all to Kelly Reserve |
-
-(Illustratively: with the default `monthly_dca = $1,500`, the factors resolve to $1,500 / $1,125 / $750 / $375 / $150 / $0.)
-
-**Kelly Reserve** = the accumulated undeployed portion of DCA. It can
-later be deployed via:
-- A Kelly Factor increase (status quo flow)
-- A separate trigger (see Trigger Check — section 4 of Health Check)
-
----
-
-## Worked Example
-
-Suppose:
-- Market Valuation: 45 (mixed)
-- Portfolio Valuation: 30 (favorable — own holdings reasonably priced)
-- Macro & Liquidity: 50 (neutral)
-- Technical: 40 (slight weakness)
-- Opportunity Set: 25 (good entry points available)
-
-```
-weighted = 0.30*45 + 0.25*30 + 0.20*50 + 0.15*40 + 0.10*25
-         = 13.5 + 7.5 + 10.0 + 6.0 + 2.5
-         = 39.5
-```
-
-Kelly Factor = **0.50** → Deploy 50% of your `state.yaml: monthly_dca` this month.
-(Illustratively: with `monthly_dca = $1,500`, deploy $750 and reserve $750.)
-
----
-
-## When To Recalculate
-
-Kelly is **not** a fixed number. Recalculate when:
-- Monthly DCA cycle begins (always)
-- A major macro event occurs (Fed decision, geopolitical shock)
-- Sleeve B caps are hit (matters for Portfolio Valuation)
-- Sleeve D surgery happens (matters for Opportunity Set)
-- NLV moves >5% in either direction
-
----
-
-## Common Failure Modes
-
-| Failure | Why it fails LIOS |
+| Need | v3.0 home |
 |---|---|
-| "Markets feel expensive, skip DCA" | Use the model, not feel. If model says 0.50, deploy $750. |
-| "Markets crashed, deploy everything" | A crash may trigger SR deployment, not Kelly. Don't confuse them. |
-| "Tech is hot, weight Opportunity Set higher" | Weights are fixed. Adjust scores, not weights. |
-| Ignoring Portfolio Valuation | A 20% position in a Sleeve B name is a Portfolio Valuation signal even if S&P is cheap. |
+| Conditions gauge | `core/regime-index.md` — Bull–Bear Index (0–100) |
+| "How much do I deploy?" | `core/deployment.md` — Rule 1, gap-driven |
+| "When do I sell?" | `core/deployment.md` — Rule 2, band breach |
+| "How big should a position be?" | `core/sleeves.md` — caps and constraints |
+
+The five dimensions, their weights, and their 0–100 scoring survived unchanged.
+Only the output and its job changed.
+
+## Why not compute real Kelly
+
+A genuine Kelly fraction for a permanent equity allocation is
+`f* = (μ − r) / σ²` (continuous) or `w* = (1/γ)·Σ⁻¹(μ − r)` (Merton
+multi-asset). Both are **linear in μ**, and μ for a broad equity index at
+current valuations is not estimable to better than a range of roughly
+−2% to +3% excess. That range moves `f*` across a span of 0 to 125% of wealth.
+
+Kelly does not remove the need for a forecast; it makes the forecast's
+consequences explicit and linear. That is useful as a diagnostic and unusable as
+a monthly controller — which is exactly why v3.0 keeps only the ordinal gauge
+and lets the gap and the glidepath do the sizing.
 
 ---
 
-## Related
-- See `02_capital_architecture.md` Sleeve C — where Kelly Reserve lives
-- See `commands/kelly-recalc.md` — re-run scoring on demand
-- See `06_health_check_structure.md` §3 — Kelly Dashboard placement in Health Check
+See also: `core/regime-index.md`, `core/deployment.md`, `core/glidepath.md`.

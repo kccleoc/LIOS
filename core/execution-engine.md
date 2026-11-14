@@ -1,3 +1,9 @@
+> **v3.0 conformance note.** Written for LIOS v2.x. In v3.0 the sleeves are
+> **A/B/C/D/Z** measured against NLV, the Kelly Factor is replaced by the
+> **Bull–Bear Index**, and the Strategic Reserve is repealed. Where this file
+> and `lios/v3.0.md` disagree, v3.0 wins.
+
+
 > **Source:** Extracted verbatim from LIOS v1.5. L15-L18 are Locked Decisions. Describes the PCI execution layer — how LOS + LFS + Kelly + Sleeves integrate.
 
 # Portfolio Construction Intelligence (Execution Engine) — LFS Framework

@@ -1,134 +1,98 @@
-# LIOS Portfolio State — SYNTHETIC EXAMPLE
-# Version: 3.0
-# Generated: 2026-01-01
-#
-# ⚠️  SYNTHETIC — NOT A RECOMMENDATION
-# All tickers below are fake (EXAMPLE-A through EXAMPLE-D). Dollar amounts
-# are round synthetic figures. This file exists to demonstrate the LIOS
-# framework end-to-end against a runnable portfolio. Copy it, swap in your
-# real state, then delete this banner.
-#
-# See state.schema.yaml for the empty contract with TODO placeholders.
+# LIOS v3.0 — Synthetic Example State
+# Fully fabricated demo. Every ticker is EXAMPLE-*; every number is invention.
+# Use this as a worked reference, never as a template for real data.
 
-date: "2026-01-01"
-version: "3.0"
+version: "v3.0"
+nlv: 1000000
+as_of: "2026-01-01"
+source: "synthetic"
 
-nlv: 1000000.00
-ibkr_nlv: 999995.00
-ibkr_gpv: 950000.00
-source: "Synthetic example data"
+sleeves:
+  a:
+    target_pct: 67
+    allocation:
+      - ticker: "EXAMPLE-A1"
+        target_pct: 62.5
+      - ticker: "EXAMPLE-A2"
+        target_pct: 37.5
+  b:
+    target_pct: 8
+    position_cap_pct: 10
+    names:
+      - ticker: "EXAMPLE-B1"
+        target_pct: 33.33
+      - ticker: "EXAMPLE-B2"
+        target_pct: 33.33
+      - ticker: "EXAMPLE-B3"
+        target_pct: 33.34
+  c:
+    target_pct: 5
+    ceiling_pct: 7
+    max_names: 6
+  d:
+    target_pct: 15
+    instrument: "EXAMPLE-D"
+  z:
+    target_pct: 5
+    floor_pct: 3
+    ceiling_pct: 8
 
-cash:
-  balance: 275500.00          # NLV target $1M − Σ position MV $724,500
-  strategic_reserve: 50000.00
-  kelly_reserve: 25500.00
-  dca_undeployed: 0.00
-  free_tactical: 200000.00
+constraints:
+  factor_cap_pct: 25
+  risky_min_pct: 60
+  risky_max_pct: 80
+  rebalance_band_pct: 8
+  discretionary_max_pct: 3
+  us_situs_ceiling: 60000
+  us_situs_exposure: 80000
+
+glidepath:
+  policy: drift_accepted
+  bands:
+    - { age_min: 45, age_max: 50, a: 67, b: 8, c: 5, d: 15, z: 5 }
+    - { age_min: 50, age_max: 55, a: 64, b: 6, c: 5, d: 20, z: 5 }
+    - { age_min: 55, age_max: 60, a: 62, b: 3, c: 5, d: 25, z: 5 }
+    - { age_min: 60, age_max: 65, a: 60, b: 0, c: 5, d: 30, z: 5 }
+    - { age_min: 65, age_max: 99, a: 55, b: 0, c: 5, d: 35, z: 5 }
+
+monthly_dca: 10000
+dca_step_up: "min(salary growth, 5%)"
+dca_review_month: 1
+
+bbi:
+  as_of: "2026-01-01"
+  market_valuation: 60
+  portfolio_valuation: 55
+  macro_liquidity: 50
+  technical: 45
+  opportunity: 55
+  weighted: 54.75
+  band: Cautious
 
 positions:
-  # ── Sleeve A: Core Compounding ──
-  - ticker: EXAMPLE-A1
-    shares: 1000.0
-    avg_cost: 90.00
-    sleeve: A
-    market_price: 100.00
-    market_value: 100000.00
+  - { ticker: "EXAMPLE-A1", sleeve: a, shares: 3000, avg_cost: 100, market_price: 138, market_value: 414000, us_situs: false }
+  - { ticker: "EXAMPLE-A2", sleeve: a, shares: 2000, avg_cost: 150, market_price: 124, market_value: 248000, us_situs: false }
+  - { ticker: "EXAMPLE-B1", sleeve: b, shares: 500, avg_cost: 80, market_price: 96, market_value: 48000, us_situs: true }
+  - { ticker: "EXAMPLE-B2", sleeve: b, shares: 300, avg_cost: 120, market_price: 108, market_value: 32400, us_situs: true }
+  - { ticker: "EXAMPLE-B3", sleeve: b, shares: 800, avg_cost: 60, market_price: 55, market_value: 44000, us_situs: false }
+  - { ticker: "EXAMPLE-C1", sleeve: c, shares: 400, avg_cost: 40, market_price: 50, market_value: 20000, us_situs: false }
+  - { ticker: "EXAMPLE-C2", sleeve: c, shares: 600, avg_cost: 30, market_price: 27, market_value: 16200, us_situs: false }
+  - { ticker: "EXAMPLE-D", sleeve: d, shares: 1500, avg_cost: 95, market_price: 100, market_value: 150000, us_situs: false }
+  - { ticker: "EXAMPLE-Z1", sleeve: z, shares: 1200, avg_cost: 100, market_price: 100, market_value: 120000, us_situs: true }
 
-  - ticker: EXAMPLE-A2
-    shares: 500.0
-    avg_cost: 180.00
-    sleeve: A
-    market_price: 200.00
-    market_value: 100000.00
+cash:
+  balance: 0
+  vehicles:
+    - { pool: "z-main", ticker: "EXAMPLE-Z1", duration_years: 0 }
 
-  - ticker: EXAMPLE-A3
-    shares: 1000.0
-    avg_cost: 95.00
-    sleeve: A
-    market_price: 100.00
-    market_value: 100000.00
+portfolio_total: 1000000
+reconciliation_delta: 0
 
-  # ── Sleeve B: Proven Alpha ──
-  - ticker: EXAMPLE-B1
-    shares: 1000.0
-    avg_cost: 150.00
-    sleeve: B
-    market_price: 180.00
-    market_value: 180000.00
-
-  - ticker: EXAMPLE-B2
-    shares: 200.0
-    avg_cost: 400.00
-    sleeve: B
-    market_price: 500.00
-    market_value: 100000.00
-
-  - ticker: EXAMPLE-B3
-    shares: 400.0
-    avg_cost: 200.00
-    sleeve: B
-    market_price: 250.00
-    market_value: 100000.00
-
-  # ── Sleeve D: Frontier Innovation ──
-  - ticker: EXAMPLE-D1
-    shares: 100.0
-    avg_cost: 100.00
-    sleeve: D
-    stage: 3
-    market_price: 120.00
-    market_value: 12000.00
-
-  - ticker: EXAMPLE-D2
-    shares: 200.0
-    avg_cost: 50.00
-    sleeve: D
-    stage: 3
-    market_price: 60.00
-    market_value: 12000.00
-
-  - ticker: EXAMPLE-D3
-    shares: 300.0
-    avg_cost: 30.00
-    sleeve: D
-    stage: 2
-    market_price: 35.00
-    market_value: 10500.00
-
-sleeve_a:
-  target_base_pct: 75
-  allocation:
-    - ticker: EXAMPLE-A1
-      target_pct: 50
-      role: "All-world equity (developed + emerging)"
-    - ticker: EXAMPLE-A2
-      target_pct: 30
-      role: "S&P 500 concentration"
-    - ticker: EXAMPLE-A3
-      target_pct: 20
-      role: "Short-duration Treasury ETF — cash-like yield buffer"
-  permanently_exited:
-    - EXAMPLE-EX1   # synthetic exited name (re-entry requires major bump)
-
-sleeve_b_caps:
-  - ticker: EXAMPLE-B1
-    cap_pct: 20
-    note: "Cap = both buying-pause AND trim trigger"
-  - ticker: EXAMPLE-B2
-    cap_pct: 5
-    note: ""
-  - ticker: EXAMPLE-B3
-    cap_pct: 6
-    note: ""
-
-sleeve_c:
-  target_pct_of_abc: 5
-
-sleeve_d:
-  target_pct_of_total_nlv: 5
-
-monthly_dca: 1500
-
-portfolio_total: 1000000.00
-reconciliation_delta: 0.00
-ibkr_nlv_gap: -5.00
+# Notes on this synthetic book:
+# - Sleeve B is 12.4% of NLV (over the 8% target) — the DCA waterfall gives B
+#   zero allocation until it falls back to target.
+# - Sleeve Z is 12% (over the 5% target and over the 8% ceiling) — the rebalance
+#   rule is triggered and must redeploy toward D.
+# - us_situs_exposure is over the ceiling and must be reduced.
+# - Total risky is 81.2%, above the 80% glidepath ceiling — the next rebalance
+#   moves money from A/B/C into D/Z.

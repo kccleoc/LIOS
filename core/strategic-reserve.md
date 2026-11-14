@@ -1,47 +1,51 @@
-> **Source:** Extracted from LIOS v1.5. L6 — Strategic Reserve is a Locked Decision.
+# Strategic Reserve — RETIRED in LIOS v3.0
 
-# Strategic Reserve (SR) — NOT a Sleeve
-
-**Status:** Locked Decision
-**Last updated:** 2026-07-25 (extracted 2026-07-28 for v2.0)
+**Status:** Superseded. Do not use.
 
 ---
 
-**Purpose:** Dry powder awaiting superior expected-return opportunities.
-SR is intentionally **offensive capital**, not defensive cash.
+## What this file was
 
-## Funding sources (strict whitelist)
-- ✅ New external capital
-- ✅ Exceptional profit realization (rare, IC-approved)
-- ✅ Windfalls
-- ❌ NOT from DCA
-- ❌ NOT from Sleeve A sales
-- ❌ NOT from Sleeve B trimming
-- ❌ NOT from Sleeve D sales
-- ❌ NOT from Kelly Reserve
+`core/strategic-reserve.md` defined L6: a cash reserve funded only by external
+capital, windfalls or exceptional realisations, deployed only on an enumerated
+list of triggers, through a strict deployment hierarchy, with the Investment
+Committee holding sole authority.
 
-## Default injection split
-- 30% deploy immediately into existing high-conviction sleeves
-- 70% to SR
-- (IC may modify split on injection)
+## Why it was removed
 
-## Deployment triggers (any one)
-- S&P correction > 8–10%
-- Nasdaq correction > 10%
-- High-conviction unjustified selloff
-- Earnings confirm stronger thesis while price declines
-- Kelly Factor increases meaningfully
-- IC formal approval
+Three reasons, in order of weight:
 
-## Deployment hierarchy (when a trigger fires)
-1. Existing high-conviction Sleeve B positions
-2. Sleeve D expansion (still subject to D staging rules — SR does **not** bypass Stage 2/3 gates)
-3. New approved tech waves
-4. Sleeve A on broad valuation opportunity
+1. **It was negative expected value as stated.** A reserve held to buy an
+   equity dip is a bet that requires a large payoff ratio to beat simply being
+   invested. For a typical trigger (the index falls 8%), the payoff ratio is
+   around one-to-one, while the opportunity cost is the full equity premium.
+   Kelly's criterion requires a payoff ratio above roughly 5.7:1 before such a
+   reserve earns its place.
 
-## Approval
-Only the Investment Committee may approve SR deployment (full or partial) or recommend holding.
+2. **The trigger was a hidden market-timing rule.** "Deploy when the index falls
+   8%" fires after the decline, not before it, and gives one shot rather than a
+   continuing mechanism.
+
+3. **It duplicated the rebalance rule.** Once targets are set against NLV and a
+   band exists, a drawdown automatically makes the defensive block overweight
+   and the risky block underweight. The gap rule then sells D and Z into A, B
+   and C. That is the same action, executed continuously rather than once.
+
+## What replaced it
+
+| Need | v3.0 home |
+|---|---|
+| Ballast | Sleeve D — duration |
+| Liquidity | Sleeve Z — cash equivalents |
+| Buying a dislocation | `core/deployment.md` Rule 2 (rebalance) and Rule 3 (discretionary) |
+| Dry powder concept | Dissolved — it is a byproduct of drift, not a bucket |
+
+**Dry powder should live in duration, not in bills.** If the purpose of the
+reserve is to buy equities in a crash, hold it in the asset that appreciates in
+that crash. A 0–1y Treasury instrument returns approximately zero while equities
+fall; a duration-bearing bond fund rallies. Holding the reserve in bills means
+arriving at the bottom with less capital than the plan assumed.
 
 ---
 
-See also: core/sleeves.md
+See also: `core/sleeves.md`, `core/deployment.md`.

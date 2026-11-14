@@ -1,165 +1,132 @@
-# 02 · Five-Layer Capital Architecture
+# 02 · Capital Architecture — Five Sleeves A/B/C/D/Z
 
-**Component version:** v1.3
-**Status:** Locked Decision
-**Last updated:** 2026-07-25
-
----
-
-## Overview
-
-LIOS partitions all capital into five distinct layers. Each layer
-has its own purpose, funding sources, caps, and decision rules.
-Total NLV = A + B + C + D + SR.
-
-The architecture is **fixed and not relitigated.**
+**Component version:** v3.0
+**Status:** Locked Decision (L1)
+**Last updated:** 2026-11-14
 
 ---
 
-## Sleeve A — Core Compounding
+## Purpose
 
-**Purpose:** Permanent, low-turnover compounding core. The bedrock.
+All capital sits in exactly five sleeves, measured against **one denominator:
+NLV**.
 
-**Targets (per-portfolio):**
+```
+NLV = A + B + C + D + Z
+```
 
-| Ticker | Target | Role |
+| Sleeve | Name | Purpose | Risk role |
+|---|---|---|---|
+| **A** | Core Index | Permanent compounding core | Systematic beta |
+| **B** | Conviction | 1–4 individual equities, equal weight at entry | Idiosyncratic alpha |
+| **C** | Satellite | Discretionary rotation, winner-weighted | Active thematic |
+| **D** | Duration | Bonds >3y, currency-hedged | Ballast + ammunition |
+| **Z** | Cash Equivalents | Duration ≈ 0 | Liquidity |
+
+A + B + C = risky block. D + Z = defensive block.
+
+---
+
+## Sleeve A — Core Index
+
+Broad-index ETFs only, at fixed within-sleeve weights summing to 100%.
+No individual equities, no thematic funds, no bonds, no cash-like instruments.
+The core is never sold to fund another sleeve.
+
+A cash-like ETF inside A is prohibited in v3.0: cash belongs in Z. The sleeve is
+defined by risk factor, not by ticker or issuer.
+
+---
+
+## Sleeve B — Conviction
+
+1–4 names, equal weight at entry. Slot bands:
+
+| Names | Slot | Drift band |
+|---|---:|---|
+| 1 | 100% | 60–100% |
+| 2 | 50% | 35–65% |
+| 3 | 33.3% | 20–50% |
+| 4 | 25% | 15–35% |
+
+**The only sell trigger is a thesis break** — LOS < 60 or equivalent research
+failure. Price is never a trigger. Caps apply to **effective** exposure (direct
+plus index-embedded), not to the direct holding alone.
+
+---
+
+## Sleeve C — Satellite
+
+Winner-weighted by design. No equal-weight rule. Laggards are cut, never averaged
+down. Funded only from inside C. Quarterly ranking against the sleeve benchmark;
+bottom half for two consecutive quarters requires a cut or a written
+justification. Above the ceiling, trim the **weakest** name.
+
+All Sleeve C surgery is governed by the Replacement Index.
+
+---
+
+## Sleeve D — Duration
+
+Duration greater than 3 years, hedged to the liability currency. T-bills,
+money-market funds and 0–1y instruments are **not** D; they are Z.
+
+D has two jobs: ballast, and ammunition. It is the designated source for the
+rebalance rule and for the discretionary channel. It never funds B or C.
+
+D hedges growth and deflation shocks. It does not hedge inflation shocks — in
+2022 duration fell alongside equities. That is accepted.
+
+---
+
+## Sleeve Z — Cash Equivalents
+
+Duration ≈ 0. Defined by risk factor, not issuer. Never reported as a bond
+sleeve or a hedge. The emergency fund sits **outside** NLV.
+
+Above ceiling → redeploy to the most underweight sleeve.
+Below floor → funded first from incoming contributions.
+
+---
+
+## Why the denominator changed
+
+Pre-v3.0 measured Sleeve A and Sleeve C against `ABC = NLV − D − SR` while
+measuring Sleeve B caps against NLV. One dollar carried two weights. The
+resulting gap widened when it was funded, because new cash entered the
+denominator as well as the numerator, and no deployment rule could close it.
+
+v3.0 deletes ABC. Drift and gap are the same number.
+
+---
+
+## Constraint Set
+
+| # | Constraint | Parameter |
 |---|---|---|
-| (see `state.yaml: sleeve_a.allocation`) | (per-portfolio %) | Broad-index ETFs (e.g., all-world equity, S&P 500 concentration, short-duration Treasury yield buffer) |
+| 1 | Single-name effective exposure | `sleeves.b.position_cap_pct` |
+| 2 | Single-factor exposure | `constraints.factor_cap_pct` |
+| 3 | Duration hedge | `sleeves.d.target_pct` |
+| 4 | Total risky weight | `glidepath.bands` |
+| 5 | US-situs assets | `constraints.us_situs_ceiling` |
+| 6 | Satellite ceiling | `sleeves.c.ceiling_pct` |
 
-The *form* of Sleeve A targets is fixed by Locked Decision L2: Sleeve A has a permanent target allocation composed of broad-index ETFs held at fixed within-Sleeve weights that sum to 100%. The *specific ETFs and weights* are portfolio-local parameters in `state.yaml: sleeve_a.allocation`. See `examples/state.example.yaml` for a fully populated synthetic demo.
-
-**Total size target:** `state.yaml: sleeve_a.target_base_pct` (~70-75% of **Core Portfolio (NLV − D − SR)** by default). Sleeve D claims a separate `state.yaml: sleeve_d.target_pct_of_total_nlv` of total NLV; A's target is sized against the remaining base. When SR = $0 this simplifies to ~70-75% of (NLV − D).
-
-**Hard rules:**
-- `state.yaml: sleeve_a.permanently_exited` — list of tickers irrevocably excluded from this portfolio; re-entry is flagged as a rule violation (conceptually the pre-v3.0 L7 discipline, now portfolio-local)
-- Sleeve A's cash-like yield buffer (whichever ETF fills that role in your `state.yaml`) is **not** a duration hedge — it is a yield-bearing cash substitute
-- Rebalancing toward targets is permitted but not mandatory on small drift
-- Never sell A to fund SR, D, or Kelly Reserve (see SR funding rules)
+Targets are outputs of constraints. A target that violates a constraint is
+invalid.
 
 ---
 
-## Sleeve B — Proven Alpha
+## Removed in v3.0
 
-**Purpose:** High-conviction individual equities where the edge is clear.
-
-**Constituents & caps (% of NLV):**
-
-| Ticker | Cap | Notes |
-|---|---|---|
-| (see `state.yaml: sleeve_b_caps`) | (per-portfolio %) | Cap = both buying-pause AND trim trigger |
-
-The *form* of Sleeve B caps is fixed by Locked Decision L3: each Sleeve B holding carries a per-position NLV cap that is binding (both buying-pause AND trim-trigger). The *specific ticker+cap values* are portfolio-local parameters in `state.yaml: sleeve_b_caps`. See `examples/state.example.yaml` for a fully populated synthetic demo.
-
-**Hard rules:**
-- Caps are **binding**, not advisory
-- A cap hit means: **stop buying**. If momentum continues, **trim** to cap
-- Names assigned to Sleeve D in your `state.yaml` stay in Sleeve D, not B, even if conviction is high (Sleeve B entry is rare and requires explicit Investment Committee approval)
-- New Sleeve B names require explicit Investment Committee approval — entry is rare
+| Concept | Fate |
+|---|---|
+| `ABC` denominator | Deleted |
+| Strategic Reserve | Repealed (L6) |
+| Kelly Reserve | Deleted |
+| Free tactical bucket | Deleted |
+| Cash-like ETF inside A | Prohibited |
 
 ---
 
-## Sleeve C — Tactical Cash
-
-**Purpose:** Short-horizon tactical deployments + Kelly Reserve parking.
-
-**Target:** `state.yaml: sleeve_c.target_pct_of_abc` (~5% of (A + B + C) base by default).
-
-**Contents:**
-- **Kelly Reserve** — undeployed portion of monthly DCA (`state.yaml: monthly_dca`)
-- **Short-term tactical deployments** — opportunistic, must justify expected return vs Kelly Reserve
-
-**Hard rules:**
-- Kelly Reserve grows when Kelly Factor < 1.00
-- Kelly Reserve depletes via:
-  - DCA deployment on Kelly Factor increase
-  - Trigger-driven opportunities (see Trigger Check)
-- Tactical deployments in C require explicit expected-return rationale
-
----
-
-## Sleeve D — Frontier Innovation
-
-**Purpose:** Smaller, higher-uncertainty positions in frontier tech themes.
-
-**Target:** `state.yaml: sleeve_d.target_pct_of_total_nlv` (5% of **total NLV (including D)** by default).
-
-**Funding sources (strict — funding source is verified at every entry):**
-- ✅ External / injected capital only
-- ❌ NOT from DCA
-- ❌ NOT from Sleeve A sales
-- ❌ NOT from Kelly Reserve
-- ❌ NOT from Sleeve B trimming (unless IC-approved exception)
-- ❌ NOT from SR (SR may fund D expansion, but only via deployment hierarchy)
-
-**Staging rules (in-progress names move through stages):**
-- **Stage 1 — Watchlist:** Thesis + initial score logged. No capital deployed.
-- **Stage 2 — Pilot:** Small starter position (typically ≤ 0.5% NLV) — confirms thesis via price action + earnings.
-- **Stage 3 — Full position:** Up to D's per-name allocation cap.
-
-**All D surgery (entry, exit, replacement) is governed by the Replacement Index** — see `04_replacement_index.md`.
-
-**Current constituents (per-portfolio, from `state.yaml`):**
-
-| Ticker | Stage | Theme |
-|---|---|---|
-| (see `state.yaml: positions` filtered to `sleeve: D`) | (1, 2, or 3 per position) | (free-form per-position note) |
-
-See `examples/state.example.yaml` for a synthetic populated Sleeve D, and `examples/snapshots/2026-01-01_portfolio.md` for what the generated Sleeve D snapshot block looks like.
-
----
-
-## Strategic Reserve (SR) — NOT a Sleeve
-
-**Purpose:** Dry powder awaiting superior expected-return opportunities.
-SR is intentionally **offensive capital**, not defensive cash.
-
-**Funding sources (strict whitelist):**
-- ✅ New external capital
-- ✅ Exceptional profit realization (rare, IC-approved)
-- ✅ Windfalls
-- ❌ NOT from DCA
-- ❌ NOT from Sleeve A sales
-- ❌ NOT from Sleeve B trimming
-- ❌ NOT from Sleeve D sales
-- ❌ NOT from Kelly Reserve
-
-**Default injection split:**
-- 30% deploy immediately into existing high-conviction sleeves
-- 70% to SR
-- (IC may modify split on injection)
-
-**Deployment triggers (any one):**
-- S&P correction > 8–10%
-- Nasdaq correction > 10%
-- High-conviction unjustified selloff
-- Earnings confirm stronger thesis while price declines
-- Kelly Factor increases meaningfully
-- IC formal approval
-
-**Deployment hierarchy (when a trigger fires):**
-1. Existing high-conviction Sleeve B positions
-2. Sleeve D expansion (still subject to D staging rules — SR does **not** bypass Stage 2/3 gates)
-3. New approved tech waves
-4. Sleeve A on broad valuation opportunity
-
-**Approval:** Only the Investment Committee may approve SR deployment (full or partial) or recommend holding.
-
----
-
-## Cross-Sleeve Invariants
-
-These rules apply across the entire architecture:
-
-1. **No sleeve may cannibalize another's funding source.**
-2. **Caps are caps** — not targets. Hitting a cap is a stop signal.
-3. **SR is offensive, not defensive.** Holding cash "for safety" is anti-LIOS.
-4. **Sleeve D is the only sleeve that takes new ideas.** Everything else is established.
-5. **Every recommendation respects the funding-source matrix** above.
-
----
-
-## Related
-- See `03_kelly_model_v2.md` — governs DCA deployment into A/B
-- See `04_replacement_index.md` — governs all D surgery
-- See `05_governance_principle.md` — why the architecture doesn't get relitigated
-- See `07_locked_decisions.md` — what is and isn't modifiable
+See also: `core/sleeves.md`, `core/deployment.md`, `core/regime-index.md`,
+`core/glidepath.md`.

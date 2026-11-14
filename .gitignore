@@ -8,10 +8,6 @@ Thumbs.db
 *.swp
 *.swo
 
-# Session state (not part of repo — internal runtime only)
-.omo/
-.codegraph/
-
 # Build / temp
 *.tmp
 *.bak

@@ -1,111 +1,97 @@
-# LIOS Portfolio State — SCHEMA (empty contract)
-# Version: 3.0
-#
-# This is the machine-checkable contract between the public LIOS framework
-# and a cloner's personal data repo. Every field the framework reads must
-# appear here. Every personal parameter extracted from the constitutional
-# files (Locked Decisions L2/L3/L7 form content, Sleeve C/D targets) lives
-# in this file, not in framework prose.
-#
-# Cloner: copy state.example.yaml, swap in your real tickers/amounts,
-# delete the `# TODO` comments, and run the generator. The synthetic
-# example is fully runnable end-to-end.
-#
-# CI note: the public LIOS repo greps for real ticker symbols and large
-# dollar amounts on every push. This schema file deliberately contains
-# neither; the framework files reference slots by name, never by value.
+# LIOS v3.0 — State Contract
+# Every field marked # TODO must be populated by the user.
+# This file is the schema. Copy examples/state.example.yaml for a populated demo.
+# NEVER commit a real state file to the public framework repo.
 
-date: ""                      # TODO: ISO date of state ("YYYY-MM-DD")
-version: "3.0"                # TODO: LIOS framework version this state targets
+version: "v3.0"
 
-# ───────────────────────────────────────────────────────────────────────
-# Portfolio totals (cash + positions)
-# ───────────────────────────────────────────────────────────────────────
-nlv: 0.0                      # TODO: Σ(position.market_value) + cash.balance — AUTHORITATIVE for all LIOS math
-ibkr_nlv: 0.0                 # TODO: IBKR Reported NLV — reference only (API/time lag OK)
-ibkr_gpv: 0.0                 # TODO: IBKR Gross Position Value — reference only
-source: ""                    # TODO: e.g. "IBKR Live", "Manual", "CSV import"
+# ── Valuation ──────────────────────────────────────────────────────────────
+nlv: 0                        # TODO: Σ(position.market_value) + Σ(cash pools)
+as_of: "YYYY-MM-DD"           # TODO: price date
+source: ""                    # TODO: broker / print source
 
-# ───────────────────────────────────────────────────────────────────────
-# Cash buckets
-# ───────────────────────────────────────────────────────────────────────
-cash:
-  balance: 0.0                # TODO: total broker cash balance
-  strategic_reserve: 0.0      # TODO: SR — offensive dry powder (per L6)
-  kelly_reserve: 0.0          # TODO: KR — Kelly-deferred capital
-  dca_undeployed: 0.0         # TODO: current month undeployed DCA
-  free_tactical: 0.0         # TODO: free tactical cash ("white powder")
+# ── Sleeves ────────────────────────────────────────────────────────────────
+# One denominator: NLV. Targets must sum to 100.
+sleeves:
+  a:
+    target_pct: 0             # TODO: core index weight
+    allocation:               # within-sleeve weights must sum to 100
+      - ticker: "EXAMPLE-A1"  # TODO
+        target_pct: 0
+  b:
+    target_pct: 0             # TODO: conviction weight (1-4 names)
+    position_cap_pct: 0       # TODO: single-name EFFECTIVE exposure ceiling
+    names:                    # 1-4; equal weight at entry
+      - ticker: "EXAMPLE-B1"  # TODO
+        target_pct: 0
+  c:
+    target_pct: 0             # TODO: satellite weight
+    ceiling_pct: 0            # TODO: hard ceiling
+    max_names: 0              # TODO
+  d:
+    target_pct: 0             # TODO: duration weight
+    instrument: "EXAMPLE-D"   # TODO: >3y duration, hedged
+  z:
+    target_pct: 0             # TODO: cash equivalents
+    floor_pct: 0              # TODO
+    ceiling_pct: 0            # TODO
 
-# ───────────────────────────────────────────────────────────────────────
-# Positions — every holding with explicit sleeve assignment
-# ───────────────────────────────────────────────────────────────────────
+# ── Constraints ────────────────────────────────────────────────────────────
+constraints:
+  factor_cap_pct: 0           # TODO: single-factor exposure ceiling
+  risky_min_pct: 0            # TODO: total risky weight floor
+  risky_max_pct: 0            # TODO: total risky weight ceiling
+  rebalance_band_pct: 8       # absolute pp deviation that triggers a rebalance
+  discretionary_max_pct: 3    # max NLV per discretionary event
+  us_situs_ceiling: 0         # TODO: estate-tax exemption in your jurisdiction
+  us_situs_exposure: 0        # TODO: current US-domiciled ETFs + US shares
+
+# ── Glidepath ──────────────────────────────────────────────────────────────
+glidepath:
+  policy: drift_accepted      # drift_accepted | hard
+  bands:                      # TODO: adjust to your horizon
+    - age_min: 45
+      age_max: 50
+      a: 0
+      b: 0
+      c: 0
+      d: 0
+      z: 0
+
+# ── Contributions ──────────────────────────────────────────────────────────
+monthly_dca: 0                # TODO: current monthly contribution
+dca_step_up: "min(salary growth, 5%)"   # never decrease
+dca_review_month: 1
+
+# ── Current Bull–Bear Index ────────────────────────────────────────────────
+bbi:
+  as_of: "YYYY-MM-DD"
+  market_valuation: 0         # TODO 0-100, higher = more bearish
+  portfolio_valuation: 0
+  macro_liquidity: 0
+  technical: 0
+  opportunity: 0
+  weighted: 0                 # 0.30/0.25/0.20/0.15/0.10
+  band: ""                    # Risk-On | Constructive | Cautious | Defensive
+
+# ── Positions ──────────────────────────────────────────────────────────────
 positions:
-  # ── Sleeve A: Core Compounding ──
-  - ticker: ""                # TODO: ticker symbol
-    shares: 0.0               # TODO: share count
-    avg_cost: 0.0             # TODO: average cost basis
-    sleeve: A                 # TODO: one of A / B / C / D
-    market_price: 0.0         # TODO: current market price
-    market_value: 0.0         # TODO: shares × market_price
+  - ticker: "EXAMPLE-A1"
+    sleeve: a                 # a | b | c | d | z
+    shares: 0
+    avg_cost: 0
+    market_price: 0
+    market_value: 0
+    us_situs: false           # true if US-domiciled ETF or US corporation
 
-  # ── Sleeve B: Proven Alpha ──
-  - ticker: ""
-    shares: 0.0
-    avg_cost: 0.0
-    sleeve: B
-    market_price: 0.0
-    market_value: 0.0
+# ── Cash ───────────────────────────────────────────────────────────────────
+cash:
+  balance: 0                  # uninvested broker cash
+  vehicles:
+    - pool: "z-main"
+      ticker: "EXAMPLE-Z1"
+      duration_years: 0
 
-  # ── Sleeve D: Frontier Innovation ──
-  # Note: Sleeve D positions carry an extra `stage` field (1/2/3)
-  - ticker: ""
-    shares: 0.0
-    avg_cost: 0.0
-    sleeve: D
-    stage: 3                  # TODO: 1 = Watchlist, 2 = Pilot, 3 = Full position
-    market_price: 0.0
-    market_value: 0.0
-
-# ───────────────────────────────────────────────────────────────────────
-# Sleeve A — L2 content (form stays Locked; values live here)
-# ───────────────────────────────────────────────────────────────────────
-sleeve_a:
-  target_base_pct: 75         # TODO: target ~70-75% of Core Portfolio (NLV − D − SR)
-  allocation:
-    - ticker: ""              # TODO: ETF ticker
-      target_pct: 0           # TODO: % within Sleeve A (sum must = 100)
-      role: ""                # TODO: free-form role description
-  permanently_exited:         # TODO: tickers irrevocably excluded; re-entry requires major bump
-    - ""                      # TODO: ticker (empty list is valid for new portfolios)
-
-# ───────────────────────────────────────────────────────────────────────
-# Sleeve B — L3 content (form stays Locked; values live here)
-# ───────────────────────────────────────────────────────────────────────
-sleeve_b_caps:
-  - ticker: ""                # TODO: ticker
-    cap_pct: 0                # TODO: max % of NLV (binding — buying pause AND trim trigger)
-    note: ""                  # TODO: optional note (e.g. "largest permitted single-name")
-
-# ───────────────────────────────────────────────────────────────────────
-# Sleeve C — target (extracted from core/sleeves.md per P2)
-# ───────────────────────────────────────────────────────────────────────
-sleeve_c:
-  target_pct_of_abc: 5        # TODO: target % of (A + B + C) base
-
-# ───────────────────────────────────────────────────────────────────────
-# Sleeve D — target per P2 (was hardcoded 5% in core/sleeves.md)
-# ───────────────────────────────────────────────────────────────────────
-sleeve_d:
-  target_pct_of_total_nlv: 5  # TODO: target % of total NLV (including D)
-
-# ───────────────────────────────────────────────────────────────────────
-# Monthly DCA — referenced by Kelly Model (was hardcoded $1,500)
-# ───────────────────────────────────────────────────────────────────────
-monthly_dca: 1500             # TODO: your monthly dollar-cost-average amount
-
-# ───────────────────────────────────────────────────────────────────────
-# Computed fields (regenerated by the validation engine — do not hand-edit)
-# ───────────────────────────────────────────────────────────────────────
-portfolio_total: 0.0          # Σ(position.market_value) + cash.balance
-reconciliation_delta: 0.0    # nlv - portfolio_total (must be ≤ ±$1.00)
-ibkr_nlv_gap: 0.0             # ibkr_nlv - nlv — INFO only, non-blocking
+# ── Computed (do not hand-edit) ────────────────────────────────────────────
+portfolio_total: 0            # Σ market_value + cash
+reconciliation_delta: 0       # nlv − portfolio_total (≤ ±1.00)

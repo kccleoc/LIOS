@@ -1,26 +1,10 @@
-> Quick reference — full methodology at core/kelly.md
+> RETIRED in LIOS v3.0 — see scores/Regime.md
 
-# Kelly Model Quick Reference
+# Kelly Model — RETIRED
 
-## Five Dimensions
+The Kelly Factor (0–1) has been removed. It was not the Kelly criterion and it
+sized a contribution flow rather than wealth.
 
-| Dimension | Weight |
-|---|---|
-| Market Valuation | 30% |
-| Portfolio Valuation | 25% |
-| Macro & Liquidity | 20% |
-| Technical Conditions | 15% |
-| Opportunity Set | 10% |
+Replacement: `scores/Regime.md` — Bull–Bear Index, 0–100, gauge only.
 
-## Kelly Factor Mapping
-
-| Weighted Total | Kelly Factor |
-|---|---|
-| 0–20 | 1.00 |
-| 21–35 | 0.75 |
-| 36–50 | 0.50 |
-| 51–65 | 0.25 |
-| 66–80 | 0.10 |
-| 81–100 | 0.00 |
-
-Core: core/kelly.md | Playbook: playbooks/KellyCheck.md
+Full rationale: `core/kelly.md`.

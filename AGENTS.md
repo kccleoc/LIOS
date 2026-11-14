@@ -100,17 +100,6 @@ grep -rE '\$[0-9]{4,}' . \
 
 ---
 
-## Directories to leave alone
-
-- `.omo/` — runtime session state, gitignored. Never commit.
-- `.codegraph/` — runtime code index, gitignored. Never commit.
-- `.omo/run-continuation/*.json` — internal OpenCode session data.
-
-If `git status` shows these as untracked, the `.gitignore` is broken —
-fix it before committing anything else.
-
----
-
 ## Voice / tone for new content
 
 Match the existing institutional, terse voice:

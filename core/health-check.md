@@ -1,10 +1,10 @@
-> **Source:** Extracted verbatim from LIOS v1.5. L10 — Health Check 16-section fixed order is a Locked Decision.
+> **Source:** Extracted from LIOS v1.5, re-pointed to the five-sleeve architecture in v3.0. L10 — Health Check 16-section fixed order is a Locked Decision.
 
 # Health Check Structure (16 Sections)
 
-**Component version:** v1.3 + v1.4 LOS integration + v1.5 LFS integration
+**Component version:** v3.0
 **Status:** Locked Decision (L10 — structure) / Dynamic (content per cycle)
-**Last updated:** 2026-07-27
+**Last updated:** 2026-11-14
 
 ---
 
@@ -23,22 +23,22 @@ breaks cross-session comparability.
 
 | # | Section | Output Type |
 |---|---|---|
-| 1 | Portfolio Health | Summary table + headline conclusions |
-| 2 | Drift Check | Per-sleeve actual vs target deltas |
-| 3 | Kelly Dashboard | Five-dimension scores + current Kelly Factor |
-| 4 | Trigger Check | SR trigger scan — which (if any) are firing? |
-| 5 | Sleeve A Review | Holdings + rebalance recommendations |
-| 6 | Sleeve B Review | Holdings + cap check + conviction |
-| 7 | Sleeve C Review | Kelly Reserve balance + tactical deployments |
-| 8 | Sleeve D Review | Stage + Replacement Index per holding |
-| 9 | Strategic Reserve Review | Balance + deployment opportunity set |
-| 10 | Strategic Reserve Opportunity Ranking | Ranked table — guides but does NOT auto-trigger |
-| 11 | Frontier Scoreboard | All D names + candidates scored |
-| 12 | Technology Wave Map | Active waves + Lc's exposure |
-| 13 | Execution Calendar | Timeline of upcoming events (earnings, macro, expiry) |
-| 14 | Execution Plan | Concrete buy/sell/hold directives with $ amounts |
-| 15 | Risk Assessment | Concentration, correlation, scenario stress |
-| 16 | CIO Resolution | One paragraph: "What should Lc do next?" |
+| 1 | Portfolio Health | NLV, sleeve totals vs targets, reconciliation |
+| 2 | Gap & Drift | One table — gap and drift are the same number |
+| 3 | Bull–Bear Index | Five scores, weighted BBI, band, band change |
+| 4 | Constraint Check | Single-name, factor, duration, risky, US-situs |
+| 5 | Sleeve A Review | Holdings + within-A weight drift |
+| 6 | Sleeve B Review | LOS, thesis-exit status, slot drift vs band |
+| 7 | Sleeve C Review | Rotation ranking, ceiling status, laggard cut list |
+| 8 | Sleeve D Review | Duration, available rebalancing ammunition |
+| 9 | Sleeve Z Review | Floor and ceiling, operational buffer |
+| 10 | Deployment Plan | This month's Rule 1 output in dollars |
+| 11 | Discretionary Channel | Open/closed, remaining budget |
+| 12 | Frontier Scoreboard | Sleeve C names + candidates scored |
+| 13 | Execution Calendar | Upcoming events (earnings, macro, index events) |
+| 14 | Execution Plan | Concrete buy/sell/hold directives with dollar amounts |
+| 15 | Risk Assessment | Constraint breaches, concentration, drawdown ladder |
+| 16 | CIO Resolution | One paragraph: what to do next, with confidence % |
 
 ---
 

@@ -367,3 +367,70 @@ See `07_locked_decisions.md`, `09_portfolio_construction_intelligence.md`.
 ### Locked Decision parameters
 **Definition:** The bound values referenced by a Locked Decision form — the portfolio-local content that varies per user. Examples: the specific ticker+cap pairs that populate L3's form (e.g., `<TICKER>` at 20% NLV, etc.), the specific ETF tickers and weights that populate L2's form. Live in `state.yaml` under the v3.0 bifurcation.
 **Used in:** ADR-003 §C; `state.yaml: sleeve_a.allocation`, `state.yaml: sleeve_b_caps`, `state.yaml: sleeve_a.permanently_exited`
+---
+
+# v3.0 — Additions and Supersessions
+
+The entries above were written for v2.x. Where they conflict with the
+definitions below, **these win**.
+
+### Bull–Bear Index (BBI)
+**Definition:** 0–100 conditions gauge, higher = more bearish. Five weighted dimensions (Market Valuation 30 / Portfolio Valuation 25 / Macro & Liquidity 20 / Technical 15 / Opportunity 10). Its only mechanical effect is to shift the A/B/C split inside a fixed risky budget. Supersedes Kelly Factor.
+**Used in:** `core/regime-index.md`, `scores/Regime.md`, `commands/regime-recalc.md`
+
+### Band (BBI)
+**Definition:** One of four regimes: Risk-On 0–35 · Constructive 36–50 · Cautious 51–65 · Defensive 66–100. Total risky exposure is identical in all four.
+**Used in:** `core/regime-index.md`
+
+### Gap (G)
+**Definition:** `G_s = w_s × (NLV + DCA) − V_s`. Positive = underweight. The only input to the DCA waterfall other than target weights. Drift and gap are the same number in v3.0.
+**Used in:** `core/deployment.md`
+
+### Standstill term
+**Definition:** `w_s × DCA`. The portion of a contribution required simply to hold a sleeve's weight, because the target grows with NLV. Without it, a gap-driven rule converges to a permanent positive gap and never closes.
+**Used in:** `core/deployment.md` Rule 1
+
+### Deployment Rules 1–3
+**Definition:** The only three operations that move capital. (1) DCA waterfall — monthly, never sells. (2) Rebalance band — on breach, sells. (3) Discretionary channel — ≤1 per quarter, max 3% NLV, funded from D or Z. L20.
+**Used in:** `core/deployment.md`
+
+### Rebalance band
+**Definition:** Absolute percentage-point deviation from target that triggers Rule 2. Default 8pp. Replaces the v2.x trigger ladder.
+**Used in:** `core/deployment.md` Rule 2
+
+### Drift-accepted glidepath
+**Definition:** Default glidepath policy. Age-band targets govern **new money only**; no equities are sold to de-risk; equity weight may exceed target by 10–20pp by retirement. The alternative is a hard glidepath.
+**Used in:** `core/glidepath.md`
+
+### Effective exposure
+**Definition:** A holding's direct weight plus its embedded weight in the index sleeves. A 7% direct position in a name that is 6.5% of a 65% core sleeve is about 11% effective. Single-name caps apply to this number, not to the direct weight.
+**Used in:** `core/sleeves.md`, L23
+
+### US-situs exposure
+**Definition:** Assets subject to US estate tax for a non-US investor — US-domiciled ETFs and shares of US corporations. Irish-domiciled UCITS do not count. Tracked against a hard ceiling. L23.
+**Used in:** `constitution/constitution.md` L23, `state.yaml: constraints.us_situs_*`
+
+### Sleeve Z (Cash Equivalents)
+**Definition:** Duration ≈ 0 sleeve, always last. T-bills, money-market funds, 0–1y Treasury ETFs, bank cash. Never reported as a bond sleeve or a hedge. Defined by risk factor, not issuer.
+**Used in:** `core/sleeves.md`
+
+### Sleeve D (Duration)
+**Definition:** Bonds with duration > 3 years, hedged to the liability currency. The only sleeve whose purpose is to appreciate when equities fall. Designated source for rebalancing and the discretionary channel.
+**Used in:** `core/sleeves.md`
+
+### Sleeve C (Satellite)
+**Definition:** Discretionary rotation sleeve, winner-weighted by design, no equal-weight rule. Laggards are cut, not averaged down. Hard ceiling; above it, trim the weakest name. Sleeve C surgery is governed by the Replacement Index.
+**Used in:** `core/sleeves.md`
+
+## Superseded terms
+
+| Term | Status | Replacement |
+|---|---|---|
+| Kelly Factor | **Deleted** | Bull–Bear Index band |
+| Kelly Model v2.0 | **Repealed (L4)** | `core/regime-index.md` |
+| Kelly Reserve | **Deleted** | Sleeve Z |
+| Strategic Reserve / SR | **Repealed (L6)** | Sleeve D drift + rebalance band |
+| Trigger ladder | **Deleted** | Rebalance band |
+| Free tactical (TC) | **Deleted** | Sleeve Z + discretionary channel |
+| `ABC` denominator | **Deleted** | NLV |
+| DCA "governed by Kelly Factor" | **Superseded** | DCA governed by the gap (Rule 1) |

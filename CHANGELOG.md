@@ -5,6 +5,57 @@ LIOS follows semver: major bumps only on Locked Decision changes.
 
 ---
 
+## [4.0.0] — 2026-11-14
+
+### Major — LIOS v3.0: Five Sleeves, Gap Deployment, Bull–Bear Index
+
+**Locked Decision changes (constitutional).**
+
+- **L1 amended.** Five sleeves renamed and redefined: **A** core index,
+  **B** conviction, **C** satellite, **D** duration, **Z** cash equivalents.
+  One denominator: **NLV**. The `ABC` base is deleted.
+- **L4 repealed** (Kelly Model v2.0). The model computed no edge, payoff ratio
+  or bankroll term, multiplied a *flow* rather than *wealth*, and ignored the
+  distance to target. Replaced by the Bull–Bear Index (L21) + gap deployment
+  (L20). Five dimensions, weights and 0–100 scoring survive; output and role do
+  not. L-number preserved, gapped.
+- **L6 repealed** (Strategic Reserve). Negative expected value as stated
+  (payoff ratio must exceed ~5.7:1), and it duplicated the rebalance band.
+  L-number preserved, gapped.
+- **L19–L23 added:** one denominator (NLV); three money operations only; the
+  index never changes total risky exposure; Sleeve B sells only on thesis break;
+  US-situs estate-tax ceiling.
+
+**New files.**
+- `core/deployment.md` — the three deployment rules (replaces `core/kelly.md`)
+- `core/regime-index.md` — Bull–Bear Index 0–100
+- `core/glidepath.md` — age bands, drift-accepted policy, DCA step-up, decumulation
+- `lios/v3.0.md` — self-contained init prompt
+- `scores/Regime.md`, `playbooks/RegimeCheck.md`, `commands/regime-recalc.md`
+
+**Rewritten.**
+- `core/sleeves.md` — A/B/C/D/Z, constraint set, funding matrix
+- `constitution/constitution.md` — L1 amended, L4/L6 repealed, L19–L23 added
+- `core/kelly.md`, `core/strategic-reserve.md` — retirement stubs with rationale
+- `core/health-check.md` — 16 sections re-pointed to the new architecture
+- `examples/state.schema.yaml`, `examples/state.example.yaml` — v3.0 schema
+- `README.md`, `docs/glossary.md`
+
+**Retired.**
+- `commands/kelly-recalc.md` → `commands/regime-recalc.md`
+- `commands/sr-rank.md`, `commands/trigger-check.md` → rebalance rule
+- `playbooks/KellyCheck.md` → `playbooks/RegimeCheck.md`
+
+**Deleted concepts.** `ABC` denominator, Kelly Factor, Kelly Reserve, Strategic
+Reserve, free-table bucket, trigger ladder, cash-like holdings inside Sleeve A.
+
+**Migration.** Executed via `LIOS-mine/execution/2026-11-14-v2-to-v3-migration.md`.
+No position is sold to satisfy a rule; every trade is funded by a target gap.
+
+Decision: ADR-005. Proposal: RFC-003.
+
+---
+
 ## [3.0.1] — 2026-07-31
 
 ### Patch — Flow-UP infrastructure

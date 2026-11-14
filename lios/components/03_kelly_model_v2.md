@@ -1,122 +1,82 @@
-# 03 · Kelly Model v2.0 — Five-Dimension Scoring
+# 03 · Bull–Bear Index — Scoring Reference
 
-**Component version:** v1.3
-**Status:** Locked Decision (framework) / Dynamic (scores)
-**Last updated:** 2026-07-25
+> **File kept at this path for link stability.** The v2.x file here was the
+> Kelly Model. That model is repealed (L4). This file now documents its
+> replacement.
 
----
-
-## Purpose
-
-Kelly Model v2.0 produces a single 0-1 fraction — the **Kelly Factor** —
-that governs what portion of the monthly DCA (`state.yaml: monthly_dca`; $1,500 default) gets deployed.
-The undeployed portion sits in Sleeve C as Kelly Reserve until
-either Kelly increases or a separate trigger fires.
-
-The model converts five orthogonal market/portfolio inputs into one
-deployable number. It is not a market-timing tool in the discretionary
-sense — it is a structured overlay.
+**Component version:** v3.0
+**Status:** Locked Decision (L21)
+**Last updated:** 2026-11-14
 
 ---
 
-## Five Dimensions
+## The Index
 
-Each dimension is scored 0-100 by the AI based on current data.
-Higher score = worse conditions for deployment (more conservative).
-Lower score = better conditions (more aggressive).
+```
+BBI = 0.30·MarketVal + 0.25·PortfolioVal + 0.20·MacroLiq
+    + 0.15·Technical + 0.10·Opportunity
+```
+
+0–100. **Higher = more bearish / more hostile to deployment.**
 
 | # | Dimension | Weight | What it measures |
-|---|---|---|---|
-| 1 | **Market Valuation** | 30% | Broad equity valuations — P/E, CAPE, equity risk premium, breadth |
-| 2 | **Portfolio Valuation** | 25% | Valuation of Lc's specific holdings — P/E vs own history, growth durability |
-| 3 | **Macro & Liquidity** | 20% | Rates, credit spreads, liquidity conditions, Fed posture, USD |
-| 4 | **Technical Conditions** | 15% | Trend, momentum, breadth, volatility regime, drawdown depth |
-| 5 | **Opportunity Set** | 10% | Quality of buying opportunities available *now* (catalysts, valuations, gaps) |
+|---|---|---:|---|
+| 1 | Market Valuation | 30% | Broad equity valuations — P/E, CAPE, ERP, breadth |
+| 2 | Portfolio Valuation | 25% | Own holdings vs their history, growth durability |
+| 3 | Macro & Liquidity | 20% | Rates, credit spreads, liquidity, policy, USD |
+| 4 | Technical Conditions | 15% | Trend, momentum, breadth, volatility, drawdown |
+| 5 | Opportunity Set | 10% | Quality of entry points available now |
 
-### Scoring guidance
-
-- **0–20:** Excellent conditions. Add aggressively.
-- **21–35:** Good conditions. Add on schedule.
-- **36–50:** Mixed. Half pace.
-- **51–65:** Cautious. Reduce adds.
-- **66–80:** Defensive. Pause adds.
-- **81–100:** Avoid adds. Capital preservation mode.
-
-Each dimension's score must come with a **one-line rationale** citing
-the specific data point driving it.
+Each dimension carries a score and a one-line rationale citing a specific data
+point.
 
 ---
 
-## Weighted Score → Kelly Factor
+## Bands
 
-```
-weighted_score = 0.30*market_val
-               + 0.25*portfolio_val
-               + 0.20*macro_liq
-               + 0.15*technical
-               + 0.10*opportunity
-```
+| BBI | Band | A | B | C | D | Z | Risky |
+|---|---|---:|---:|---:|---:|---:|---:|
+| 0–35 | Risk-On | 65% | 9% | 6% | 15% | 5% | 80% |
+| 36–50 | Constructive | 66% | 8.5% | 5.5% | 15% | 5% | 80% |
+| 51–65 | Cautious | 70% | 6% | 4% | 15% | 5% | 80% |
+| 66–100 | Defensive | 73% | 4% | 3% | 15% | 5% | 80% |
 
-| Weighted Score | Kelly Factor | DCA Action (multiply by `state.yaml: monthly_dca`) |
-|---|---|---|
-| 0–20 | **1.00** | Deploy 100% of monthly DCA |
-| 21–35 | **0.75** | Deploy 75% of monthly DCA |
-| 36–50 | **0.50** | Deploy 50% of monthly DCA |
-| 51–65 | **0.25** | Deploy 25% of monthly DCA |
-| 66–80 | **0.10** | Deploy 10% of monthly DCA |
-| 81–100 | **0.00** | Deploy 0% — all to Kelly Reserve |
-
-(Illustratively: with the default `monthly_dca = $1,500`, the factors resolve to $1,500 / $1,125 / $750 / $375 / $150 / $0.)
-
-**Kelly Reserve** = the accumulated undeployed portion of DCA. It can
-later be deployed via:
-- A Kelly Factor increase (status quo flow)
-- A separate trigger (see Trigger Check — section 4 of Health Check)
+Total risky is identical in every band. Only the passive/active split moves.
 
 ---
 
-## Worked Example
+## How the Band Is Used
 
-Suppose:
-- Market Valuation: 45 (mixed)
-- Portfolio Valuation: 30 (favorable — own holdings reasonably priced)
-- Macro & Liquidity: 50 (neutral)
-- Technical: 40 (slight weakness)
-- Opportunity Set: 25 (good entry points available)
-
-```
-weighted = 0.30*45 + 0.25*30 + 0.20*50 + 0.15*40 + 0.10*25
-         = 13.5 + 7.5 + 10.0 + 6.0 + 2.5
-         = 39.5
-```
-
-Kelly Factor = **0.50** → Deploy $750 this month. Remaining $750 to Kelly Reserve.
+- The band shifts the A/B/C split inside the risky block.
+- It is executed by the **DCA waterfall** — a step-down starves B and C of new
+  contributions. It never triggers a sale.
+- At most **one band step per quarter**.
 
 ---
 
-## When To Recalculate
+## Prohibitions
 
-Kelly is **not** a fixed number. Recalculate when:
-- Monthly DCA cycle begins (always)
-- A major macro event occurs (Fed decision, geopolitical shock)
-- Sleeve B caps are hit (matters for Portfolio Valuation)
-- Sleeve D surgery happens (matters for Opportunity Set)
-- NLV moves >5% in either direction
-
----
-
-## Common Failure Modes
-
-| Failure | Why it fails LIOS |
+| Attempt | Verdict |
 |---|---|
-| "Markets feel expensive, skip DCA" | Use the model, not feel. If model says 0.50, deploy $750. |
-| "Markets crashed, deploy everything" | A crash may trigger SR deployment, not Kelly. Don't confuse them. |
-| "Tech is hot, weight Opportunity Set higher" | Weights are fixed. Adjust scores, not weights. |
-| Ignoring Portfolio Valuation | A 20% position in a Sleeve B name is a Portfolio Valuation signal even if S&P is cheap. |
+| Use BBI to cut total equity | ❌ L21 — total risky is fixed |
+| Use BBI to deploy a reserve | ❌ No reserve exists |
+| Skip a contribution because BBI is high | ❌ Rule 1 is mechanical |
+| Override the band by discretion | ❌ L21 |
 
 ---
 
-## Related
-- See `02_capital_architecture.md` Sleeve C — where Kelly Reserve lives
-- See `commands/kelly-recalc.md` — re-run scoring on demand
-- See `06_health_check_structure.md` §3 — Kelly Dashboard placement in Health Check
+## Why This Replaced the Kelly Factor
+
+The Kelly Factor was not the Kelly criterion. It computed no edge, no payoff
+ratio and no bankroll term, and it sized a flow rather than wealth. It also
+ignored the distance between the portfolio and its target.
+
+Kelly, computed properly, is `f* = (μ − r)/σ²` or `w* = (1/γ)Σ⁻¹(μ − r)` — both
+linear in an unestimable μ. The plausible range for a broad equity index at
+current valuations moves `f*` from roughly 0% to over 100% of wealth. That is
+useful as a diagnostic and unusable as a monthly controller, which is why v3.0
+keeps only an ordinal gauge.
+
+---
+
+See also: `core/regime-index.md`, `core/deployment.md`, `scores/Regime.md`.

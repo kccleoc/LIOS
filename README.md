@@ -17,10 +17,11 @@ and recover full context instantly.
 
 LIOS is **not a stock-picking service**. It is:
 
-1. A **capital architecture** — five distinct layers (A/B/C/D/SR) with explicit funding rules and caps
-2. A **scoring framework** — Kelly Model v2.0 (5 dimensions) + Replacement Index (3 metrics)
-3. A **report structure** — 16-section Health Check, fixed order, always
-4. A **governance philosophy** — "Rules are permanent. Decisions are dynamic."
+1. A **capital architecture** — five sleeves (A/B/C/D/Z) measured against one denominator, with explicit funding rules and a constraint set
+2. A **scoring framework** — Bull–Bear Index (5 dimensions, gauge only) + LOS/LFS research gates + Replacement Index (3 metrics)
+3. A **deployment engine** — exactly three money rules (DCA waterfall, rebalance band, discretionary channel)
+4. A **report structure** — 16-section Health Check, fixed order, always
+5. A **governance philosophy** — "Rules are permanent. Decisions are dynamic."
 
 The system is executed in parallel across any LLM. Every session reads the same initialization prompt → identical framework, identical voice, identical evaluation discipline.
 
@@ -30,7 +31,7 @@ The system is executed in parallel across any LLM. Every session reads the same 
 
 | What you want to do | Go to |
 |---|---|
-| Initialize a new AI session | [`lios/v2.1.md`](./lios/v2.1.md) — paste the entire file (v2.0.md also available for compat) |
+| Initialize a new AI session | [`lios/v3.0.md`](./lios/v3.0.md) — paste the entire file |
 | Set up your own portfolio | Copy [`examples/state.example.yaml`](./examples/state.example.yaml) → rename → swap tickers → save as your `state.yaml` |
 | Understand the state contract | [`examples/state.schema.yaml`](./examples/state.schema.yaml) — every field with `# TODO` descriptions |
 | See a demo snapshot | [`examples/snapshots/2026-01-01_portfolio.md`](./examples/snapshots/2026-01-01_portfolio.md) — synthetic example |
@@ -57,18 +58,19 @@ your real holdings. Fill in your actual NLV, position counts, and
 sleeve assignments. Every `# TODO` field in `examples/state.schema.yaml`
 must be populated.
 
-### 3. Set your Locked Decision parameters
+### 3. Set your parameters
 Your `state.yaml` defines:
-- `sleeve_a.allocation` — your Sleeve A ETFs + within-Sleeve weights (L2 form)
-- `sleeve_b_caps` — your Sleeve B tickers + binding NLV caps (L3 form)
-- `sleeve_a.permanently_exited` — your permanently-exited list (was L7; now portfolio-local)
-- `sleeve_c.target_pct_of_abc` / `sleeve_d.target_pct_of_total_nlv` — your target percentages
-- `monthly_dca` — your monthly dollar-cost-average amount
+- `sleeves.a.allocation` — your core index ETFs + within-sleeve weights (L2 form)
+- `sleeves.b.position_cap_pct` — single-name effective exposure ceiling (L3 form)
+- `sleeves.c.*` / `sleeves.d.*` / `sleeves.z.*` — satellite, duration and cash parameters
+- `glidepath` — age bands and total risky weight
+- `constraints` — factor cap, risky band, US-situs ceiling, discretionary limit
+- `monthly_dca` — your monthly contribution
 
 ### 4. Paste the init prompt + your snapshot
-Open a fresh AI chat, paste `lios/v2.1.md` as the first message,
+Open a fresh AI chat, paste `lios/v3.0.md` as the first message,
 then paste your snapshot (generated or hand-crafted from your state).
-The AI acknowledges LIOSv2.1 and loads your holdings. Then paste any
+The AI acknowledges LIOS v3.0 and loads your holdings. Then paste any
 command from `commands/`.
 
 ### 5. Keep your personal data private
@@ -83,41 +85,45 @@ full bifurcation design.
 ## Repository Structure
 
 ```
-LIOS/                              ← public framework repo (v3.0)
+LIOS/                              ← public framework repo
 ├── README.md                      ← You are here
-├── VERSION.md                     Current version: 3.0
+├── VERSION.md                     Current release: 4.0.0 · methodology v3.0
 ├── CHANGELOG.md                   Version history
 ├── LICENSE                        Open-source (MIT)
 ├── constitution/                  Permanent knowledge — rarely changes
-│   ├── constitution.md            All Locked Decisions (L1–L18; L7 gapped — removed v3.0)
+│   ├── constitution.md            All Locked Decisions (L1–L23; L4, L6, L7 gapped — repealed)
 │   ├── mission.md                 Core purpose
 │   ├── principles.md              Communication standards
 │   └── governance.md              "Rules permanent, decisions dynamic"
 ├── core/                          Framework implementation
-│   ├── kelly.md                   Kelly Model v2.0
-│   ├── sleeves.md                 Sleeves A/B/C/D architecture
-│   ├── strategic-reserve.md       SR funding + deployment rules
-│   ├── replacement-index.md       Sleeve D surgery rules
+│   ├── sleeves.md                 Five sleeves A/B/C/D/Z, constraints, funding matrix
+│   ├── deployment.md              The three money rules
+│   ├── regime-index.md            Bull–Bear Index (0–100, gauge only)
+│   ├── glidepath.md               Age bands, step-up, decumulation
+│   ├── kelly.md                   RETIRED — v2.0 Kelly Model stub + rationale
+│   ├── strategic-reserve.md       RETIRED — v2.x SR stub + rationale
+│   ├── replacement-index.md       Sleeve C surgery rules
 │   ├── research-layer.md          LOS/RIL scoring framework
 │   ├── health-check.md            16-section structure
 │   ├── investment-committee.md    IC authority + workflow
 │   ├── execution-engine.md        PCI / LFS integration layer
 │   ├── validation.md              9-check auto-validation
-│   └── event-pipeline.md          15-step LIOS workflow
-├── examples/                      Synthetic demo data (v3.0 — new)
+│   └── event-pipeline.md          LIOS workflow
+├── examples/                      Synthetic demo data
 │   ├── state.schema.yaml          Empty contract — every field with # TODO
-│   ├── state.example.yaml         Fully synthetic populated demo ($1M NLV, EXAMPLE-* tickers)
+│   ├── state.example.yaml         Fully synthetic populated demo
 │   └── snapshots/                 Generated synthetic snapshot
 ├── lios/                          Paste-ready init prompts
-│   ├── v2.1.md                    Current init (v2.1)
-│   ├── v2.0.md                    Previous (still valid for compat)
+│   ├── v3.0.md                    Current init (v3.0)
+│   ├── v2.1.md                    Frozen history — not referenced by v3.0
+│   ├── v2.0.md                    Frozen history — not referenced by v3.0
 │   └── components/                Modular reference docs
 ├── commands/                      Paste-ready command library
 ├── scores/                        Quick-reference score methodology cards
 ├── playbooks/                     Agent workflow definitions
 ├── templates/                     Reusable document templates
-├── rfcs/                          Proposed changes (RFC-001, RFC-002)
-├── decisions/                     Architecture Decision Records (ADR-001, ADR-002, ADR-003)
+├── rfcs/                          Proposed changes (RFC-001 … RFC-003)
+├── decisions/                     Architecture Decision Records (ADR-001 … ADR-005)
 └── docs/
     └── glossary.md
 ```
@@ -134,10 +140,17 @@ LIOS/                              ← public framework repo (v3.0)
 ```
 LOS      →  decides WHICH assets deserve investment
 LFS      →  decides PRIORITY among investments that pass LOS
-Kelly    →  decides HOW MUCH capital to deploy
-Sleeves  →  decide WHERE the capital lives (A/B/C/D/SR)
-SR       →  offensive dry powder, deployed on triggers only
+Glidepath→  decides TOTAL risky exposure (age band)
+BBI      →  distributes ACTIVE risk inside the risky block (gauge only)
+Gap      →  decides HOW MUCH of this month's contribution goes where
+Sleeves  →  decide WHERE the capital lives (A/B/C/D/Z)
 ```
+
+Three money rules only: the DCA waterfall (never sells), the rebalance band
+(the crash response), and a small discretionary channel funded from duration or
+cash. There is no reserve, no trigger ladder, and no factor multiplying the
+contribution.
+
 
 - **LOS** (v1.4): Research Intelligence Layer — LVS/LGS/LQS/LMS → LOS 0-100
 - **LFS** (v1.5): Portfolio Construction Intelligence — five-dimension portfolio fit score
