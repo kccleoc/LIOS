@@ -1,6 +1,6 @@
 > **v3.0 conformance note.** Written for LIOS v2.x. In v3.0 the sleeves are
 > **A/B/C/D/Z** measured against NLV, the Kelly Factor is replaced by the
-> **Bull–Bear Index**, and the Strategic Reserve is repealed. Where this file
+> **Regime Index**, and the Strategic Reserve is repealed. Where this file
 > and `lios/v3.0.md` disagree, v3.0 wins.
 
 
@@ -16,7 +16,7 @@ portfolio.
 
 - Monthly review (always)
 - After major market moves (>5% NLV swing)
-- Before any Rule 2 rebalance or Rule 3 discretionary deployment
+- Before any Rebalance
 - Quarterly as a full reset
 
 ## Inputs required
@@ -41,15 +41,15 @@ Snapshot:
 Output the complete 16-section report in the canonical order:
 1. Portfolio Health          — NLV, sleeve totals vs targets, reconciliation
 2. Gap & Drift               — one table; gap and drift are the same number
-3. Bull–Bear Index           — five scores, weighted BBI, band, band change
+3. Regime Index           — five scores, weighted RI, band, band change
 4. Constraint Check          — single name, factor, duration, risky, US-situs
 5. Sleeve A Review
 6. Sleeve B Review           — LOS, thesis-exit status, slot drift
 7. Sleeve C Review           — rotation ranking, ceiling status
 8. Sleeve D Review           — duration, ammunition available
 9. Sleeve Z Review           — floor and ceiling
-10. Deployment Plan          — Rule 1 output in dollars
-11. Discretionary Channel    — open/closed, remaining budget
+10. Top-up Plan              — allocation in dollars
+11. Rebalance Status         — triggered / executed / escalated
 12. Frontier Scoreboard
 13. Execution Calendar
 14. Execution Plan
@@ -63,9 +63,9 @@ Rules:
 - Facts separated from Assessments
 - Confidence % on every recommendation in sections 5, 6, 8, 14, 15
 - No skipped sections — if no news, state "no action" with one-line rationale
-- The BBI is a gauge: it may NOT change total risky exposure (L21)
-- The only Sleeve B sell trigger is a thesis break, LOS < 60 (L22)
-- Money moves only via the three deployment rules (L20)
+- The RI is a gauge: it may NOT change total risky exposure (P2)
+- The only Sleeve B sell trigger is a thesis break, LOS < 60 (P5)
+- Money moves only via the three deployment rules (P3)
 - End with CIO Resolution as one paragraph
 
 Begin.

@@ -1,53 +1,49 @@
-# 07 · Locked Decisions — Index
+# 07 · The Constitution — P1 to P8
 
-> **This file is a pointer.** The authoritative Locked Decisions live in
-> `constitution/constitution.md`. Do not duplicate the rule text here —
-> duplicated rules drift. Use this file only as a routing index.
+> **This file is a routing index.** The authoritative rules live in
+> `constitution/constitution.md`. Do not duplicate rule text — duplicated rules
+> drift.
 
-**Component version:** v3.0
-**Last updated:** 2026-11-14
+**Component version:** v4.1
+**Last updated:** 2026-11-15
 
 ---
 
-| # | Status | Rule |
+| # | Rule | Source |
 |---|---|---|
-| **L1** | Live (amended v3.0) | Five sleeves A/B/C/D/Z; one denominator NLV |
-| **L2** | Live | Sleeve A has a permanent target allocation of broad-index ETFs at fixed within-sleeve weights |
-| **L3** | Live | Sleeve B per-position caps are binding (buying pause + trim trigger) |
-| **L4** | **Repealed v3.0** | Kelly Model v2.0 — number gapped |
-| **L5** | Live | Replacement Index governs all Sleeve C surgery |
-| **L6** | **Repealed v3.0** | Strategic Reserve — number gapped |
-| **L7** | **Removed v3.0** | Portfolio-local permanently-exited list |
-| **L8** | Live | Governance principle — rules permanent, decisions dynamic |
-| **L9** | Live | Communication standards |
-| **L10** | Live | Health Check is 16 sections, fixed order |
-| **L11** | Live | Research Intelligence Layer is canonical |
-| **L12** | Live | LOS bands fixed at five tiers |
-| **L13** | Live (reworded v3.0) | LOS does not replace sleeves, LFS or the Replacement Index |
-| **L14** | Live | LOS default weighting LQS 35 / LGS 25 / LVS 25 / LMS 15 |
-| **L15** | Live | LFS is canonical after LOS ≥ 70 |
-| **L16** | Live | LOS absolute, LFS relative |
-| **L17** | Live | LFS cannot rescue a poor investment |
-| **L18** | Live | When LOS ties within 5 points, prefer higher LFS |
-| **L19** | New v3.0 | One denominator — NLV |
-| **L20** | New v3.0 | Three money operations only |
-| **L21** | New v3.0 | BBI never changes total risky exposure |
-| **L22** | New v3.0 | Sleeve B sells only on thesis break |
-| **L23** | New v3.0 | US-situs estate-tax ceiling |
+| **P1** | Five sleeves (A/B/C/D/Z), one denominator (NLV) | `core/sleeves.md` |
+| **P2** | Targets from the glidepath; risky weight set by age | `core/glidepath.md` |
+| **P3** | Two operations only — Top-up and Rebalance | `core/deployment.md` |
+| **P4** | Rebalance direction: never sell A into D or Z | `core/deployment.md` |
+| **P5** | Sleeve B exits only on thesis break, via a 30-day review | `core/sleeves.md` |
+| **P6** | Caps outrank every rule | `core/sleeves.md` |
+| **P7** | A cap breach is itself a Rebalance trigger | `core/deployment.md` |
+| **P8** | Reports state dollars, confidence, fixed 16-section order | `constitution/method.md` |
 
 ---
 
-## Rules of the Rules
+## What is not a rule
 
-- L-numbers are **never renumbered**. Repealed decisions keep their number and
-  are gapped.
-- Modifying any live L-number requires a **major version bump** plus an ADR.
-- There is no soft-amendment pathway.
-- Locked Decision *parameters* (tickers, weights, caps) live in `state.yaml` and
-  may be edited without a version bump. Locked Decision *forms* live in
-  `constitution/` and `core/` and may not.
+LOS/LFS weights, band thresholds, Replacement Index weights, report templates,
+communication style and glossary entries live in `constitution/method.md`. They
+can be changed with a CHANGELOG entry and no version bump.
+
+If it cannot be broken in a way that damages the portfolio, it is method.
 
 ---
 
-Full statements, sources and rationale: `constitution/constitution.md`.
-Paste-ready summary: `lios/v3.0.md` § Locked Decisions.
+## Amendment
+
+A P-rule change requires a major version bump, an ADR, and a CHANGELOG entry.
+There is no soft-amendment pathway.
+
+Parameters in `state.yaml` — tickers, weights, caps, DCA, glidepath bands — are
+portfolio-local and need no bump.
+
+---
+
+## History
+
+L1–L23 were retired in v4.1.0. Twelve of them were method in constitutional
+clothing; L4, L6, L7 were already dead; L19 and L21 were merged or deleted. The
+mapping is in `constitution/constitution.md` § What replaced what.

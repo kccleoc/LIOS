@@ -23,7 +23,7 @@ the same book would imply. The name was doing no mathematical work.
 
 | Need | v3.0 home |
 |---|---|
-| Conditions gauge | `core/regime-index.md` — Bull–Bear Index (0–100) |
+| Conditions gauge | `core/regime-index.md` — Regime Index (0–100) |
 | "How much do I deploy?" | `core/deployment.md` — Rule 1, gap-driven |
 | "When do I sell?" | `core/deployment.md` — Rule 2, band breach |
 | "How big should a position be?" | `core/sleeves.md` — caps and constraints |

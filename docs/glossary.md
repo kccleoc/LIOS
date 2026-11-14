@@ -1,5 +1,10 @@
 # LIOS Glossary
 
+> **Historical note.** Entries above the "v4.1 — Eight Rules and Two
+> Operations" section were written for earlier versions and may reference
+> L-numbers, Kelly, or the Strategic Reserve. Those concepts are retired. Where
+> an entry conflicts with the v4.1 section, the v4.1 section wins.
+
 Terms used across LIOS docs. Sorted alphabetically.
 Each entry: term, definition, where it's used.
 
@@ -374,11 +379,11 @@ See `07_locked_decisions.md`, `09_portfolio_construction_intelligence.md`.
 The entries above were written for v2.x. Where they conflict with the
 definitions below, **these win**.
 
-### Bull–Bear Index (BBI)
+### Regime Index (RI)
 **Definition:** 0–100 conditions gauge, higher = more bearish. Five weighted dimensions (Market Valuation 30 / Portfolio Valuation 25 / Macro & Liquidity 20 / Technical 15 / Opportunity 10). Its only mechanical effect is to shift the A/B/C split inside a fixed risky budget. Supersedes Kelly Factor.
 **Used in:** `core/regime-index.md`, `scores/Regime.md`, `commands/regime-recalc.md`
 
-### Band (BBI)
+### Band (RI)
 **Definition:** One of four regimes: Risk-On 0–35 · Constructive 36–50 · Cautious 51–65 · Defensive 66–100. Total risky exposure is identical in all four.
 **Used in:** `core/regime-index.md`
 
@@ -388,27 +393,27 @@ definitions below, **these win**.
 
 ### Standstill term
 **Definition:** `w_s × DCA`. The portion of a contribution required simply to hold a sleeve's weight, because the target grows with NLV. Without it, a gap-driven rule converges to a permanent positive gap and never closes.
-**Used in:** `core/deployment.md` Rule 1
+**Used in:** `core/deployment.md` Top-up
 
 ### Deployment Rules 1–3
-**Definition:** The only three operations that move capital. (1) DCA waterfall — monthly, never sells. (2) Rebalance band — on breach, sells. (3) Discretionary channel — ≤1 per quarter, max 3% NLV, funded from D or Z. L20.
+**Definition:** The only three operations that move capital. (1) DCA waterfall — monthly, never sells. (2) Rebalance band — on breach, sells. (3) Discretionary channel — ≤1 per quarter, max 3% NLV, funded from D or Z. P3.
 **Used in:** `core/deployment.md`
 
 ### Rebalance band
-**Definition:** Absolute percentage-point deviation from target that triggers Rule 2. Default 8pp. Replaces the v2.x trigger ladder.
-**Used in:** `core/deployment.md` Rule 2
+**Definition:** Per-sleeve band, `clamp(0.5 × target, 2pp, 8pp)`. A breach triggers Rebalance. Replaces the v2.x trigger ladder.
+**Used in:** `core/deployment.md` Rebalance
 
-### Drift-accepted glidepath
+### Contribution tilt
 **Definition:** Default glidepath policy. Age-band targets govern **new money only**; no equities are sold to de-risk; equity weight may exceed target by 10–20pp by retirement. The alternative is a hard glidepath.
 **Used in:** `core/glidepath.md`
 
 ### Effective exposure
 **Definition:** A holding's direct weight plus its embedded weight in the index sleeves. A 7% direct position in a name that is 6.5% of a 65% core sleeve is about 11% effective. Single-name caps apply to this number, not to the direct weight.
-**Used in:** `core/sleeves.md`, L23
+**Used in:** `core/sleeves.md`, P6
 
 ### US-situs exposure
-**Definition:** Assets subject to US estate tax for a non-US investor — US-domiciled ETFs and shares of US corporations. Irish-domiciled UCITS do not count. Tracked against a hard ceiling. L23.
-**Used in:** `constitution/constitution.md` L23, `state.yaml: constraints.us_situs_*`
+**Definition:** Assets subject to US estate tax for a non-US investor — US-domiciled ETFs and shares of US corporations. Irish-domiciled UCITS do not count. Tracked against a hard ceiling. P6.
+**Used in:** `constitution/constitution.md` P6, `state.yaml: constraints.us_situs_*`
 
 ### Sleeve Z (Cash Equivalents)
 **Definition:** Duration ≈ 0 sleeve, always last. T-bills, money-market funds, 0–1y Treasury ETFs, bank cash. Never reported as a bond sleeve or a hedge. Defined by risk factor, not issuer.
@@ -426,11 +431,53 @@ definitions below, **these win**.
 
 | Term | Status | Replacement |
 |---|---|---|
-| Kelly Factor | **Deleted** | Bull–Bear Index band |
+| Kelly Factor | **Deleted** | Regime Index band |
 | Kelly Model v2.0 | **Repealed (L4)** | `core/regime-index.md` |
 | Kelly Reserve | **Deleted** | Sleeve Z |
 | Strategic Reserve / SR | **Repealed (L6)** | Sleeve D drift + rebalance band |
 | Trigger ladder | **Deleted** | Rebalance band |
 | Free tactical (TC) | **Deleted** | Sleeve Z + discretionary channel |
 | `ABC` denominator | **Deleted** | NLV |
-| DCA "governed by Kelly Factor" | **Superseded** | DCA governed by the gap (Rule 1) |
+| DCA "governed by Kelly Factor" | **Superseded** | DCA governed by the gap (Top-up) |
+
+---
+
+# v4.1 — Eight Rules and Two Operations
+
+Supersedes the L-number layer entirely.
+
+### P1–P8 (Portfolio Rules)
+**Definition:** The eight constitutional rules. P1 five sleeves one denominator · P2 targets from the glidepath, risky weight by age · P3 two operations only · P4 Rebalance direction limits · P5 Sleeve B exits only on thesis break, via a 30-day review · P6 caps outrank every rule · P7 a cap breach is a Rebalance trigger · P8 reporting. Changing any of them requires a major version bump plus an ADR.
+**Used in:** `constitution/constitution.md`
+
+### Method
+**Definition:** Everything in `constitution/method.md` — LOS/LFS weights, band thresholds, Replacement Index, report templates, communication style, glossary. Editable with a CHANGELOG entry, no version bump. The test: if it cannot be broken in a way that damages the portfolio, it is method.
+**Used in:** `constitution/method.md`
+
+### Top-up
+**Definition:** The monthly operation. Allocates the contribution pro-rata to each sleeve's gap, `G_s = w_s × (NLV + DCA) − V_s`. Never sells. Falls back to routing 100% to D and Z when total risky weight is at the age-band cap.
+**Used in:** `core/deployment.md` (P3)
+
+### Rebalance
+**Definition:** The on-breach operation. Triggered by a per-sleeve band breach or any cap breach. Sells overweight and buys underweight, subject to P4's direction limits. This is the crash response.
+**Used in:** `core/deployment.md` (P3, P7)
+
+### Per-sleeve band
+**Definition:** `clamp(0.5 × target, 2pp, 8pp)`. A 70% sleeve gets ±8pp; a 4% sleeve gets ±2pp. A single absolute band could not serve both.
+**Used in:** `core/deployment.md`
+
+### Transition mandate
+**Definition:** A time-boxed structural migration. Requires a sunset date, completion criteria, a fallback that closes unmet gaps by Rebalance, and continuous cap compliance. Cannot raise risky weight above the P2 ceiling.
+**Used in:** `core/deployment.md`
+
+### Contribution tilt
+**Definition:** The default glidepath policy. Targets govern new money only; equity is not sold to de-risk. Contrast with a hard glidepath, where targets are binding and Rebalance sells equity to reach them. A "glidepath" that cannot reduce equity weight is a contribution tilt, and should be named one.
+**Used in:** `core/glidepath.md`
+
+### Regime Index (RI)
+**Definition:** 0–100 conditions gauge, higher = more bearish. Dashboard only. It sizes nothing, shifts no target, gates no operation. Its mechanical effect was removed in v4.1.
+**Used in:** `core/regime-index.md`
+
+### 30-day review (P5)
+**Definition:** What LOS < 60 triggers on a Sleeve B holding. Must resolve to either a documented re-score ≥ 60 citing new evidence, or an exit. No third outcome, no automatic extension.
+**Used in:** `constitution/constitution.md` P5

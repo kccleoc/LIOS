@@ -9,13 +9,13 @@ are the same number** — there is one calculation, not two.
 
 - Monthly, before the DCA
 - After any trade or large price move
-- Before invoking Rule 2
+- Before invoking Rebalance
 
 ## Inputs
 
 1. `portfolio/state/portfolio.yaml`
 2. Sleeve targets from the glidepath band for the current age
-3. `constraints.rebalance_band_pct` (default 8)
+3. Per-sleeve bands: clamp(0.5 × target, 2pp, 8pp)
 
 ## Command
 
@@ -40,7 +40,7 @@ For each sleeve in A, B, C, D, Z:
 Then:
 1. Confirm Σ gaps = 0
 2. Name every sleeve that breaches the band
-3. If any breach: state that Rule 2 is triggered and give the proceed sizes
+3. If any breach: state that Rebalance is triggered and give the proceed sizes
    (sell overweight to target, buy underweight pro-rata, Z never below floor)
 4. Within-A weight drift against the within-A allocation
 5. Within-B slot drift against the equal-weight slot bands
@@ -77,9 +77,10 @@ Positive = underweight. Negative = overweight.
 
 | Gap | Action |
 |---|---|
-| Inside the band | none |
-| Band breach (default 8pp) | Rule 2 rebalance |
-| D +25% relative to target | Rule 2 rebalance |
+| Inside the per-sleeve band | none |
+| Band breach | Rebalance |
+| Cap breach (P7) | Rebalance, or escalate if P4 forbids the cure |
+| D +25% relative to target | Rebalance |
 
 ## Related
 

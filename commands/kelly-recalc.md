@@ -10,7 +10,7 @@ Use instead:
 
 | Need | Command |
 |---|---|
-| Conditions gauge | `/regime-recalc` — Bull–Bear Index, 0–100 |
-| This month's allocation | `/health-check` §10 — Deployment Plan (gap-driven) |
+| Conditions gauge | `/regime-recalc` — Regime Index, 0–100 |
+| This month's allocation | `/health-check` §10 — Top-up Plan (gap-driven) |
 
 See `../core/regime-index.md` and `../core/deployment.md`.

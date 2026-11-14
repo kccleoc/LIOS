@@ -1,8 +1,8 @@
 > Quick reference — full methodology at core/regime-index.md
 
-# Bull–Bear Index — Quick Reference
+# Regime Index — Quick Reference
 
-0–100. **Higher = more bearish / more hostile to deployment.**
+0–100. **Higher = more bearish.** Dashboard only — it has no mechanical effect.
 
 ## Five Dimensions
 
@@ -15,25 +15,26 @@
 | Opportunity Set | 10% |
 
 ```
-BBI = 0.30·MV + 0.25·PV + 0.20·ML + 0.15·T + 0.10·O
+RI = 0.30·MV + 0.25·PV + 0.20·ML + 0.15·T + 0.10·O
 ```
 
-## Bands
+## Bands (labels only)
 
-| BBI | Band | A | B | C | D | Z |
-|---|---|---:|---:|---:|---:|---:|
-| 0–35 | Risk-On | 65% | 9% | 6% | 15% | 5% |
-| 36–50 | Constructive | 66% | 8.5% | 5.5% | 15% | 5% |
-| 51–65 | Cautious | 70% | 6% | 4% | 15% | 5% |
-| 66–100 | Defensive | 73% | 4% | 3% | 15% | 5% |
+| Range | Reading |
+|---|---|
+| 0–35 | Risk-on |
+| 36–50 | Constructive |
+| 51–65 | Cautious |
+| 66–100 | Defensive |
 
-Total risky exposure is **80% in every band**. The index shifts only the split
-between passive index and active bets.
+## What it may not do
 
-## Three Rules
+- change total risky exposure
+- shift sleeve targets
+- size the contribution
+- gate or override a band or cap
 
-1. Never changes total risky exposure.
-2. Implemented by **starving** B and C of contributions — never by selling.
-3. One band step per quarter.
+If a session proposes any of these, refuse: it is market timing with a score
+attached.
 
 Core: `core/regime-index.md` | Command: `commands/regime-recalc.md`

@@ -1,223 +1,184 @@
-> **Source:** Extracted verbatim from LIOS v1.x components, amended in v3.0. All live L-numbers are constitutional. Modifying any requires a major version bump.
+> **Source:** Replaces the L1–L23 "Locked Decisions" accumulated across v1.x–v3.0. Consolidated in v4.1.0.
 
-# 07 · Locked Decisions
+# Portfolio Rules — P1 to P8
 
-**Component version:** v3.0 (L1 amended; L4 and L6 repealed; L19–L23 added)
-**Status:** Locked Decision
-**Last updated:** 2026-11-14
-
----
-
-## What This File Is
-
-A consolidated reference for **every rule that is locked across LIOS versions**.
-If you (or an AI) are tempted to suggest changing one of these,
-stop. That suggestion requires a **major version bump** (v2.0+)
-and a constitutional amendment — not a normal cycle review.
-
-Trade recommendations built on top of these may change. The rules themselves do not.
+**Component version:** v4.1
+**Status:** Constitutional. Changing any P-rule requires a major version bump.
+**Last updated:** 2026-11-15
 
 ---
 
-## The Locked Decisions
+## What this file is
 
-### L1 · Five-Sleeve Capital Architecture
-- **Statement:** Portfolio is partitioned into five sleeves — **A** (core index), **B** (conviction), **C** (satellite), **D** (duration), **Z** (cash equivalents). Each has a distinct purpose, funding rule and constraint. Every sleeve, cap, floor and ceiling is measured against **one denominator: NLV**. No secondary denominator exists.
-- **Source:** `core/sleeves.md`
-- **Modifying requires:** Major version bump
-- **Notes:** v3.0 amendment. The pre-v3.0 form was "Sleeves A, B, C, D + Strategic Reserve" measured against an `ABC` base for A and C. `ABC` is deleted; Strategic Reserve is repealed (L6).
+Eight rules. That is the whole constitution.
 
-### L2 · Sleeve A Targets (Permanent)
-- **Statement:** Sleeve A carries a permanent target allocation composed of broad-index ETFs held at fixed within-Sleeve weights. The *form* (Sleeve A has permanent target allocation; broad-index ETFs carry fixed within-Sleeve weights summing to 100%) is constitutional. The *parameter values* (specific ETF tickers and their target weights) live in `state.yaml: sleeve_a.allocation`.
-- **Source:** `core/sleeves.md` Sleeve A
-- **Modifying requires:** Major version bump (form). Per-portfolio ETF and weight values may change via `state.yaml` edit without bump — they are personal parameters, not framework invariants.
+The previous structure carried twenty live "Locked Decisions" (L1–L23, with three
+repealed). Twelve of them were not decisions at all — they were method
+documentation wearing a constitutional costume: how to weight research scores,
+how many sections a report has, how to write. Those now live in
+`constitution/method.md` and can be changed with a changelog entry.
 
-### L3 · Sleeve B Assets and Caps
-- **Statement:** Sleeve B carries high-conviction individual equities, each governed by a per-position NLV cap. The *form* (caps are binding — both buying-pause AND trim-trigger; cap hit means stop buying and, on continued momentum, trim to cap) is constitutional. The *parameter values* (specific ticker symbols and their cap percentages) live in `state.yaml: sleeves.b.caps`.
-- **Source:** `core/sleeves.md` Sleeve B
-- **Modifying requires:** Major version bump (form). Per-portfolio ticker and cap values may change via `state.yaml` edit without bump — they are personal parameters, not framework invariants.
-
-### L4 · [Repealed in v3.0 — was Kelly Model v2.0 Five-Dimension Scoring]
-- **Statement (pre-v3.0):** Five dimensions (Market Valuation 30% / Portfolio Valuation 25% / Macro & Liquidity 20% / Technical Conditions 15% / Opportunity Set 10%), each 0-100. Weighted total mapped to a Kelly Factor (0.00–1.00) via a six-tier table, and the factor multiplied the monthly DCA.
-- **Repeal rationale:** The model was not the Kelly criterion. It computed no edge, no payoff ratio and no bankroll term, applied a fraction of a *flow* rather than of *wealth*, and ignored the distance between the portfolio and its target. The name implied a derivation that never happened.
-- **Replaced by:** `core/regime-index.md` — **Bull–Bear Index (BBI)**, 0–100, as a gauge that shifts the internal split of the risky block (L21); and `core/deployment.md` — Rule 1, gap-driven deployment (L20). The five dimensions, weights and 0–100 scoring survive unchanged; only the output and its job changed.
-- **L-number preserved** per the no-renumber rule. Future additions skip L4.
-- **Modifying requires:** Major version bump to restore L4 as written (not anticipated).
-
-### L5 · Replacement Index for All Sleeve D Decisions
-- **Statement:** Three metrics (Frontier 40% / Momentum 35% / Diversification 25%), 0-100 each. Replacement requires composite superiority + ≥2 of 4 qualitative conditions.
-- **Source:** `core/replacement-index.md`
-- **Modifying requires:** Major version bump
-
-### L6 · [Repealed in v3.0 — was Strategic Reserve Funding and Deployment Rules]
-- **Statement (pre-v3.0):** SR funded only by external capital / exceptional realization / windfalls. Default injection split 30/70. Deployment only on enumerated triggers, via a deployment hierarchy. IC had sole deployment authority.
-- **Repeal rationale:** A reserve held to buy an equity dip is negative expected value unless the trigger's payoff ratio exceeds approximately 5.7:1; a common "index falls 8%" trigger is near 1:1 while the opportunity cost is the full equity premium. The enumerated trigger was also a hidden market-timing rule that fires after the decline, and it duplicated what a rebalance band does continuously.
-- **Replaced by:** `core/deployment.md` Rule 2 (rebalance band) and Rule 3 (discretionary channel). Dry powder is a byproduct of drift, not a bucket. Ballast and ammunition live in Sleeve D (duration), not in bills.
-- **L-number preserved** per the no-renumber rule. Future additions skip L6.
-- **Modifying requires:** Major version bump to restore L6 as written (not anticipated).
-
-### L7 · [Removed in v3.0 — was a portfolio-local, not a framework invariant]
-- **Statement (pre-v3.0):** A specific ticker (the original repo's IBTA) was permanently exited — re-entry prohibited under any circumstances.
-- **Removal rationale:** The "permanently exited" discipline is *portfolio-local*: every cloner may maintain their own list of names irrevocably excluded from their portfolio, but no specific ticker is excluded by *the framework*. The pre-v3.0 original L7 conflated Leo's personal exit (IBTA, a pre-v3.0 holding) with a constitutional rule. v3.0 removes L7 from the public framework and relocates the *concept* of a portfolio-local permanently-exited list to personal state (`state.yaml: sleeve_a.permanently_exited`). The L-number is preserved per AGENTS.md's no-renumber rule; future L-number additions skip L7.
-- **Source (historical):** `core/sleeves.md` Sleeve A note (v1.x–v2.x)
-- **Modifying requires:** Major version bump to *restore* L7 as a framework invariant (not anticipated).
-- **Cloner note:** Add your own permanently-exited tickers to `state.yaml: sleeve_a.permanently_exited`. The validation engine honors the list exactly as the original L7 did — re-entry is flagged as a rule violation.
-
-### L8 · Governance Principle ("Rules Permanent, Decisions Dynamic")
-- **Statement:** Rules are permanent; decisions are dynamic. No trade recommendation is permanently embedded.
-- **Source:** `constitution/governance.md`
-- **Modifying requires:** Major version bump (this is the constitution itself)
-
-### L9 · Communication Standards
-- **Statement:** Conclusions first, dollar amounts always, explicit directives, Facts vs Assessments separation, Confidence %, no fluff.
-- **Source:** `constitution/principles.md`
-- **Modifying requires:** Major version bump
-
-### L10 · Health Check 16-Section Fixed Order
-- **Statement:** Health Check is always 16 sections in the canonical order. No section may be skipped.
-- **Source:** `core/health-check.md`
-- **Modifying requires:** Major version bump
+A rule belongs here only if breaking it would damage the portfolio. Everything
+else is method.
 
 ---
 
-## v1.4 Additions — Research Intelligence Layer (L11–L14)
+## The Eight Rules
 
-The following locked decisions were introduced in v1.4. They
-**add** to the constitution; they do not modify L1–L10.
+### P1 · Five sleeves, one denominator
 
-### L11 · Research Intelligence Layer Is Canonical
-- **Statement:** Every security researched under LIOS v1.4+ must receive LVS, LGS, LQS, LMS, and LOS scores using the standard output format defined in `core/research-layer.md`.
-- **Source:** `core/research-layer.md`
-- **Modifying requires:** Major version bump
-- **Notes:** Sleeve A broad-index ETFs are exempt (LOS not applicable to index vehicles).
+The portfolio is partitioned into five sleeves:
 
-### L12 · LOS Interpretation Bands Are Fixed
-- **Statement:** LOS bands are fixed at five tiers — Elite 90-100 / Buy 80-89 / Watch 70-79 / Hold 60-69 / Pass <60.
-- **Source:** `core/research-layer.md`
-- **Modifying requires:** Major version bump
-- **Notes:** The actions associated with each band (e.g., "Buy on meaningful correction" for Watch) are part of this locked decision.
+| Sleeve | Holds | Risk role |
+|---|---|---|
+| **A** | Broad-index ETFs only | Systematic beta |
+| **B** | 1–4 individual equities, equal weight at entry | Idiosyncratic alpha, capped |
+| **C** | Discretionary rotation, winner-weighted | Active thematic, capped |
+| **D** | Bonds, duration > 3 years, hedged | Ballast and ammunition |
+| **Z** | Duration ≈ 0 — T-bills, money market, cash | Liquidity |
 
-### L13 · LOS Does Not Replace Sleeves, LFS, or Replacement Index
-- **Statement:** LOS is the upstream research filter. Sleeves, the constraint set and the three deployment rules still decide placement and size; LFS still decides priority; the Replacement Index still gates all Sleeve C surgery. LOS is **additive**, not substitutive.
-- **Source:** `core/research-layer.md`, `core/replacement-index.md`
-- **Modifying requires:** Major version bump
-- **Notes:** v3.0 reworded the statement: the Kelly Model named in the v2.x form was repealed (L4). A candidate with strong research but weak portfolio fit should not displace an incumbent without explicit IC rationale.
+Every weight, cap, floor and ceiling is a percentage of **NLV**. No second
+denominator exists. There is no `ABC` base.
 
-### L14 · LOS Default Weighting Orientation
-- **Statement:** Default LOS weighting orientation is LQS-heaviest, then LGS/LVS, then LMS. The default weights themselves are: LQS 35% / LGS 25% / LVS 25% / LMS 15%. The exact weights may evolve over time as LIOS improves, but every LOS must be explainable.
-    - **Source:** `core/research-layer.md`
-- **Modifying requires:** Documented v1.4.x patch with rationale in CHANGELOG (does NOT require major bump — this is a calibration of an existing framework, not a constitutional change).
-- **Notes:** Per-score deviations from default weights must be disclosed with one-line rationale.
+A cash-like instrument may not sit inside A. A duration-bearing instrument may
+not sit inside Z. Sleeves are defined by risk factor, not by issuer or ticker.
 
 ---
 
-## v1.5 Additions — Portfolio Construction Intelligence (L15–L18)
+### P2 · Targets come from the glidepath; risky weight is set by age
 
-The following locked decisions were introduced in v1.5. They
-**add** to the constitution; they do not modify L1–L14.
+Sleeve targets are read from the age band in `state.yaml: glidepath`.
 
-### L15 · LFS Is Canonical (Portfolio Fit Evaluation Required)
-- **Statement:** Every investment that passes the LOS threshold (LOS ≥ 70) must also be evaluated for LFS (LIOS Fit Score) before capital allocation. LFS measures portfolio fit — how much does this investment improve the current LIOS portfolio? LFS is portfolio-relative and dynamic.
-- **Source:** `core/execution-engine.md`
-- **Modifying requires:** Major version bump
-- **Notes:** Sleeve A broad-index ETFs are exempt (LFS not applicable to index vehicles). LFS is additive to LOS, Kelly, Sleeves, and Replacement Index — never a substitute.
-
-### L16 · LOS Is Absolute, LFS Is Relative
-- **Statement:** LOS evaluates the investment itself (absolute). LFS evaluates the investment against the current portfolio (relative). They measure different things. Both are required. Neither replaces the other. A change in LFS alone does NOT change LOS.
-- **Source:** `core/execution-engine.md`
-- **Modifying requires:** Major version bump
-
-### L17 · LFS Cannot Rescue a Poor Investment
-- **Statement:** A weak LOS cannot become a Buy simply because it diversifies the portfolio. LOS remains the primary investment gate. An investment with LOS < 70 does not advance to LFS evaluation. The Investment Decision Matrix (LOS + LFS) is binding: Low LOS + High LFS = Do Not Buy.
-- **Source:** `core/execution-engine.md`
-- **Modifying requires:** Major version bump
-- **Notes:** Exceptions require explicit IC override documented in Health Check.
-
-### L18 · LFS Preference Rule
-- **Statement:** When LOS values are similar (within 5 points), LIOS should prefer the investment with the higher LFS. This is an official decision rule that guides capital allocation priority among LOS-qualified candidates.
-- **Source:** `core/execution-engine.md`
-- **Modifying requires:** Major version bump
-- **Notes:** This rule applies to capital allocation priority, not to Replacement Index decisions (L5) which have their own criteria.
+**Total risky weight is set by age, not by opinion, not by the regime index, not
+by a market view.** An investor who wants to change the equity level changes the
+glidepath band and writes down why. Nothing else may move it.
 
 ---
 
-## v3.0 Additions — Deployment, Index, and Constraints (L19–L23)
+### P3 · Money moves two ways only
 
-The following locked decisions were introduced in v3.0. They **add** to the
-constitution; they do not modify L1–L3, L5, or L8–L18.
+| Operation | Job | Frequency | Sells? |
+|---|---|---|---|
+| **Top-up** | Allocate the monthly contribution | Monthly | **No** |
+| **Rebalance** | Correct a band or cap breach | On breach | **Yes** |
 
-### L19 · One Denominator — NLV
-- **Statement:** Every sleeve weight, cap, floor, ceiling and drift measurement is a percentage of **NLV**. No target, gap or cap may use a different base. The `ABC` base is abolished.
-- **Source:** `core/sleeves.md`
-- **Modifying requires:** Major version bump
-- **Notes:** A single dollar previously carried two weights depending on the rule applied. That inconsistency produced a gap that widened when funded and could not be closed by any deployment rule.
+There is no third operation. No discretionary channel, no reserve, no trigger
+ladder, no override. Anything else is a rule violation.
 
-### L20 · Three Money Operations Only
-- **Statement:** Capital moves by exactly three operations — (1) the monthly DCA waterfall, (2) the rebalance band, (3) the discretionary channel. There is no fourth path. The DCA never sells; only rules 2 and 3 sell.
-- **Source:** `core/deployment.md`
-- **Modifying requires:** Major version bump
-
-### L21 · Regime Index Never Changes Total Risky Exposure
-- **Statement:** The Bull–Bear Index (BBI, 0–100, higher = more bearish) may shift the split between Sleeves A, B and C **inside a fixed risky budget**. It may not raise or lower total risky exposure. Its effect is implemented by starving sleeves of new contributions — never by selling. At most one band step per quarter.
-- **Source:** `core/regime-index.md`
-- **Modifying requires:** Major version bump
-- **Notes:** This is the guard that prevents the gauge from becoming a market-timing rule. A long-horizon accumulator's equity level is set by the glidepath and the constraints, not by a score.
-
-### L22 · Sleeve B Sells Only on Thesis Break
-- **Statement:** A Sleeve B holding is sold only when its thesis breaks — LOS < 60 or an equivalent research failure. Price declines, drawdowns, valuations and macro conditions are never sell triggers. Weight drift inside the band is tolerated; rebalancing occurs only at band breach and at most annually.
-- **Source:** `core/sleeves.md`
-- **Modifying requires:** Major version bump
-- **Notes:** Without a thesis-exit rule, a permanently impaired company remains in the portfolio indefinitely. The rule is not optional: LOS < 60 is a mandatory exit.
-
-### L23 · US-Situs Estate-Tax Ceiling
-- **Statement:** Assets subject to US estate tax for a non-US investor — US-domiciled ETFs and shares of US corporations — must not exceed the contributing jurisdiction's exemption amount. The ceiling and current exposure are tracked in `state.yaml: constraints.us_situs_*` and reported in every Health Check.
-- **Source:** `core/deployment.md`, `core/health-check.md`
-- **Modifying requires:** Major version bump
-- **Notes:** Irish-domiciled UCITS do not count. This is a hard tail-risk constraint, not a preference: the exposure is avoidable at zero cost by holding the UCITS equivalent.
+A time-boxed **transition mandate** may exist (P3a) to migrate the portfolio from
+one structure to another. It has a sunset date and cannot exceed the caps in P6.
 
 ---
 
-## Anti-Pattern: Modifying Locked Decisions Without Bumping
+### P4 · Rebalance may not de-risk the core
 
-If an AI session suggests one of these changes without flagging it
-as a constitutional amendment, treat that suggestion as suspect:
+Rebalance may sell:
 
-| Suggestion | Verdict |
+| Direction | Permitted? |
 |---|---|
-| "Maybe we should add crypto to Sleeve A" | ❌ Reject — would require L1 + L2 amendments |
-| "Trim a Sleeve B name's cap to a different value" | ❌ Reject as framework change; ✅ Allowed via `state.yaml: sleeves.b.caps` edit if it's your own portfolio (per-portfolio parameter, not framework) |
-| "Use a 4-dimension Kelly model" | ❌ Reject — L21 (BBI dimensions and weights fixed) |
-| "Replace the Replacement Index with gut feel" | ❌ Reject — L5 amendment |
-| "Hold a strategic reserve for the next dip" | ❌ Reject — L6 repealed; use the rebalance band |
-| "BBI is high, cut equity exposure" | ❌ Reject — L21 (total risky is fixed) |
-| "Sell a Sleeve B name because it fell 20%" | ❌ Reject — L22 (thesis break only) |
-| "Deploy cash because the market looks cheap" | ❌ Reject — L20 (no fourth path) |
-| "Measure Sleeve A against a different base" | ❌ Reject — L19 (NLV only) |
-| "Re-enter a name on my permanently-exited list" | ❌ Reject — your own `state.yaml: sleeve_a.permanently_exited` is binding for your portfolio (formerly L7) |
-| "Skip section 13 of Health Check this time" | ❌ Reject — L10 |
-| "Past you said buy a name — so buy it regardless" | ❌ Reject — L8 (decisions dynamic) |
-| "Skip LOS for Sleeve D, just use Frontier Score" | ❌ Reject — L13 (LOS additive) |
-| "Add a 6th LOS band (e.g., 'Speculative' at 50-60)" | ❌ Reject — L12 (5 bands fixed) |
-| "Make LMS the heaviest LOS weight because momentum is hot" | ⚠️ Allowed per-score deviation IF disclosed — but NOT a default change to L14 without changelog note |
-| "Use LOS < 50 instead of < 60 as the Pass threshold" | ❌ Reject — L12 amendment |
-| "Buy a low-LOS name because its LFS is high" | ❌ Reject — L17 (LFS cannot rescue poor investment) |
-| "Ignore LFS, only use LOS for capital allocation" | ❌ Reject — L15 (LFS evaluation is required after LOS passes) |
-| "LFS is high, skip the Replacement Index" | ❌ Reject — L5 (Replacement Index unchanged) + L15 (LFS additive, not substitutive) |
-| "Use LFS to override Sleeve B caps" | ❌ Reject — L3 form (caps are binding) + L15 (LFS does not modify sleeve rules) |
+| Defensive → risky (D/Z → A/B/C) | ✅ The crash response |
+| Defensive → defensive (Z → D) | ✅ Fixes a cash overweight |
+| Risky → risky (B/C → A) | ✅ Fixes concentration |
+| **A → D or Z** | ❌ **Prohibited** |
+
+Selling core equity to buy bonds or cash is de-risking, and de-risking is what
+the glidepath decides — not a rebalance. Under a hard glidepath this restriction
+is lifted, and `state.yaml` says so explicitly.
 
 ---
 
-## When Locked Decisions May Change
+### P5 · Sleeve B exits only on a thesis break
 
-Locked Decisions may change **only** via:
+A Sleeve B holding is **exited** — taken to zero — only when its thesis breaks.
+Price decline, drawdown, valuation and macro conditions are never exit triggers.
 
-1. Explicit IC decision to amend (rare)
-2. Major version bump in `CHANGELOG.md`
-3. Documentation of the rationale for the amendment
-4. Migration plan for existing positions if applicable
+**LOS < 60 opens a 30-day deep-dive review.** The review must resolve to one of
+exactly two outcomes:
 
-There is no "soft amendment" pathway.
+1. a documented re-score of 60 or above, citing new evidence, or
+2. exit.
+
+No third outcome. No automatic extension. If the review is not completed within
+30 days, the position exits.
+
+**A weight trim is not an exit.** Trimming a position back to its band is risk
+control and is always permitted.
 
 ---
 
-See also: constitution/governance.md, constitution/principles.md
+### P6 · Caps outrank every rule
+
+| Constraint | Default |
+|---|---|
+| Single-name effective exposure (direct + index-embedded) | 10% of NLV |
+| Single-factor exposure | 25% of NLV |
+| Duration sleeve | 15% of NLV |
+| US-situs assets (non-US investor) | below the jurisdiction's estate-tax exemption |
+| Satellite ceiling | 7% of NLV |
+
+When a cap and any other rule disagree, **the cap wins**. A target that violates
+a cap is invalid and must be re-solved.
+
+Effective exposure includes index-embedded weight. A 6% direct position in a name
+that is 6.5% of a 70% index sleeve is about 10.5% effective.
+
+**US-situs:** stop adding when exposure reaches 80% of the ceiling, and buy
+UCITS-domiciled instruments in preference to US-domiciled ones at all times.
+This keeps the constraint from being breached by appreciation alone.
+
+---
+
+### P7 · A cap breach is itself a Rebalance trigger
+
+No separate mechanism is needed. Any cap breach — name, factor, duration,
+US-situs, sleeve ceiling — triggers Rebalance, and Rebalance resolves it under
+the P4 direction limits.
+
+If a breach cannot be cured within the P4 limits, it is escalated to the
+Investment Committee as a structural problem, not silently tolerated.
+
+---
+
+### P8 · Reports state dollars, confidence, and fixed order
+
+Every report:
+
+- leads with the conclusion
+- states dollar amounts, not percentages alone
+- separates facts from assessments
+- carries a confidence percentage on each recommendation
+- follows the 16-section Health Check order when producing a full review
+
+---
+
+## Amendment
+
+| Change | Requirement |
+|---|---|
+| Any P-rule | Major version bump, ADR, CHANGELOG entry |
+| Anything in `constitution/method.md` | CHANGELOG entry only |
+| Parameters in `state.yaml` (tickers, weights, caps, DCA) | No bump — they are portfolio-local |
+
+There is no soft-amendment pathway.
+
+---
+
+## What replaced what
+
+| Old | New |
+|---|---|
+| L1, P1 | **P1** |
+| L2, L3 | **P2, P6** |
+| P3 | **P3** |
+| — (new) | **P4** |
+| P5 | **P5** |
+| P6 | **P6** |
+| — (new) | **P7** |
+| L9, L10 | **P8** |
+| L5, L8, L11–L18 | `constitution/method.md` |
+| L4, L6, L7, P2 | **deleted** |
+
+---
+
+See also: `constitution/method.md`, `constitution/governance.md`,
+`core/deployment.md`, `core/sleeves.md`.

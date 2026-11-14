@@ -53,7 +53,7 @@ source: portfolio state
 ## Regime
 
 ```
-BBI: XX.X (<band>)   scored YYYY-MM-DD
+RI: XX.X (<band>)   scored YYYY-MM-DD
 ```
 
 ---

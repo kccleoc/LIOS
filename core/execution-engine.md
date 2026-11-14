@@ -1,15 +1,15 @@
 > **v3.0 conformance note.** Written for LIOS v2.x. In v3.0 the sleeves are
 > **A/B/C/D/Z** measured against NLV, the Kelly Factor is replaced by the
-> **Bull–Bear Index**, and the Strategic Reserve is repealed. Where this file
+> **Regime Index**, and the Strategic Reserve is repealed. Where this file
 > and `lios/v3.0.md` disagree, v3.0 wins.
 
 
-> **Source:** Extracted verbatim from LIOS v1.5. L15-L18 are Locked Decisions. Describes the PCI execution layer — how LOS + LFS + Kelly + Sleeves integrate.
+> **Source:** Extracted verbatim from LIOS v1.5. Method content, consolidated in constitution/method.md in v4.1. Describes the PCI execution layer — how LOS, LFS and sleeves integrate.
 
 # Portfolio Construction Intelligence (Execution Engine) — LFS Framework
 
 **Component version:** v1.5 (new module)
-**Status:** Locked Decision (L15–L18)
+**Status:** Method (`constitution/method.md`)
 **Last updated:** 2026-07-27
 
 ---
@@ -64,15 +64,15 @@ Both are required. Neither replaces the other.
 
 ## LFS Constitution (L15–L18)
 
-### Rule 1 — LOS is Absolute
+### LFS Rule A — LOS is Absolute
 LOS evaluates the investment itself. It is independent of portfolio
 composition.
 
-### Rule 2 — LFS is Relative
+### LFS Rule B — LFS is Relative
 LFS evaluates the investment against the current portfolio.
 It changes whenever portfolio composition changes.
 
-### Rule 3 — LFS Cannot Rescue a Poor Investment
+### LFS Rule C — LFS Cannot Rescue a Poor Investment
 A weak LOS cannot become a Buy simply because it diversifies the
 portfolio. LOS remains the primary investment gate.
 
@@ -247,7 +247,7 @@ Generate LFS
   ↓
 Evaluate Decision Matrix (LOS + LFS)
   ↓
-Deployment plan (Rule 1 — gap-driven)
+Top-up (gap-driven)
   ↓
 Sleeve assignment
   ↓
@@ -262,12 +262,12 @@ Execution
 - LOS remains the upstream research filter.
 - LFS is evaluated **after** LOS passes threshold.
 - A candidate with LOS < 70 does not advance to LFS evaluation.
-- v1.4 L11–L14 locked decisions unaffected.
+- The research-layer method is unaffected.
 
 ### Deployment (v3.0 — replaces Kelly Factor)
-- The Kelly Model and its Factor are repealed (L4). Deployment is governed by
-  `core/deployment.md`: Rule 1 (DCA waterfall, gap-driven, never sells),
-  Rule 2 (rebalance band), Rule 3 (discretionary channel).
+- The Kelly Model and its Factor are repealed. Deployment is governed by
+  `core/deployment.md`: **Top-up** (monthly, gap-driven, never sells) and
+  **Rebalance** (on band or cap breach, sells, direction-limited by P4).
 - LFS informs **priority ranking** among LOS-qualified candidates. It does not
   size the contribution — the gap does.
 - When multiple LOS-qualified candidates compete for capital, higher LFS receives
@@ -284,14 +284,9 @@ Execution
 - LFS is an **additional input** when comparing candidates with similar Replacement Indices.
 - LFS does not override Replacement Index superiority.
 
-### Strategic Reserve (v1.3 — unchanged)
-- SR funding/deployment rules (L6) unchanged.
-- SR Opportunity Ranking (Health Check §10) should now include LFS alongside LOS.
-
 ### Health Check
-- L10 (16-section fixed order) unchanged.
+- P8 (16-section fixed order) unchanged.
 - Each holding in sections 5, 6, 8 now shows LFS beside LOS.
-- §10 SR Opportunity Ranking includes LFS.
 - New subsection in §15 (Risk Assessment) for portfolio construction intelligence.
 
 ---
@@ -300,11 +295,11 @@ Execution
 
 | Trigger | Why it's not a valid LFS use |
 |---|---|
-| "LFS 92, so buy it despite LOS 58" | L3 — LFS cannot rescue a poor investment. LOS is the primary gate. |
+| "LFS 92, so buy it despite LOS 58" | P6 — LFS cannot rescue a poor investment. LOS is the primary gate. |
 | "LFS is low so sell a great company" | Strong LOS + low LFS = excellent company, lower portfolio priority. Not a sell signal. |
-| "Use LFS instead of the Replacement Index" | L5 — Replacement Index still governs all Sleeve D surgery. LFS is additive. |
+| "Use LFS instead of the Replacement Index" | The Replacement Index still governs all Sleeve C surgery. LFS is additive. |
 | "The sector is different so LFS is automatically high" | Economic Engine Principle — sector labels alone do not determine diversification. |
-| "Calculate LFS once and it's permanent" | L4 — LFS is dynamic. Re-score after portfolio changes. |
+| "Calculate LFS once and it's permanent" | LFS is dynamic. Re-score after portfolio changes. |
 | "Replace LOS with LFS" | They measure different things. Both are required. |
 
 ---

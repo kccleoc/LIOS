@@ -17,11 +17,11 @@ and recover full context instantly.
 
 LIOS is **not a stock-picking service**. It is:
 
-1. A **capital architecture** — five sleeves (A/B/C/D/Z) measured against one denominator, with explicit funding rules and a constraint set
-2. A **scoring framework** — Bull–Bear Index (5 dimensions, gauge only) + LOS/LFS research gates + Replacement Index (3 metrics)
-3. A **deployment engine** — exactly three money rules (DCA waterfall, rebalance band, discretionary channel)
+1. A **capital architecture** — five sleeves (A/B/C/D/Z) measured against one denominator, with a constraint set that outranks every rule
+2. A **scoring framework** — Regime Index (5 dimensions, dashboard only) + LOS/LFS research gates + Replacement Index (3 metrics)
+3. A **deployment engine** — exactly two operations: Top-up and Rebalance
 4. A **report structure** — 16-section Health Check, fixed order, always
-5. A **governance philosophy** — "Rules are permanent. Decisions are dynamic."
+5. A **constitution** — eight rules, P1–P8, and nothing else
 
 The system is executed in parallel across any LLM. Every session reads the same initialization prompt → identical framework, identical voice, identical evaluation discipline.
 
@@ -91,14 +91,15 @@ LIOS/                              ← public framework repo
 ├── CHANGELOG.md                   Version history
 ├── LICENSE                        Open-source (MIT)
 ├── constitution/                  Permanent knowledge — rarely changes
-│   ├── constitution.md            All Locked Decisions (L1–L23; L4, L6, L7 gapped — repealed)
+│   ├── constitution.md            The constitution: eight rules, P1–P8
+│   ├── method.md                  Scoring, reports, workflow — editable without a bump
 │   ├── mission.md                 Core purpose
 │   ├── principles.md              Communication standards
 │   └── governance.md              "Rules permanent, decisions dynamic"
 ├── core/                          Framework implementation
 │   ├── sleeves.md                 Five sleeves A/B/C/D/Z, constraints, funding matrix
-│   ├── deployment.md              The three money rules
-│   ├── regime-index.md            Bull–Bear Index (0–100, gauge only)
+│   ├── deployment.md              Top-up and Rebalance — the two operations
+│   ├── regime-index.md            Regime Index (0–100, dashboard only)
 │   ├── glidepath.md               Age bands, step-up, decumulation
 │   ├── kelly.md                   RETIRED — v2.0 Kelly Model stub + rationale
 │   ├── strategic-reserve.md       RETIRED — v2.x SR stub + rationale
@@ -138,18 +139,17 @@ LIOS/                              ← public framework repo
 ## How LIOS Allocates Capital
 
 ```
-LOS      →  decides WHICH assets deserve investment
-LFS      →  decides PRIORITY among investments that pass LOS
-Glidepath→  decides TOTAL risky exposure (age band)
-BBI      →  distributes ACTIVE risk inside the risky block (gauge only)
-Gap      →  decides HOW MUCH of this month's contribution goes where
-Sleeves  →  decide WHERE the capital lives (A/B/C/D/Z)
+LOS       →  decides WHICH assets deserve investment
+LFS       →  decides PRIORITY among investments that pass LOS
+Glidepath →  sets TOTAL risky exposure by age (P2)
+Top-up    →  allocates this month's contribution to the gaps (never sells)
+Rebalance →  corrects a band or cap breach (sells, direction-limited by P4)
+Sleeves   →  decide WHERE the capital lives (A/B/C/D/Z)
 ```
 
-Three money rules only: the DCA waterfall (never sells), the rebalance band
-(the crash response), and a small discretionary channel funded from duration or
-cash. There is no reserve, no trigger ladder, and no factor multiplying the
-contribution.
+Two operations only. There is no reserve, no trigger ladder, no discretionary
+channel, and no score that sizes anything. The Regime Index reports; it does not
+act.
 
 
 - **LOS** (v1.4): Research Intelligence Layer — LVS/LGS/LQS/LMS → LOS 0-100
@@ -160,8 +160,8 @@ contribution.
 ## LIOS Playbook
 
 ### Play 1 — Initialize (start every new session here)
-Open any AI chat and paste `lios/v2.1.md` as the **first message**.
-The AI acknowledges LIOS v2.1. Without this, the AI has no framework,
+Open any AI chat and paste `lios/v3.0.md` as the **first message**.
+The AI acknowledges LIOS v3.0. Without this, the AI has no framework,
 no rules, and will hallucinate.
 
 ### Play 2 — Load Your Portfolio
@@ -174,9 +174,9 @@ full context: rules, portfolio, cash, caps, sleeves.
 With LIOS initialized and portfolio loaded, paste any command from
 `commands/`. Example workflow:
 ```
-Paste commands/kelly-recalc.md  →  AI returns Kelly Factor
-Paste commands/health-check.md  →  AI returns full 16-section report
-Paste commands/los-lfs.md       →  AI returns LOS + LFS for a candidate
+Paste commands/regime-recalc.md  →  AI returns the Regime Index band
+Paste commands/health-check.md   →  AI returns full 16-section report
+Paste commands/los-lfs.md        →  AI returns LOS + LFS for a candidate
 ```
 
 ### Play 4 — Follow Up

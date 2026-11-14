@@ -1,124 +1,99 @@
-> **Source:** Replaces the Kelly Factor (L4 — repealed in v3.0). The five
-> dimensions and their weights are unchanged; the output and its role are not.
+> **Source:** Replaces the Kelly Factor (repealed). The five dimensions and their
+> weights are unchanged.
 
-# Bull–Bear Index (BBI)
+# Regime Index — Dashboard Only
 
-**Component version:** v3.0
-**Status:** Locked Decision (L21)
-**Last updated:** 2026-11-14
+**Component version:** v4.1
+**Status:** Method, not constitutional. **This index has no mechanical effect on the portfolio.**
+**Last updated:** 2026-11-15
 
 ---
 
-## What changed and why
+## What this is
 
-Kelly Model v2.0 converted a 0–100 conditions score into a 0–1 "Kelly Factor"
-and multiplied the monthly DCA by it. Two problems:
+A 0–100 reading of how hostile current conditions look, reported every cycle.
 
-1. **It was not Kelly.** No edge, payoff ratio or bankroll term was ever
-   computed. A risk-appetite dial was wearing the name of an optimisation rule.
-2. **It ignored the distance to target.** A book 5pp underweight received the
-   same deployment as a book on target.
-
-v3.0 keeps the scoring (it is a useful gauge) and removes the sizing job.
-The index is now reported as **0–100, higher = more bearish**, and its only
-mechanical effect is to shift the internal split of the risky block.
+**It does not size anything, gate anything, or move any money.** It replaced a
+"Kelly Factor" that multiplied the monthly contribution — a job it was never
+equipped to do. In v4.1 it does the only thing a score is good for: giving you a
+consistent way to describe the environment and notice change.
 
 ---
 
 ## The Index
 
 ```
-BBI = 0.30·MarketVal + 0.25·PortfolioVal + 0.20·MacroLiq
-    + 0.15·Technical + 0.10·Opportunity
+RI = 0.30·MarketVal + 0.25·PortfolioVal + 0.20·MacroLiq
+   + 0.15·Technical + 0.10·Opportunity
 ```
 
 | # | Dimension | Weight | What it measures |
 |---|---|---:|---|
-| 1 | Market Valuation | 30% | Broad equity valuations — P/E, CAPE, equity risk premium, breadth |
-| 2 | Portfolio Valuation | 25% | Valuation of the investor's own holdings vs their history |
-| 3 | Macro & Liquidity | 20% | Rates, credit spreads, liquidity, policy posture, USD |
-| 4 | Technical Conditions | 15% | Trend, momentum, breadth, volatility regime, drawdown depth |
-| 5 | Opportunity Set | 10% | Quality of entry points available *now* |
+| 1 | Market Valuation | 30% | Broad valuations — P/E, CAPE, ERP, breadth |
+| 2 | Portfolio Valuation | 25% | Own holdings versus their history |
+| 3 | Macro & Liquidity | 20% | Rates, credit spreads, liquidity, policy, USD |
+| 4 | Technical | 15% | Trend, momentum, breadth, volatility, drawdown |
+| 5 | Opportunity | 10% | Quality of entry points available now |
 
-Every dimension is scored 0–100 where **higher = more bearish / more hostile to
-deployment**. Each score carries a one-line rationale citing the data point that
-drives it.
+0–100. **Higher = more bearish / more hostile.**
 
-### Scoring guidance
-
-| Score | Reading |
+| Range | Reading |
 |---|---|
-| 0–20 | Very favourable. Cheap, liquid, trending. |
-| 21–35 | Favourable. |
-| 36–50 | Constructive / neutral. |
-| 51–65 | Cautious. Expensive or deteriorating. |
-| 66–80 | Defensive. |
-| 81–100 | Capital-preservation regime. |
+| 0–35 | Risk-on |
+| 36–50 | Constructive |
+| 51–65 | Cautious |
+| 66–100 | Defensive |
+
+Each dimension carries a one-line rationale citing a specific data point.
 
 ---
 
-## Bands and the Mechanical Effect
-
-BBI never changes total risky exposure. It shifts the **A/B/C split inside a
-fixed risky budget**.
-
-| BBI | Band | A | B | C | D | Z | Risky |
-|---|---|---:|---:|---:|---:|---:|---:|
-| 0–35 | Risk-On | 65% | 9% | 6% | 15% | 5% | **80%** |
-| 36–50 | Constructive | 66% | 8.5% | 5.5% | 15% | 5% | **80%** |
-| 51–65 | Cautious | 70% | 6% | 4% | 15% | 5% | **80%** |
-| 66–100 | Defensive | 73% | 4% | 3% | 15% | 5% | **80%** |
-
-D and Z are constant. The risky block is constant. Only the split between
-passive index and active bets moves.
-
-**Direction of the shift:** as the regime worsens, the model reduces *active
-risk* — the names most likely to fail alongside a company-specific event and
-the ones hardest to hold with conviction. It does **not** reduce market risk,
-because a long-horizon accumulator should not time the market.
-
-### Implementation
-
-- The shift is executed by the **DCA waterfall** (`core/deployment.md`, Rule 1).
-- A step-down **starves** B and C of new money. It **never sells**.
-- At most one band step per quarter. The index is re-scored monthly; the
-  allocation changes slowly by design.
-
-Effect size on a $1M book: a move from Constructive to Cautious shifts about
-$30,000 of target weight from B/C to A. Executed by flow, that is 3–6 months of
-DCA with zero transactions.
-
----
-
-## What the Index May Not Do
+## What it may not do
 
 | Attempt | Verdict |
 |---|---|
-| "BBI is 80, move everything to cash" | ❌ Total risky is fixed at 80%. Use the target split |
-| "BBI improved, deploy the reserve" | ❌ No reserve exists. Only Rule 2 or Rule 3 move money |
-| "BBI is 70, skip this month's DCA" | ❌ Rule 1 is mechanical |
-| "Override the band because I disagree" | ❌ L21 |
-| "Add a sixth dimension" | ❌ L21 — weights and dimensions are fixed |
+| "Index is 75, cut equity exposure" | ❌ P2 — risky weight is set by age |
+| "Index improved, deploy more" | ❌ Top-up is mechanical (P3) |
+| "Index is 70, skip the contribution" | ❌ P3 |
+| "Index says defensive, override a band" | ❌ P7 — bands and caps govern |
+| "Shift the A/B/C split on the index" | ❌ removed in v4.1 |
+
+The last row is the important one. In v3.0 the index shifted the A/B/C split by
+up to five percentage points within the risky block. That was removed because:
+
+1. It was market timing expressed as *composition* rather than *level* — a shift
+   from high-beta single names into an index lowers portfolio beta by roughly
+   0.025 even with the risky dollars unchanged.
+2. Changing target weights caused Rebalance to sell single names down to the new
+   targets, contradicting "never acts by selling."
+3. It made every band and cap depend on the index value, which is untested.
+
+A backtest of the split against a fixed allocation showed no reliable benefit at
+any horizon tested. It is gone.
 
 ---
 
 ## Reporting
 
-Every Health Check reports:
-
 ```
-BBI: 60.1 (Cautious)
-  Market Valuation     66
-  Portfolio Valuation  58
-  Macro & Liquidity    68
-  Technical            40
-  Opportunity          62
-Band change vs prior cycle: none
+Regime Index: 58.2 (Cautious)     prior: 60.1     change: none
+  Market Valuation     68   S&P −2.9% off high; 10Y at 5.07% compresses ERP
+  Portfolio Valuation  50   top holding ~17x forward, a decade low; weight reduced
+  Macro & Liquidity    70   credit calm, export-control overhang repriced
+  Technical            30   six down weeks, below all MAs
+  Opportunity          68   entries appearing, but every candidate fails LOS 80
 ```
 
-Plus one line: **what the band implies for B and C flow this cycle**, not a
-dollar deployment figure.
+That is the entire output. No allocation follows from it.
 
 ---
 
-See also: `core/sleeves.md`, `core/deployment.md`, `scores/Regime.md`.
+## When it is updated
+
+Monthly, and after a material macro event. If a dimension cannot be scored from
+available data, say so — do not extrapolate.
+
+---
+
+See also: `core/deployment.md`, `constitution/constitution.md`,
+`constitution/method.md`.

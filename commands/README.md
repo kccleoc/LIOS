@@ -24,7 +24,7 @@ Every command respects:
 
 | Command | Job | Replaces |
 |---|---|---|
-| [`regime-recalc.md`](./regime-recalc.md) | Score the five BBI dimensions, return the band | `kelly-recalc` |
+| [`regime-recalc.md`](./regime-recalc.md) | Score the five RI dimensions, return the band | `kelly-recalc` |
 | [`health-check.md`](./health-check.md) | Full 16-section report | — |
 | [`drift-check.md`](./drift-check.md) | Gap table only | old drift report |
 | [`live-health-check.md`](./live-health-check.md) | Health Check against live data | — |
@@ -42,8 +42,8 @@ Every command respects:
 | Command | Status | Replacement |
 |---|---|---|
 | `kelly-recalc.md` | Retired | `regime-recalc.md` |
-| `sr-rank.md` | Retired (L6 repealed) | `core/deployment.md` Rule 2/3 |
-| `trigger-check.md` | Retired (L6 repealed) | `core/deployment.md` Rule 2 |
+| `sr-rank.md` | Retired (L6 repealed) | `core/deployment.md` Rebalance/3 |
+| `trigger-check.md` | Retired (L6 repealed) | `core/deployment.md` Rebalance |
 | `sleeve-d-review.md` | Retired (sleeve letters changed) | `sleeve-c-review.md` |
 
 Retired files are retained for historical reference and carry a banner. Do not

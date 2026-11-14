@@ -18,7 +18,8 @@ Constitution → Architecture → Research → Portfolio Construction → Execut
 
 ## Reference
 
-- constitution/constitution.md — all Locked Decisions (L1-L18)
+- constitution/constitution.md — the eight Portfolio Rules (P1–P8)
+- constitution/method.md — scoring, reports, workflow
 - constitution/governance.md — governance principle
 - core/ — framework implementation
 

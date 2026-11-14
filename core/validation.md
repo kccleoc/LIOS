@@ -100,7 +100,7 @@ Treasury fund as a bond sleeve. Duration is the test, not the issuer.
 
 ---
 
-### Check 7 · Bull–Bear Index Validity
+### Check 7 · Regime Index Validity
 
 **Verifies:** the index is computed, complete and consistent with its band.
 
@@ -114,9 +114,9 @@ Treasury fund as a bond sleeve. Duration is the test, not the issuer.
   (0–35 Risk-On / 36–50 Constructive / 51–65 Cautious / 66–100 Defensive)
 - more than one band step versus the prior cycle
 
-**Abort:** "Validation failed: BBI inconsistent (weighted X, band Y)."
+**Abort:** "Validation failed: RI inconsistent (weighted X, band Y)."
 
-**Note:** a second band step in the same quarter is a rule violation (L21), not
+**Note:** a second band step in the same quarter is a rule violation (P2), not
 a data error. Report it as a compliance failure, not an abort if the data is
 otherwise sound.
 

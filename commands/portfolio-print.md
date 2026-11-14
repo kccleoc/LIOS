@@ -1,6 +1,6 @@
 > **v3.0 conformance note.** Written for LIOS v2.x. In v3.0 the sleeves are
 > **A/B/C/D/Z** measured against NLV, the Kelly Factor is replaced by the
-> **Bull–Bear Index**, and the Strategic Reserve is repealed. Where this file
+> **Regime Index**, and the Strategic Reserve is repealed. Where this file
 > and `lios/v3.0.md` disagree, v3.0 wins.
 
 
@@ -67,7 +67,7 @@ Never assume the value. Always ask.
 no Strategic Reserve, no Kelly Reserve and no free-tactical bucket in v3.0. If a
 sub-bucket split is offered, reject it and restate that cash is one sleeve.
 
-If `Z` exceeds its ceiling (default 8% of NLV): flag it. The fix is a Rule 2
+If `Z` exceeds its ceiling (default 8% of NLV): flag it. The fix is a Rebalance
 rebalance, not a relabelling.
 
 ### Step 4 — Classify every holding into its LIOS sleeve

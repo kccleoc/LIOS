@@ -15,24 +15,21 @@ or build artifacts — there are none. Adjust expectations.
 - **No commit without explicit user request.** Lc has a strict
   no-auto-commit rule. Stage freely (`git add`), but never run
   `git commit` or `git push` unless explicitly asked.
-- **Locked Decisions L1–L23 are constitutional** (see
-  `constitution/constitution.md`). Do not propose changes
-  that violate them without flagging as a major version bump.
-  - **L2 form:** "Sleeve A has a permanent target allocation of broad-index ETFs
-    at fixed within-sleeve weights" — constitutional. ETF tickers+weights live in
-    `state.yaml: sleeves.a.allocation` (personal parameters).
-  - **L3 form:** "Sleeve B per-position caps are binding" — constitutional.
-    Ticker+cap values live in `state.yaml: sleeve_b.caps` (personal parameters).
-  - **L4:** repealed in v3.0 (Kelly Model v2.0 — not the Kelly criterion).
-  - **L6:** repealed in v3.0 (Strategic Reserve — negative EV and duplicate of
-    the rebalance band).
-  - **L7:** removed in v3.0 (was Leo-specific exited-name discipline, not a
-    framework invariant).
-  - L-numbers are **never renumbered**. Repealed decisions keep their number,
-    gapped.
-  - Changing Locked Decision *parameters* in `state.yaml` does NOT require a
-    version bump. Changing Locked Decision *forms* in `constitution/` or `core/`
-    DOES require a major version bump.
+- **Eight Portfolio Rules, P1–P8, are constitutional** (see
+  `constitution/constitution.md`). Do not propose changes that violate them
+  without flagging a major version bump plus an ADR.
+  - **The eight rules:** P1 five sleeves one denominator · P2 targets from the
+    glidepath, risky weight by age · P3 two operations only (Top-up, Rebalance) ·
+    P4 Rebalance direction limits · P5 Sleeve B exits only on thesis break, via a
+    30-day review · P6 caps outrank every rule · P7 a cap breach is a Rebalance
+    trigger · P8 reporting.
+  - **Method lives elsewhere.** `constitution/method.md` holds LOS/LFS weights,
+    bands, the Replacement Index and report templates. Change it with a CHANGELOG
+    entry — no version bump.
+  - **Parameters** in `state.yaml` (tickers, weights, caps, DCA, glidepath bands)
+    need no bump. **Rules** in `constitution/` and `core/` require a major bump.
+  - There are no L-numbers any more. If you see one in an old file, treat it as
+    historical.
 - **Two file roles, two rules:**
   - **`lios/v*.md` and `commands/*.md`** = paste-ready prompts.
     They get pasted into fresh AI sessions with no other context.
@@ -80,7 +77,7 @@ unreferenced. CHANGELOG.md marks supersession.
 | Bump type | When | Required actions |
 |---|---|---|---|
 | **Minor** | New module, new commands, refined docs, snapshot updates | 1. RFC in `rfcs/`  2. CHANGELOG entry  3. Update affected files  4. Update `constitution/constitution.md` if a new L-number is added |
-| **Major** | Locked Decision (L1–L23) changes | Same as minor + ADR in `decisions/` + constitutional amendment note in CHANGELOG |
+| **Major** | A P-rule change (P1–P8) | Same as minor + ADR in `decisions/` + constitutional amendment note in CHANGELOG |
 | **Patch** | Typo fixes, small corrections | CHANGELOG entry only |
 
 ---
@@ -126,8 +123,8 @@ before writing a new one.
 
 1. `cp lios/v1.X.md lios/v1.X+1.md`
 2. Edit heading: bump version + add changelog banner at top
-3. Insert new module content before the Locked Decisions section
-4. Add new Locked Decisions (L15, L16…) if applicable — never renumber
+3. Insert new module content before the Portfolio Rules section
+4. Add new Portfolio Rules (P9, P10…) if required — a major bump with an ADR
 5. Update CHANGELOG.md with a new top entry (most recent first)
 6. Update affected `lios/components/*.md` (add new ones, modify
    referenced sections in existing ones)

@@ -1,4 +1,4 @@
-> **Source:** Extracted from LIOS v1.5. L9 — Communication Standards is a Locked Decision.
+> **Source:** Extracted from LIOS v1.5. P8 — communication standards.
 
 # Communication Standards & Principles
 

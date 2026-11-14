@@ -1,15 +1,15 @@
 > **v3.0 conformance note.** Written for LIOS v2.x. In v3.0 the sleeves are
 > **A/B/C/D/Z** measured against NLV, the Kelly Factor is replaced by the
-> **Bull–Bear Index**, and the Strategic Reserve is repealed. Where this file
+> **Regime Index**, and the Strategic Reserve is repealed. Where this file
 > and `lios/v3.0.md` disagree, v3.0 wins.
 
 
-> **Source:** Extracted verbatim from LIOS v1.5. L11-L14 are Locked Decisions.
+> **Source:** Extracted verbatim from LIOS v1.5. L11–L18 content moved to constitution/method.md in v4.1.
 
 # Research Intelligence Layer (RIL) — LOS Framework
 
 **Component version:** v1.4 (still active in v1.5)
-**Status:** Locked Decision (L11–L14)
+**Status:** Method (`constitution/method.md`)
 **Last updated:** 2026-07-25
 
 ---
@@ -135,7 +135,7 @@ deep-value opportunity, a turnaround thesis).
 | **60–69** | **Hold** | Existing holders monitor. New purchases require a strong catalyst. |
 | **Below 60** | **Pass** | Avoid. Candidate for replacement if currently owned. |
 
-Bands are **fixed** (Locked Decision L12). Modifying band
+Bands are **fixed** by the method doc (changeable with a CHANGELOG entry). Modifying band
 boundaries requires a major version bump.
 
 ---
@@ -175,19 +175,16 @@ Confidence: 78%
 
 ## Integration with Existing LIOS
 
-### Kelly
-- Kelly v2.0 (L4) unchanged. Kelly still decides **how much** capital to deploy.
-- LOS decides **which** assets are even candidates for Kelly-allocated dollars.
-- A LOS < 70 candidate does not enter Kelly sizing decisions.
+### Deployment
+- The Kelly Model is repealed. Deployment is governed by `core/deployment.md`:
+  **Top-up** (monthly, gap-driven, never sells) and **Rebalance** (on breach).
+- LOS decides **which** assets are candidates. It never decides how much.
+- A LOS < 70 candidate does not receive capital.
 
 ### Sleeves
-- Sleeve targets and caps (L2, L3) unchanged.
-- LOS ≥ 80 required for new Sleeve B additions (per IC discipline; not a hard rule but expected).
+- Sleeve targets and caps (P2, P6) are binding.
+- LOS ≥ 80 required for new Sleeve B additions (IC discipline).
 - Sleeve A (broad-index ETFs) does not receive LOS scoring (not applicable to index vehicles).
-
-### Strategic Reserve
-- SR funding/deployment rules (L6) unchanged.
-- SR Opportunity Ranking (Health Check §10) should now also display LOS beside each candidate.
 
 ### Health Check
 - L10 (16-section fixed order) unchanged.
@@ -275,6 +272,6 @@ Sleeve B per-position cap rules (see `state.yaml: sleeves.b.caps` — caps are b
 - See `lios/v1.4.md` — full paste-ready init prompt including RIL
 - See `04_replacement_index.md` — LOS + Replacement Index joint workflow
 - See `06_health_check_structure.md` — where LOS shows up in Health Check
-- See `07_locked_decisions.md` — L11–L14 are the new LOS locked decisions
+- See `07_locked_decisions.md` — the eight Portfolio Rules
 - See `commands/los*.md` — 9 LOS-specific commands
 - See `docs/glossary.md` — definitions of LVS, LGS, LQS, LMS, LOS

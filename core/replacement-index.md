@@ -1,9 +1,9 @@
-> **Source:** Extracted verbatim from LIOS v1.5. L5 — Replacement Index is a Locked Decision.
+> **Source:** Extracted verbatim from LIOS v1.5. Method — the Replacement Index governs Sleeve C surgery.
 
 # Sleeve D — Replacement Index
 
 **Component version:** v1.3 (unchanged in v1.4)
-**Status:** Locked Decision (L5) / Dynamic (scores)
+**Status:** Method (`constitution/method.md`) / dynamic scores
 **Last updated:** 2026-07-25
 
 ---

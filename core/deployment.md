@@ -1,180 +1,194 @@
-> **Source:** Replaces `core/kelly.md` (Kelly Model v2.0, L4 — repealed in v3.0).
+> **Source:** Replaces `core/kelly.md` (Kelly Model v2.0, repealed) and the v3.0 "three rules".
 
-# Deployment — The Three Rules
+# Deployment — Top-up and Rebalance
 
-**Component version:** v3.0
-**Status:** Locked Decision (L20)
-**Last updated:** 2026-11-14
+**Component version:** v4.1
+**Status:** Constitutional (P3, P4, P7)
+**Last updated:** 2026-11-15
 
 ---
 
 ## Purpose
 
-Capital moves by exactly **three operations**. There is no fourth path.
-Anything else is a rule violation.
+Capital moves by exactly **two operations**, plus a time-boxed transition mandate
+when the structure itself is changing.
 
-| Rule | Job | Frequency | Sells? |
+| Operation | Job | Frequency | Sells? |
 |---|---|---|---|
-| **1. DCA waterfall** | Allocate new contributions | Monthly | No |
-| **2. Rebalance band** | Correct structural drift | On breach + annual | Yes |
-| **3. Discretionary channel** | Act on a specific dislocation | ≤1 per quarter | Yes (from D/Z) |
+| **Top-up** | Allocate the monthly contribution | Monthly | **No** |
+| **Rebalance** | Correct a band or cap breach | On breach | **Yes** |
+| Transition mandate | Migrate to a new structure | Once, sunsets | Yes |
 
-The pre-v3.0 Kelly Factor multiplied the monthly DCA by a 0–1 score. That made
-a risk-appetite dial do the job of an allocation controller, and it ignored the
-distance to target entirely. v3.0 removes it: the **gap** controls the DCA, and
-the score survives only as a gauge (`core/regime-index.md`).
+There is no third path. No discretionary channel, no reserve, no trigger ladder.
 
 ---
 
-## Terminology
+## Precedence
+
+When two rules could both act:
 
 ```
-V_s   = current market value of sleeve s
-T_s   = target dollars = w_s × (NLV + DCA)
-G_s   = gap = T_s − V_s          (positive = underweight)
+1  Caps (P6)                 — absolute; nothing overrides a cap
+2  Rebalance (P3)            — overrides Top-up in any month both would act,
+                               but only to the extent it actually executes a trade
+3  Top-up (P3)               — the default monthly action
+4  Transition mandate (P3a)  — bounded by the caps; cannot raise risky above P2
 ```
 
-`G_s` and "drift" are the same number. There is no separate drift calculation.
+A Rebalance trigger that executes no trade does **not** block Top-up. That
+distinction matters: without it, a stuck sleeve freezes contributions forever.
 
 ---
 
-## Rule 1 — DCA Waterfall
+## Per-sleeve bands
 
-Runs monthly. Never sells. No discretionary input.
-
-### Algorithm
+One absolute band cannot serve sleeves of 4% and 70%. Bands scale:
 
 ```
-1.  NLV' = NLV + DCA
-2.  T_s  = w_s × NLV'                       for s in {A,B,C,D,Z}
-3.  G_s  = T_s − V_s
-4.  Apply ceilings:
-        if w_C ≥ ceiling_C          → G_C = 0
-        if w_B ≥ 0.12 and w_B ≥ target_B × 1.5 → G_B = 0
-5.  Apply Z floor:
-        if V_Z < floor_Z × NLV'     → fund Z to floor first; reduce DCA by that amount
-6.  G⁺ = { max(G_s, 0) }
-7.  if ΣG⁺ = 0:  DCA_s = DCA × w_s           (fully at target — split by weight)
-    else:        DCA_s = DCA × G_s⁺ / ΣG⁺
+band_s = clamp(0.5 × target_s, 2pp, 8pp)
 ```
 
-**Note the standstill term.** Because the target grows with NLV, a sleeve at
+| Sleeve | Target | Band | Upper edge | Lower edge |
+|---|---:|---:|---:|---:|
+| A | 70% | ±8.0pp | 78.0% | 62.0% |
+| B | 6% | ±3.0pp | 9.0% | 3.0% |
+| C | 4% | ±2.0pp | 6.0% | 2.0% |
+| D | 15% | ±7.5pp | 22.5% | 7.5% |
+| Z | 5% | ±2.5pp | 7.5% | 2.5% |
+
+**A sleeve ceiling always binds before its band** if it is lower. C's ceiling is
+7% but its band tops at 6%, so 6% is the effective trigger. Do not write a
+ceiling above a band and call it enforcement.
+
+---
+
+## Top-up
+
+Runs monthly. Never sells. No discretion.
+
+```
+NLV' = NLV + DCA
+T_s  = w_s × NLV'
+G_s  = T_s − V_s                     positive = underweight
+G+   = max(G_s, 0)
+
+risky_now = (A + B + C) / NLV
+
+if risky_now >= risky_cap:
+        allocate the whole DCA to D and Z, split by their target weights
+else if sum(G+) = 0:
+        allocate by target weight w_s
+else:
+        allocate DCA × G+ / sum(G+)
+```
+
+At balance this degenerates to the target split: no tilt, no decision.
+
+**Why the standstill term matters.** The target grows with NLV, so a sleeve at
 target must still receive `w_s × DCA` just to hold its weight. A rule that
-allocates only `G_s` will converge to a permanent positive gap and never close
-it. This is why step 7 falls back to the weight split.
+allocates only the gap converges to a permanent positive gap and never closes it.
+The `sum(G+) = 0` branch is the expression of that.
 
-### Worked example — balanced book (synthetic)
-
-```
-NLV 1,000,000 | DCA 10,000 | targets A 67% B 8% C 5% D 15% Z 5%
-Book is exactly on target.
-G_A = 6,700  G_B = 800  G_C = 500  G_D = 1,500  G_Z = 500   Σ = 10,000
-```
-
-| Sleeve | Allocation |
-|---|---:|
-| A | 6,700 |
-| B | 800 |
-| C | 500 |
-| D | 1,500 |
-| Z | 500 |
-
-At balance the rule **degenerates to the target split**. No tilt, no decision.
-
-### Worked example — post-drawdown (synthetic)
-
-```
-NLV 700,000 | DCA 10,000 | A has fallen; D is overweight
-G_A = +52,000   G_B = +11,000   G_C = +4,000
-G_D = −48,000   G_Z = −9,000    ΣG⁺ = 67,000
-```
-
-| Sleeve | Allocation | Share of positive gap |
-|---|---:|---:|
-| A | 7,761 | 77.6% |
-| B | 1,642 | 16.4% |
-| C | 597 | 6.0% |
-| D | 0 | overweight |
-| Z | 0 | overweight |
-
-The rule automatically starves the defensive block and floods the risky block
-after a decline. **This is the crash response under a no-exit-rule policy.**
+**The risky-cap fallback** is what keeps Top-up from ever breaching P2. When the
+risky block is already at the age-band ceiling, every new dollar goes to D and Z.
 
 ---
 
-## Rule 2 — Rebalance Band
+## Rebalance
 
-Runs on breach, plus an annual check. This is the only routine operation
+Runs on a band breach or a cap breach (P7). This is the only routine operation
 that sells.
 
 ### Trigger
 
-Fire if **any** of:
-- some sleeve deviates > `constraints.rebalance_band_pct` absolute from target
-- D exceeds its target by > 25% relative
-- annual review date
+Any of:
+- a sleeve outside its band
+- a cap breach: single name, factor, duration, US-situs, sleeve ceiling
+- an age-band change, after a 12-month grace period (see `core/glidepath.md`)
+
+### Direction limits (P4)
+
+| Sell → buy | Permitted |
+|---|---|
+| D or Z → A, B, C | ✅ the crash response |
+| Z → D | ✅ fixes a cash overweight |
+| B or C → A | ✅ fixes concentration |
+| A → D or Z | ❌ **prohibited** — that is de-risking, which the glidepath decides |
+
+Under a *hard* glidepath this restriction is lifted. `state.yaml: glidepath.policy`
+says which applies.
 
 ### Action
 
 ```
-1.  Identify overweight sleeves (G_s < 0) excluding Z below floor
-2.  Sell overweight down to target
-3.  Buy underweight sleeves pro-rata to their remaining gaps
-4.  Z is never sold below its floor
+1  Identify overweight sleeves and cap-breached names
+2  Sell the smallest set that cures the breach, subject to P4
+3  Buy underweight sleeves pro-rata to their remaining gaps
+4  Z is never sold below its floor
 ```
 
-An 8pp band on a $1M book is $80,000. Wide bands are deliberate: they prevent
-churn, and they reserve selling for genuine structural breaks.
+### Trim selection
 
-### Why this matters more than the hedge
+When a sleeve is over its band, *which* name gets trimmed:
 
-In a severe drawdown the defensive block becomes overweight automatically.
-Selling D and Z into the underweight risky sleeves is what converts a crash from
-a loss into a discount on future purchases. **A portfolio with no exit rule must
-have a rebalance rule**, or the crash response does not exist.
-
----
-
-## Rule 3 — Discretionary Channel
-
-The only other way capital moves. Deliberately small.
-
-| Constraint | Value |
+| Sleeve | Trim |
 |---|---|
-| Maximum per event | `constraints.discretionary_max_pct` of NLV (default 3%) |
-| Maximum per quarter | 1 event |
-| Funding source | D or Z only — **never A** |
-| Eligibility | LOS ≥ 80 for the destination; BBI ≥ 25 |
-| Approval | IC note, logged in the Health Check |
+| **B** | the **largest** position — trims reduce concentration |
+| **C** | the **weakest** position by Replacement Index — C is winner-weighted |
+| A | the largest within-A holding, back to its within-A weight |
+| D / Z | no intra-sleeve selection needed; sell pro-rata |
 
-This exists so a genuine dislocation can be acted on without inventing a new
-path for money. It is not a reserve: there is no earmarked cash waiting for it.
+Trimming the largest in B and the weakest in C is deliberate: B is a conviction
+book where size should follow conviction, and C is a rotation book where laggards
+get cut.
+
+**A trim is not an exit.** Exits are governed by P5.
 
 ---
 
-## Prohibited Operations
+## Transition mandate (P3a)
+
+A one-time structural migration is permitted, with four requirements:
+
+1. **A sunset date.** Hard. After it, P1–P7 apply unchanged.
+2. **Completion criteria.** Per-sleeve target ranges, in dollars.
+3. **A fallback.** At sunset, any unmet gap is closed by Rebalance — planning
+   does not continue indefinitely because a target was missed.
+4. **Cap compliance throughout.** The mandate cannot raise total risky weight
+   above the P2 ceiling, and cannot breach any P6 cap.
+
+Without requirement 3, a transition quietly becomes a permanent exception. That
+is how the previous architecture accumulated its exemptions.
+
+---
+
+## Prohibited
 
 | Operation | Verdict |
 |---|---|
-| "Deploy the reserve because the market looks cheap" | ❌ No reserve exists; use Rule 2 |
-| "Increase DCA because a score improved" | ❌ DCA is a contribution, not a signal |
-| "Skip the DCA because valuations are high" | ❌ Rule 1 is mechanical |
-| "Sell equities to raise cash for safety" | ❌ Z is a target, not a fear response |
-| "Trim a winner to fund a laggard inside C" | ❌ C cuts laggards, never winners |
-| "Sell B on a price drop" | ❌ B sells only on thesis break |
-| "Move money A → D because D is underweight" | ❌ A never funds the defensive block |
+| "Deploy cash because the market looks cheap" | ❌ no such operation |
+| "Skip this month's contribution" | ❌ Top-up is mechanical |
+| "Increase the contribution because a score improved" | ❌ contribution is a contribution |
+| "Sell equities to raise cash for safety" | ❌ P4 |
+| "Trim a winner to fund a laggard in C" | ❌ C cuts laggards |
+| "Sell B on a price drop" | ❌ P5 |
+| "Move A → D because D is underweight" | ❌ P4 |
+| "One more exception, just this quarter" | ❌ the transition mandate is the only exception, and it sunsets |
 
 ---
 
-## Deprecated in v3.0
+## Deprecated
 
 | Concept | Fate |
 |---|---|
-| Kelly Factor × DCA | Deleted — gap controls allocation |
-| Kelly Reserve | Deleted — undeployed DCA is Z, funded only because Z is underweight |
-| Trigger ladder (L6) | Deleted — the rebalance band is the trigger |
-| `ABC` denominator | Deleted — NLV only |
+| Kelly Factor × DCA | Deleted |
+| Kelly Reserve | Deleted |
+| Strategic Reserve and trigger ladder | Deleted |
+| Rule 3 discretionary channel | Deleted |
+| `ABC` denominator | Deleted |
+| Single absolute 8pp band | Replaced by per-sleeve bands |
 
 ---
 
-See also: `core/sleeves.md`, `core/regime-index.md`, `core/glidepath.md`.
+See also: `constitution/constitution.md`, `core/sleeves.md`,
+`core/glidepath.md`, `core/regime-index.md`.

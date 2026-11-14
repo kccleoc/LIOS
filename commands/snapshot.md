@@ -36,7 +36,7 @@ Output the snapshot template with:
    Show MV, % of NLV, target %, delta pp
 5. Constraint snapshot:
      effective single-name exposure, factor, duration, total risky, US-situs
-6. BBI line: weighted value, band, date scored
+6. RI line: weighted value, band, date scored
 
 Rules:
 - Sleeves are A/B/C/D/Z. There is no SR, no ABC denominator

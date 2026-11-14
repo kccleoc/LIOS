@@ -2,7 +2,7 @@
 
 **Basis:** `portfolio/state/portfolio.yaml` as of <DATE>
 **NLV:** $X · **Reconciliation Δ:** $X
-**BBI:** XX.X (<band>) · **Targets:** A70 B6 C4 D15 Z5 · **Risky:** 80%
+**RI:** XX.X (<band>) · **Targets:** A70 B6 C4 D15 Z5 · **Risky:** 80%
 
 ---
 
@@ -23,12 +23,12 @@ Three-line headline: where we are, what changed, what matters next.
 
 One table. Gap and drift are the same number.
 
-| Sleeve | Value | Target $ | Gap $ | Gap pp | Band ±8pp | Action |
+| Sleeve | Value | Target $ | Gap $ | Gap pp | Band | Action |
 |---|---:|---:|---:|---:|---|---|
 
 Σ gaps must be $0.
 
-## 3. Bull–Bear Index
+## 3. Regime Index
 
 | Dimension | Weight | Score | Rationale |
 |---|---:|---:|---|
@@ -37,7 +37,7 @@ One table. Gap and drift are the same number.
 | Macro & Liquidity | 20% | | |
 | Technical | 15% | | |
 | Opportunity | 10% | | |
-| **BBI** | | | |
+| **RI** | | | |
 | **Band** | | | |
 
 Band change vs prior cycle, and whether the one-step-per-quarter rule permits an
@@ -65,7 +65,7 @@ Within-sleeve weight drift. No cash-like instrument may appear here.
 | Ticker | Value | % NLV | % of B | Slot band | LOS | Thesis-exit? | Verdict |
 |---|---:|---:|---:|---|---:|---|---|
 
-The only sell trigger is a thesis break (L22). State explicitly whether any name
+The only sell trigger is a thesis break (P5). State explicitly whether any name
 is below LOS 60.
 
 ## 7. Sleeve C Review
@@ -75,26 +75,29 @@ justifications.
 
 ## 8. Sleeve D Review
 
-Duration, currency hedge, ammunition available for Rule 2.
+Duration, currency hedge, ammunition available for Rebalance.
 
 ## 9. Sleeve Z Review
 
 Floor 3%, ceiling 8%. Vehicle = duration ≈ 0 only. Zero uninvested cash unless
 policy allows.
 
-## 10. Deployment Plan
+## 10. Top-up Plan
 
-Rule 1 output. Show `NLV'`, `G_s` per sleeve, `ΣG⁺`, and the allocation.
+Show `NLV'`, `G_s` per sleeve, `ΣG⁺`, and the allocation. State whether the
+risky-cap fallback applies.
 
 | Sleeve | Allocation | Share of positive gap |
 |---|---:|---:|
 
-If Rule 2 is triggered, state that it absorbs the contribution and Rule 1 is not
-run separately.
+If Rebalance triggers **and executes a trade**, state that it absorbs the
+contribution and Top-up is not run separately that month.
 
-## 11. Discretionary Channel
+## 11. Rebalance Status
 
-Open / closed. Budget remaining (3% of NLV). Eligibility: LOS ≥ 80 destination.
+Not triggered / triggered and executed / triggered but no legal move (escalate
+under P7). Which sleeves or caps breached, by how much, and the direction of any
+trade.
 
 ## 12. Frontier Scoreboard
 

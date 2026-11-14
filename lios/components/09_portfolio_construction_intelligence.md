@@ -56,11 +56,11 @@ Both are required. Neither replaces the other.
 
 ## LFS Constitution (L15–L18)
 
-### Rule 1 — LOS is Absolute
+### Top-up — LOS is Absolute
 LOS evaluates the investment itself. It is independent of portfolio
 composition.
 
-### Rule 2 — LFS is Relative
+### Rebalance — LFS is Relative
 LFS evaluates the investment against the current portfolio.
 It changes whenever portfolio composition changes.
 
@@ -258,7 +258,7 @@ Execution
 
 ### Deployment (v3.0 — replaces Kelly Factor)
 - Kelly Model v2.0 and its Factor are repealed (L4). Sizing is gap-driven:
-  `core/deployment.md` Rule 1.
+  `core/deployment.md` Top-up.
 - LFS informs **priority ranking** among LOS-qualified candidates. It does not
   size the contribution.
 - When multiple LOS-qualified candidates compete for capital, higher LFS receives

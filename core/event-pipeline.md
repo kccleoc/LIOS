@@ -19,7 +19,7 @@ Recalculate sleeves          → core/sleeves.md
     ↓
 Recalculate gaps             → core/deployment.md
     ↓
-Recalculate Bull–Bear Index  → core/regime-index.md
+Recalculate Regime Index  → core/regime-index.md
     ↓
 Recalculate LOS / LFS        → core/research-layer.md, core/execution-engine.md
     ↓
@@ -77,20 +77,20 @@ Push                         → git push (explicit approval only)
 - **Abort if:** targets undefined or do not sum to 100
 - **Note:** gap and drift are the same number in v3.0. Do not compute them twice.
 
-### Step 6 · Recalculate Bull–Bear Index
+### Step 6 · Recalculate Regime Index
 - **Triggers:** after gaps, or on `/regime-recalc`
 - **Reads:** state, `market/market-state.yaml`, `core/regime-index.md`
-- **Writes:** five dimension scores, weighted BBI, band
+- **Writes:** five dimension scores, weighted RI, band
 - **Abort if:** market inputs missing (report the gap; do not extrapolate)
 - **Note:** output is a band, never a dollar amount.
 
 ### Step 7 · Recalculate LOS / LFS
-- **Triggers:** after BBI, or on an LOS/LFS command
+- **Triggers:** after RI, or on an LOS/LFS command
 - **Reads:** `research/database/*.md`, `core/research-layer.md`,
   `core/execution-engine.md`
 - **Writes:** updated scores (if changed)
 - **Abort if:** an active Sleeve B or C position has no current research record
-- **Note:** LOS < 60 on a Sleeve B name is a **mandatory exit** (L22), not a
+- **Note:** LOS < 60 on a Sleeve B name is a **mandatory exit** (P5), not a
   discussion item.
 
 ### Step 8 · Constraint Check
@@ -101,15 +101,15 @@ Push                         → git push (explicit approval only)
 - **Note:** compute **effective** single-name exposure (direct + index-embedded).
   A direct weight inside the cap can still breach on an effective basis.
 
-### Step 9 · Deployment Plan
+### Step 9 · Top-up and Rebalance
 - **Triggers:** constraint check complete
 - **Reads:** gaps, `core/deployment.md`
-- **Writes:** Rule 1 allocation; Rule 2 rebalance flag if any sleeve breaches the
-  band; Rule 3 budget status
-- **Abort if:** a data input needed for the waterfall is missing
-- **Note:** only one of Rule 1 / Rule 2 runs as the primary action in a cycle. If
-  Rule 2 is triggered, the rebalance absorbs the contribution and Rule 1 is not
-  run separately.
+- **Writes:** Top-up allocation; Rebalance flag if any sleeve breaches a band or a
+  cap (P7)
+- **Abort if:** a data input needed for the allocation is missing
+- **Note:** if Rebalance triggers **and executes a trade**, it absorbs the
+  contribution and Top-up is not run separately. If it triggers but executes no
+  trade, Top-up still runs.
 
 ### Step 10 · Generate Reports
 - **Triggers:** all calculations complete, validation passed
@@ -161,7 +161,7 @@ Push                         → git push (explicit approval only)
 | Broker price update | 1 | — |
 | Trade executed | 1 | — |
 | Capital injection | 1 | — |
-| BBI recalc only | 6 | 1–5 current |
+| RI recalc only | 6 | 1–5 current |
 | LOS / LFS update | 7 | 1–6 current |
 | Snapshot generation | 12 | 1–11 current |
 | Report regeneration | 10 | 1–9 current |

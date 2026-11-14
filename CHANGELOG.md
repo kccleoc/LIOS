@@ -5,6 +5,96 @@ LIOS follows semver: major bumps only on Locked Decision changes.
 
 ---
 
+## [4.1.0] — 2026-11-15
+
+### Major — Constitution reduced from 20 rules to 8
+
+**Constitutional change.** The L1–L23 "Locked Decisions" layer is replaced by
+eight Portfolio Rules, **P1–P8**. A major bump because it restructures the
+constitution itself.
+
+**Why.** Twenty live rules accumulated across five versions. Twelve were not
+decisions — they were method documentation (LOS weights, report formats,
+communication style) wearing a constitutional costume. Locking those made every
+scoring tweak a version bump and made the rule list unreadable.
+
+| Layer | Contents | Change requirement |
+|---|---|---|
+| `constitution/constitution.md` | **P1–P8** — the only rules | Major bump + ADR |
+| `constitution/method.md` | LOS/LFS, bands, Replacement Index, templates, glossary | CHANGELOG entry only |
+
+**The eight rules.**
+
+- **P1** five sleeves, one denominator (NLV)
+- **P2** targets from the glidepath; risky weight set by age
+- **P3** two operations only — Top-up and Rebalance
+- **P4** direction: defensive→risky, defensive→defensive, risky→risky; never A → D/Z
+- **P5** Sleeve B exits only on thesis break; LOS < 60 opens a 30-day review that
+  must resolve to a re-score ≥ 60 or an exit
+- **P6** caps outrank every rule, including effective single-name exposure
+- **P7** a cap breach is itself a Rebalance trigger
+- **P8** reports state dollars, confidence, fixed 16-section order
+
+**Deleted.** L4, L6, L7 (already dead); L19 (merged into P1); L21 (the regime
+index no longer acts, so nothing to constrain); Rule 3 discretionary channel
+(a rationalisation route worth about 1.2k/yr at best, and dead once risky weight
+drifts above the cap).
+
+**Changed mechanics.**
+
+| Item | Before | v4.1 |
+|---|---|---|
+| Bands | one absolute 8pp | `clamp(0.5 × target, 2, 8)` → A ±8 · B ±3 · C ±2 · D ±7.5 · Z ±2.5 |
+| Top-up at risky cap | undefined | routes 100% to D and Z |
+| Age-band step | silent P2 breach | 12-month grace, then Rebalance |
+| Transition mandate | no sunset fallback | sunset closes remaining gaps by Rebalance |
+| Regime index | shifted A/B/C targets up to 5pp | dashboard only, zero mechanical effect |
+| Trim selection | unstated | B trims the largest, C trims the weakest |
+| US-situs | fixed ceiling | early warning at 80% of ceiling, UCITS-first |
+| Sleeve B exit | automatic at LOS < 60 | 30-day review, two permitted outcomes |
+
+**Why the regime index lost its effect.** Shifting weight from high-beta single
+names into an index is market timing expressed as composition: it moves portfolio
+beta by about 0.025 with risky dollars unchanged. Changing target weights also
+caused Rebalance to sell names down to the new targets, contradicting "never acts
+by selling." A backtest of the split against a fixed allocation showed no
+reliable benefit.
+
+**New files.** `constitution/method.md`, `rfcs/RFC-004.md`, `decisions/ADR-006.md`.
+**Rewritten.** `constitution/constitution.md`, `core/deployment.md`,
+`core/regime-index.md`, `core/sleeves.md`, `core/glidepath.md`, `lios/v3.0.md`.
+
+Decision: ADR-006. Proposal: RFC-004.
+
+---
+
+## [4.0.2] — 2026-11-14
+
+### Patch — v3.0 completion pass
+
+Retired `/los-sleeve-d` (sleeve letters changed: the satellite sleeve is now C,
+duration is D). Cut 22 files off stale v2.x rules rather than annotating them:
+`core/validation.md`, `core/event-pipeline.md`, `core/health-check.md`,
+`core/investment-committee.md`, `lios/components/06`, `lios/components/07`,
+`templates/*`, `commands/drift-check.md` (was pure `ABC`/SR logic), plus
+`commands/health-check`, `live-health-check`, `snapshot`, `portfolio-print`.
+Added `commands/sleeve-c-review.md`. Real tickers in research examples replaced
+with synthetic `EXAMPLE-*`. Parameter paths re-pointed `sleeve_b_caps` →
+`sleeves.b.caps`.
+
+---
+
+## [4.0.1] — 2026-11-14
+
+### Patch — documentation cleanup, first pass
+
+Reworded L13 (it still referenced the repealed Kelly Model). Rebuilt
+`core/health-check.md`. Reduced `lios/components/07_locked_decisions.md` to a
+routing index — it duplicated the constitution and had already drifted. Rebuilt
+`templates/HealthCheck.md` and `templates/Snapshot.md`.
+
+---
+
 ## [4.0.0] — 2026-11-14
 
 ### Major — LIOS v3.0: Five Sleeves, Gap Deployment, Bull–Bear Index

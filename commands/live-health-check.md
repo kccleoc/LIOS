@@ -1,6 +1,6 @@
 > **v3.0 conformance note.** Written for LIOS v2.x. In v3.0 the sleeves are
 > **A/B/C/D/Z** measured against NLV, the Kelly Factor is replaced by the
-> **Bull–Bear Index**, and the Strategic Reserve is repealed. Where this file
+> **Regime Index**, and the Strategic Reserve is repealed. Where this file
 > and `lios/v3.0.md` disagree, v3.0 wins.
 
 
@@ -104,15 +104,15 @@ Follow the canonical order and format from `../core/health-check.md`.
 Sections:
 1. Portfolio Health — summary table + 3-line headline (live NLV, what changed, what matters)
 2. Gap & Drift — one table; gap and drift are the same number
-3. Bull–Bear Index — five dimension scores + band (incorporate fresh macro)
+3. Regime Index — five dimension scores + band (incorporate fresh macro)
 4. Constraint Check — single name effective, factor, duration, total risky, US-situs
 5. Sleeve A Review — live MV, within-A weight drift, `state.yaml: sleeves.a.permanently_exited` flag (was L7), no LOS/LFS (index ETFs)
 6. Sleeve B Review — live MV, % NLV, slot drift vs band, LOS, LFS, Decision Matrix, thesis-exit status, directive
 7. Sleeve C Review — rotation ranking, ceiling status, laggard cut list
-8. Sleeve D Review — duration, currency hedge, ammunition available for Rule 2
+8. Sleeve D Review — duration, currency hedge, ammunition available for Rebalance
 9. Sleeve Z Review — floor 3%, ceiling 8%, duration ≈ 0 only
-10. Deployment Plan — Rule 1 output in dollars; Rule 2 flag if any sleeve breaches the band
-11. Discretionary Channel — open/closed, remaining 3% budget
+10. Top-up Plan — allocation in dollars; state whether the risky-cap fallback applies
+11. Rebalance Status — triggered? executed? escalated under P7?
 12. Frontier Scoreboard — all C names + watchlist, RI composite, LOS, LFS
 13. Execution Calendar — upcoming earnings (B/C), macro events (next 30 days)
 14. Execution Plan — BUY/HOLD/REDUCE/EXIT with dollars, confidence %, rationale
