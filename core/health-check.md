@@ -4,7 +4,7 @@
 
 **Component version:** v5
 **Status:** Constitutional (P8′) for structure; method for content
-**Last updated:** 2026-11-15
+**Last updated:** 2026-11-16
 
 ---
 
@@ -56,6 +56,9 @@ that reports an empty sleeve is a section nobody reads.
 ### 2. Gap & Drift
 - One table: sleeve, value, target dollars, gap dollars, gap in pp, band status
 - `G_s = w_s × NLV − V_s`. Gap and drift are the same number; never compute both
+- **Positive gap = underweight = fundable.** State the sign convention on the line.
+  A wrong sign is silent: `−$6,098` in an underweight sleeve reads as a valid number and
+  allocates zero
 - **B appears in the table with a ceiling, not a target.** Its "gap" is the distance
   to the ceiling, and a positive distance is not fundable.
 - Σ gaps over {A, C, Z} must equal zero

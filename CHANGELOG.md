@@ -5,6 +5,50 @@ LIOS follows semver: major bumps only on Locked Decision changes.
 
 ---
 
+## [5.0.2] — 2026-11-16
+
+Findings from an external adversarial review. Two of them are worse than anything
+the pre-registered suspect list contained, and both are the same failure: a
+document that describes a plan rather than executing it.
+
+- **`validation.md` could not pass on a post-mandate state and could not run one of
+  its own checks.** Checks 2, 3 and 8 fail on any position carrying zero shares —
+  which is exactly how a not-yet-executed mandate target must be written. Check 7
+  read `bbi.*`, a v2.1 field that no v5 state contains. A pipeline that cannot pass
+  is a pipeline nobody runs, which is indistinguishable from not having one. Checks
+  2/3/8 now skip `status: pending`; Check 7 became optional and dashboard-only, and
+  its "second band step is a rule violation" note is deleted — the Regime Index
+  gates nothing, and a dashboard cannot be violated.
+- **New Check 10 · US-situs derivation.** The figure must equal the sum of the lines
+  flagged US-situs plus broker cash. This is the check that would have caught the
+  v5.0.1 defect before a human did.
+- **A soft breach had no magnitude limit.** A sleeve could sit at six times its
+  tolerance forever, correctly reported, and nothing fired. Beyond 3× tolerance, or
+  surviving two consecutive reviews, a soft breach is now hard.
+- **Risky weight had no band at all.** The number the entire glidepath is built on
+  was never tested; every sleeve could be inside its own band while total risk was
+  above the age target. It now has one, tested quarterly, closed by Top-up tilt and
+  by nothing else.
+- **The risky-cap fallback split by target weight, not by gap**, feeding whichever
+  of C or Z was already overweight. It also gave A nothing while A was underweight,
+  which is correct but must be reported.
+- **Two directions were missing from the P4′ table.** A Z-floor breach triggers an
+  immediate Rebalance for which no direction funded Z, and a look-through cap inside
+  A had no permitted cure. `C → Z` and `A → A` are now named.
+- **The grace-end de-risking rule could not be obeyed.** `glidepath.md` said a
+  leftover age-step gap "is closed by Rebalance", while P4′ prohibits the only
+  direction that would close it. Under `contribution_tilt` the band is a direction,
+  not a deadline, and the gap is reported open every cycle.
+- **A skipped contribution had no recovery rule.** One missed month drifted the book
+  permanently. Arrears are now repaid at the normal rate, never as a lump.
+- **`w_s` was undefined in the standstill branch**, where A's target is residual.
+  An undefined weight makes a branch unexecutable, which is how rules stop running.
+- **The Investment Committee had no decision test.** It is one human plus whichever
+  session is open, so "an IC decision" funded the one sleeve where judgment replaces
+  arithmetic. Five recorded items now constitute a decision; no record, no funding.
+
+---
+
 ## [5.0.1] — 2026-11-16
 
 Four defects found by recomputing the book rather than reading the rules. All four

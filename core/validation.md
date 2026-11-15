@@ -1,9 +1,9 @@
 # LIOS v5 Auto-Validation Rules
 
 **Version:** 5.0.0
-**Last updated:** 2026-11-15
+**Last updated:** 2026-11-16
 
-Every report generation runs these **9 checks** against
+Every report generation runs these **10 checks** against
 `portfolio/state/portfolio.yaml`. If any check fails, generation is aborted.
 
 ## Validation Pipeline
@@ -33,6 +33,11 @@ A failure halts the pipeline and reports the failure with details.
 
 **Failure:** any `shares ≤ 0`, or not a number.
 
+**Exception:** a position carrying `status: pending` is a **target, not a holding** — it is
+in `positions[]` only so the mandate can name it. Skip this check for it. Without the
+exception, a post-mandate SSOT aborts report generation by construction, and a pipeline that
+cannot pass is a pipeline nobody runs.
+
 **Abort:** "Validation failed: invalid share count for [TICKER]."
 
 ---
@@ -44,6 +49,8 @@ A failure halts the pipeline and reports the failure with details.
 **Source:** `positions[].avg_cost`
 
 **Failure:** any `avg_cost ≤ 0`, or not a number.
+
+**Exception:** `status: pending` — see Check 2.
 
 **Abort:** "Validation failed: invalid average cost for [TICKER]."
 
@@ -100,11 +107,13 @@ Treasury fund as a bond sleeve. Duration is the test, not the issuer.
 
 ---
 
-### Check 7 · Regime Index Validity
+### Check 7 · Regime Index (dashboard, optional)
 
-**Verifies:** the index is computed, complete and consistent with its band.
+**Verifies:** *if* the state carries a Regime Index block, it is internally consistent.
 
-**Source:** `bbi.*`
+**Source:** `regime.*` — **not** `bbi.*`. `bbi` was the v2.1 field; v5's Regime Index is a
+dashboard (P2′), and no v5 SSOT is required to carry one. This check was pointing at a field
+that no longer exists, so it could not run at all.
 
 **Failure:**
 - any dimension missing, or outside 0–100
@@ -114,11 +123,14 @@ Treasury fund as a bond sleeve. Duration is the test, not the issuer.
   (0–35 Risk-On / 36–50 Constructive / 51–65 Cautious / 66–100 Defensive)
 - more than one band step versus the prior cycle
 
-**Abort:** "Validation failed: RI inconsistent (weighted X, band Y)."
+**Abort:** none. If the block is absent, report `Regime Index: not computed` and continue.
+If present and inconsistent, report it as a dashboard discrepancy — never abort report
+generation on a metric that governs no rule.
 
-**Note:** a second band step in the same quarter is a rule violation (P2), not
-a data error. Report it as a compliance failure, not an abort if the data is
-otherwise sound.
+**Note:** a large move in the index is reported as a **change worth noticing**, not as a
+breach. This note previously called a second band step "a rule violation (P2)", which
+contradicted `core/regime-index.md`: the index has no mechanical effect and gates nothing.
+A dashboard cannot be violated.
 
 ---
 
@@ -129,6 +141,8 @@ otherwise sound.
 **Source:** `positions[].market_value`
 
 **Failure:** any `market_value ≤ 0`, or not a number.
+
+**Exception:** `status: pending` — see Check 2.
 
 **Abort:** "Validation failed: invalid market value for [TICKER]."
 
@@ -153,7 +167,30 @@ cash.
 not abort.
 
 **Abort:** "RECONCILIATION FAILED. Delta: $X.XX. Do not generate reports until
-state is corrected and all 9 checks pass."
+state is corrected and all 10 checks pass."
+
+---
+
+### Check 10 · US-situs Derivation
+
+**Verifies:** the stored US-situs figure is derived, not asserted.
+
+**Source:** `constraints.us_situs_exposure`, `positions[].us_situs`, `cash.balance`,
+`constraints.us_situs_includes_cash`
+
+**Rule:** `us_situs_exposure` must equal
+`Σ(positions where us_situs: true).market_value` plus `cash.balance` if
+`us_situs_includes_cash` is true.
+
+**Failure:** the stored figure differs from the derivation by more than $1.00.
+
+**Abort:** "Validation failed: US-situs derivation mismatch (stored X, derived Y)."
+
+**Why this check exists.** This field was wrong for weeks by a whole *definition*, not by a
+rounding error: it omitted every line whose domicile flag was incorrect, and the omission was
+exactly one sleeve. Nothing caught it, because the only reconciliation in the pipeline tested
+the total that every other number is derived from. A hand-kept total with no derivation check
+is the one number in the file that no other number constrains.
 
 ---
 
@@ -173,7 +210,7 @@ Every run records, in `logs/validation/`:
 Before generating any report:
 
 1. Load `portfolio/state/portfolio.yaml`
-2. Run all 9 checks in order
+2. Run all 10 checks in order
 3. If any check fails → abort, record in `logs/validation/`, report the failure
 4. If all pass → record, proceed
 

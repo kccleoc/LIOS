@@ -108,7 +108,7 @@ LIOS/                              ← public framework repo
 │   ├── health-check.md            15-section structure
 │   ├── investment-committee.md    IC authority + workflow
 │   ├── execution-engine.md        PCI / LFS integration layer
-│   ├── validation.md              9-check auto-validation
+│   ├── validation.md              10-check auto-validation
 │   └── event-pipeline.md          LIOS workflow
 ├── examples/                      Synthetic demo data
 │   ├── state.schema.yaml          Empty contract — every field with # TODO

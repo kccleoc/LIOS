@@ -4,7 +4,7 @@
 
 **Component version:** v5
 **Status:** Constitutional (P3′, P4′, P7′)
-**Last updated:** 2026-11-15
+**Last updated:** 2026-11-16
 
 ---
 
@@ -58,10 +58,23 @@ band_s = clamp(0.5 × target_s, 2pp, 8pp)
 **Sleeve B has no band.** It has a ceiling. A sleeve with no target cannot drift
 from a target; it can only breach a ceiling.
 
-**Tolerance.** Soft limits — sleeve bands and the B ceiling — are tested against
-`state.yaml: rebalance_tolerance_pct` (default 2.5pp). A deviation inside the
-tolerance is **reported, not traded**. This exists because a rebalance cannot
-strike targets exactly, and a rule that demands an exact strike gets ignored.
+**Risky weight has a band too.** `risky = (A + B) / NLV` is tested against the
+glidepath's `risky_pct` at the same 2.5pp tolerance, at the quarterly review. A shortfall is
+closed by the Top-up tilt and by nothing else — under `contribution_tilt` the tilt *is* the
+instrument. Without this band the one number the whole glidepath is built on had no test at
+all: every sleeve could sit inside its own band while total risk was above the age target.
+
+**Tolerance.** Soft limits — sleeve bands, the risky band and the B ceiling — are tested
+against `state.yaml: rebalance_tolerance_pct` (default 2.5pp). A deviation inside the
+tolerance is **reported, not traded**. This exists because a rebalance cannot strike targets
+exactly, and a rule that demands an exact strike gets ignored.
+
+**Escalation — a soft breach is not soft forever.** A deviation beyond **3× tolerance**, or
+one that survives **two consecutive quarterly reviews**, is treated as hard and triggers
+Rebalance at the next session with a permitted direction — unless an open Transition Mandate
+cures it inside its window. Reporting is not enforcement: without an escalation rule a
+chronic soft breach persists indefinitely as long as it is correctly reported, and a
+permanently-reported breach becomes furniture.
 
 ---
 
@@ -78,7 +91,7 @@ G+   = max(G_s, 0)
 risky_now = (A + B) / NLV                     ← C is bonds, NOT risky
 
 if risky_now >= risky_cap:
-        allocate the whole DCA to C and Z, split by their target weights
+        allocate the whole DCA to C and Z, pro-rata to their POSITIVE gaps (G+)
 else if sum(G+) = 0:
         allocate by target weight w_s
 else:
@@ -109,12 +122,30 @@ bought every month by the calendar, and a hard cap will be crossed by accumulati
 rather than by any decision. The Top-up is the only operation that runs without a
 trigger, so it is the only one that can breach a cap silently.
 
+**The fallback splits by gap, not by target weight.** Splitting 75/25 by target weights
+looks tidy and feeds whichever of C or Z is already overweight — today that is Z. If neither
+has a positive gap, hold the contribution in Z and report it; do not force money into an
+overweight sleeve to make the arithmetic close. This branch also gives A nothing even when A
+is underweight, which is correct (risk is at its cap) but must be **reported**, because an
+underweight sleeve receiving zero is indistinguishable from one that was forgotten.
+
 At balance this degenerates to the target split: no tilt, no decision.
 
 **Why the standstill term matters.** The target grows with NLV, so a sleeve at
 target must still receive `w_s × DCA` just to hold its weight. A rule that
 allocates only the gap converges to a permanent positive gap and never closes it.
 The `sum(G+) = 0` branch expresses that.
+
+In that branch `w_s = T_s / NLV'`. For A this is **not** a stored constant: A's target is
+residual, so `w_A = (risky_target × NLV' − B_actual) / NLV'`. Writing `w_A` as a fixed number
+is what makes this branch unexecutable in practice — and an unexecutable branch is how a
+rule quietly stops running.
+
+**A skipped month is deferred, not cancelled.** The contribution is a fixed rate, and the
+plan has no discretion to reduce it. A month that is not executed becomes arrears, repaid on
+top of the normal contribution over the following months — never as a single lump that
+changes the allocation arithmetic. Without this, one missed month drifts the whole book
+permanently, because the gap the Top-up was closing simply stops closing.
 
 ---
 
@@ -146,6 +177,8 @@ is the only routine operation that sells.
 | Z → C | ✅ fixes a cash overweight |
 | B → A | ✅ fixes concentration |
 | A → B | ✅ **IC decision only**, never automatic |
+| C → Z | ✅ funds a Sleeve Z floor breach (defensive → defensive) |
+| A → A (within-sleeve) | ✅ cures a look-through cap inside A; a rotation, not an exit |
 | A → C or Z | ❌ **prohibited** — that is de-risking |
 
 Under a *hard* glidepath the A → C/Z restriction is lifted. `state.yaml:

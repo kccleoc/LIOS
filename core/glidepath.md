@@ -2,7 +2,7 @@
 
 **Component version:** v5
 **Status:** Method, not constitutional (targets are `state.yaml` parameters)
-**Last updated:** 2026-11-15
+**Last updated:** 2026-11-16
 
 ---
 
@@ -106,12 +106,26 @@ breach of P2′.
 1  On the birthday that changes the band, the new targets take effect.
 2  A 12-month grace period begins.
 3  During grace, Top-up routes entirely to the defensive block.
-4  At the end of grace, any remaining excess is closed by Rebalance.
+4  At the end of grace, any remaining excess is reported as an OPEN de-risking gap.
 ```
 
 Twelve months of Top-up at a realistic contribution rate rarely closes a 5pp gap.
 That is fine — the point is that the rule is *stated*, with a defined end, rather
 than being quietly ignored.
+
+**What step 4 used to say, and why it could not be obeyed.** It said the excess "is
+closed by Rebalance". Under `glidepath.policy: contribution_tilt` no permitted direction
+lowers risky weight: `A → C` and `A → Z` are prohibited by P4′ because that is de-risking,
+`B → A` leaves risky unchanged, `C`/`Z → A` raises it, and `Z → C` leaves it unchanged. A
+grace-end Rebalance would therefore fire and have nothing legal to execute — a rule that
+looks enforceable and is not, which is worse than an honest gap.
+
+Under `contribution_tilt` the new band is a **direction, not a deadline**. The gap closes
+when contributions and market moves close it, and it is reported every cycle until it does.
+Under `glidepath.policy: hard` the A→C/Z restriction lifts and step 4 becomes a real trade.
+If a hard deadline is ever wanted under `contribution_tilt`, the only honest way to get one
+is an explicitly named, capped exception in the constitution — not a sentence in a method
+document that the direction table forbids. See `core/deployment.md`, Escalation.
 
 ---
 

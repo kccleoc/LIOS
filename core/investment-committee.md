@@ -8,6 +8,21 @@
 The Investment Committee (IC) is the investor plus the active AI session. All
 recommendations are advisory. The IC holds final decision authority.
 
+**That is one human and whichever session happens to be open, so "an IC decision" needs a
+written test, or it is just a word for "I decided".** Sleeve B is funded by IC decision and
+receives no contribution, which is the only thing separating it from the discretionary sleeve
+v4.1 retired. A decision exists only if all five are recorded, dated, in the SSOT's history:
+
+1. the candidate, and the sleeve it enters;
+2. its LOS and its Replacement Index against the weakest incumbent;
+3. the dollar amount, the B ceiling headroom it consumes, and the look-through it creates;
+4. the alternative that was rejected, and why;
+5. the condition that would reverse it.
+
+No record, no funding. A verbal or chat-only approval is a deferral, not a decision. This is
+deliberately bureaucratic: it is the only control on the one sleeve where judgment replaces
+arithmetic.
+
 ## Authority
 
 The IC has **sole authority** on:
