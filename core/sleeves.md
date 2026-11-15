@@ -49,6 +49,11 @@ Every weight, cap and floor is a percentage of NLV. No second denominator.
 - A is never sold to fund C or Z (P4′).
 - A rotation of a thematic ETF is permitted under the Transition Mandate rules, and
   only then. A rotation inside A is a Rebalance, not a discretionary trade.
+- **A holding at a 0% target has no claim on capital.** A position listed at
+  `target_pct: 0` that still holds value is an unfinished exit, not a position. It
+  receives no contribution and is dispositioned at the next Rebalance, proceeds to
+  the A line most underweight. Without this rule a residual-target formula — which
+  can only ever allocate *to A as a whole* — leaves such a holding funded forever.
 
 **Thematic ceiling.** The thematic share of A is capped so that a sector view can
 never become the portfolio's dominant exposure by drift. The cap lives in
@@ -61,6 +66,9 @@ never become the portfolio's dominant exposure by drift. The cap lives in
 **Ceiling:** `state.yaml: sleeves.b.ceiling_pct` — **10% of NLV**
 **Target:** none. B has no target weight.
 **Structure:** individual companies and narrow bets. No equal-weight rule.
+**Concentration inside B:** `sleeves.b.names_max` (default 5 names) and
+`sleeves.b.position_cap_pct` (default 5% of NLV per name). Both are tested at the
+quarterly Rebalance review; both are enforced, not merely declared.
 
 **Funding:**
 

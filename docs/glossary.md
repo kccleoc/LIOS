@@ -514,6 +514,10 @@ conflicts with these, these win.
 **Definition:** Exposure to a single company measured through every wrapper: direct holdings plus each fund's underlying weight in that company plus index-embedded weight. Two funds holding the same company are one exposure. Capped at 5% of NLV; single-sector exposure (25% of NLV) is measured the same way, including sector weight inside broad-index funds.
 **Used in:** `constitution/constitution.md` P6′, `core/sleeves.md`, Health Check §11
 
+### Sector basis
+**Definition:** The taxonomy a sector cap is computed on, recorded in `state.yaml: constraints.sector_basis` because "sector" is otherwise undefined and the same book is compliant or in hard breach depending on the reading. Default `gics_industry_group`. Broad GICS sector exposure is a dashboard metric, not a cap. A cap with no recorded basis is treated as non-compliant, not as passing.
+**Used in:** `constitution/constitution.md` P6′, Health Check §11
+
 ### Cap-only
 **Definition:** A sleeve governed by a ceiling rather than a target weight. Applies to Sleeve B: no target, no glidepath share, no Top-up. The ceiling — 10% of NLV — binds at the quarterly review within the tolerance; between reviews a winner may run, with the overage reported every cycle.
 **Used in:** `core/deployment.md`, `core/sleeves.md`

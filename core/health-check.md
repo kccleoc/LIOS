@@ -73,7 +73,10 @@ that reports an empty sleeve is a section nobody reads.
 
 ### 4. Constraint Check
 - Look-through single-company exposure (direct + fund look-through + index-embedded)
-- Single-sector exposure, including sector weight inside broad-index funds
+- Single-sector exposure, including sector weight inside broad-index funds, **on the
+  basis recorded in `constraints.sector_basis`** — report the basis on the same line
+  as the number, and if it is not recorded, report the constraint as
+  `NON-COMPLIANT: basis undefined`, never as passing
 - Duration (Sleeve **C**)
 - Total risky weight = `(A + B) / NLV`
 - US-situs exposure against the ceiling, with the 80% early warning
@@ -124,7 +127,11 @@ that reports an empty sleeve is a section nobody reads.
 ### 11. Look-Through Concentration
 - Top 10 underlying companies across the entire book, in dollars and % of NLV
 - Each against the look-through cap
-- Sector totals against the sector cap
+- Sector totals against the sector cap, **stating the taxonomy** (industry group by
+  default) and the measurement error you are working within — a hand-built
+  look-through has one
+- Broad GICS sector totals as a **dashboard metric, not a cap** — reported, never
+  enforced
 - **Name the double-counting risk explicitly:** which companies appear in more than
   one wrapper, and the combined weight
 
@@ -133,6 +140,7 @@ that reports an empty sleeve is a section nobody reads.
 - Watchlist candidates with LOS and LFS
 - The replacement test: composite superiority plus two of four qualitative conditions
 - Whether any candidate has IC approval to be funded from A
+- Name count against `names_max`, and each name against `position_cap_pct`
 
 ### 13. Execution Calendar
 - Earnings dates for B names

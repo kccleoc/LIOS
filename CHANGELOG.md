@@ -5,6 +5,36 @@ LIOS follows semver: major bumps only on Locked Decision changes.
 
 ---
 
+## [5.0.1] — 2026-11-16
+
+Four defects found by recomputing the book rather than reading the rules. All four
+are the same species v5 was meant to eliminate: a rule that is declared but never
+enforced, or measured on a basis nobody wrote down.
+
+- **The 25% sector cap had no taxonomy.** "Sector" was undefined, so the same book
+  was compliant or in immediate hard breach depending on whether the reader meant a
+  GICS sector or an industry group. Now measured on **GICS industry group**, with
+  the basis recorded in `constraints.sector_basis`; broad-sector totals become a
+  dashboard metric. A cap with no recorded basis is reported as `NON-COMPLIANT`,
+  never as passing.
+- **The US-situs stop-adding line did not bind the Top-up.** Measured correctly, a
+  book can sit above 80% of the estate-tax ceiling while the monthly waterfall keeps
+  buying a US-domiciled line inside A — crossing a hard cap by calendar, not by
+  decision. The fourth Top-up gate now restricts A's share to non-US-domiciled
+  lines while the line is live.
+- **`names_max` and `position_cap_pct` were dead declarations.** Present in state,
+  referenced by no trigger, gate or step. Both are now soft triggers at the
+  quarterly review and hard conditions on any IC decision to fund B.
+- **A holding at a 0% target kept its capital.** A residual-target formula can only
+  allocate *to* A as a whole, so a position listed at `target_pct: 0` had no exit
+  path at all. The dust rule dispositions it at the next Rebalance.
+
+Also recorded: buy legs are sized on **actual net proceeds**, never on an estimate
+struck three days before the fill. Sizing a buy on an estimate produces either idle
+cash or an unfunded order.
+
+---
+
 ## [5.0.0] — 2026-11-15
 
 ### Major — four sleeves, ETF-basket conviction, cap-only satellites

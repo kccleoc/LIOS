@@ -164,6 +164,22 @@ purposes: it is the sum of its underlying holdings. Two funds that both hold the
 same company are one exposure. Broad-index funds are included — index-embedded
 weight counts.
 
+**"Sector" is measured on a declared basis, not an assumed one.** The 25% cap is
+computed on **GICS industry group** — the level at which a thematic book actually
+concentrates — and the basis is recorded in `state.yaml: constraints.sector_basis`.
+A cap whose basis is not recorded cannot be computed, and a book that cannot be
+measured is treated as non-compliant. Broad GICS *sector* exposure (eleven
+sectors) is reported as a **dashboard metric, not a cap**: a portfolio that takes
+most of its risk through broad-index funds cannot satisfy an eleven-sector cap,
+and a cap that cannot be satisfied is not a control — it is a rule everyone
+learns to ignore. The same word must not mean two things in two reports.
+
+**The stop-adding line binds the Top-up, not just the trade.** When US-situs
+exposure is at or above 80% of the ceiling, the A share of a contribution is
+directed only to A's non-US-domiciled lines; where A has none to buy, that share
+goes to C and Z. A rule that restrains deliberate trades but not the monthly
+waterfall is a rule breached by the calendar.
+
 **Sleeve B ceiling is soft.** It enforces at the quarterly Rebalance review within
 the tolerance band. A satellite that appreciates past the ceiling is trimmed back
 to it at that review; between reviews it may exceed the ceiling, and this is

@@ -99,6 +99,16 @@ else:
 
 3. **The risky-cap fallback targets C and Z.** Not "D and Z" — D does not exist.
 
+**Fourth gate — the US-situs stop-adding line.** The formula above allocates to
+*sleeves*. Inside A, an allocated dollar buys A's lines pro-rata to their within-A
+targets. Before that happens, test `state.yaml: constraints.us_situs_exposure`
+against its stop-adding line. At or above 80% of the ceiling, A's share is directed
+only to A's **non-US-domiciled** lines; where A has none to buy, that share goes to
+C and Z instead. This exists because a US-domiciled line inside A will otherwise be
+bought every month by the calendar, and a hard cap will be crossed by accumulation
+rather than by any decision. The Top-up is the only operation that runs without a
+trigger, so it is the only one that can breach a cap silently.
+
 At balance this degenerates to the target split: no tilt, no decision.
 
 **Why the standstill term matters.** The target grows with NLV, so a sleeve at
@@ -124,6 +134,8 @@ is the only routine operation that sells.
 **Soft — quarterly review, beyond tolerance:**
 - a sleeve outside its band
 - Sleeve B above its ceiling
+- Sleeve B above `sleeves.b.names_max`, or a B name above `position_cap_pct`
+- an A holding carrying a 0% target and still holding value (the dust rule)
 - an age-band change, after the 12-month grace period
 
 ### Direction limits (P4′)
@@ -145,8 +157,12 @@ glidepath.policy` says which applies.
 1  Identify hard-cap breaches, then soft breaches beyond tolerance
 2  Sell the smallest set that cures the breach, subject to P4′
 3  Buy underweight sleeves pro-rata to their remaining gaps
-4  B is bought only under an explicit IC decision
+4  B is bought only under an explicit IC decision, within `names_max` and
+   `position_cap_pct` — a decision that breaches either is not an IC decision,
+   it is a cap breach
 5  Z is never sold below its floor
+6  Disposition any A holding carrying a 0% target (dust rule); proceeds to the
+   most underweight A line
 ```
 
 ### Trim selection
