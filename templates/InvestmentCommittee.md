@@ -8,7 +8,7 @@ status: draft
 
 ## Agenda
 1. Portfolio Review
-2. Trigger Check
+2. Rebalance Triggers (P7′)
 3. Watchlist Review
 4. RFC Discussion
 5. Decisions

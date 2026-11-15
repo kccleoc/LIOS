@@ -1,5 +1,5 @@
-> **Source:** Derived from the LIOS governance principle and P1–P8.
-> **Version:** v4.1
+> **Source:** Derived from the LIOS governance principle and P1′–P8′.
+> **Version:** v5
 
 # Investment Committee
 
@@ -13,8 +13,8 @@ recommendations are advisory. The IC holds final decision authority.
 The IC has **sole authority** on:
 
 - Approval, deferral or rejection of any trade recommendation
-- Sleeve B entry (rare) and any thesis-break exit (P5)
-- Sleeve C replacement surgery (L5)
+- Sleeve B entry (rare) and any thesis-break exit (P5′)
+- Sleeve B replacement decisions (Replacement Index method)
 - The Investment Committee has no discretionary deployment channel. A drawdown
   response is Rebalance, which is mechanical and needs no approval
 - Economic-engine classification
@@ -22,13 +22,13 @@ The IC has **sole authority** on:
 
 The IC may **NOT**:
 
-- Modify a P-rule (P1–P8) without a major version bump and a
+- Modify a P-rule (P1′–P8′) without a major version bump and a
   constitutional amendment
-- Skip Health Check sections (L10 — 16-section fixed order)
-- Change total risky exposure because of a market view (P2)
-- Move money outside the three deployment rules (P3)
-- Override Sleeve B caps (L3 form — binding)
-- Sell a Sleeve B name on price (P5)
+- Skip Health Check sections (P8′ — 15-section fixed order)
+- Change total risky exposure because of a market view (P2′)
+- Move money outside the two deployment operations (P3′)
+- Override the Sleeve B cap (P6′)
+- Sell a Sleeve B name on price (P5′)
 - Re-enter a ticker on the portfolio-local permanently-exited list
   (`state.yaml: sleeve_a.permanently_exited`)
 
@@ -38,7 +38,7 @@ rebalance band), which requires no approval — it is mechanical.
 
 ## Meeting Workflow
 
-1. **Review** — load state, validate, review the 16-section Health Check
+1. **Review** — load state, validate, review the 15-section Health Check
 2. **Discuss** — gaps, constraints, RI band, research changes, risks
 3. **Decide** — issue directives: Buy / Hold / Reduce / Exit / Pass
 4. **Record** — update workspace notes, issue the CIO Resolution
@@ -52,7 +52,7 @@ with a confidence percentage.
 ## Related
 
 - `constitution/governance.md` — governance principle
-- `constitution/constitution.md` — the eight Portfolio Rules (P1–P8)
+- `constitution/constitution.md` — the eight Portfolio Rules (P1′–P8′)
 - `constitution/method.md` — scoring, reports, workflow
-- `core/deployment.md` — the three money rules
+- `core/deployment.md` — the two deployment operations
 - `playbooks/InvestmentCommittee.md` — meeting workflow

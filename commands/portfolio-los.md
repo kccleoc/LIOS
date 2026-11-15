@@ -36,18 +36,18 @@ Output sections:
 ### A. Sleeve B LOS (Health Check §6)
 
 | Ticker | Shares | MV | % NLV | LOS | Band | LVS | LGS | LQS | LMS | Rec |
+| ... | ... | ... | ... | ... | ... | ... | ... | ... | ... |
+
+### B. Sleeve B LOS + Replacement Index (Health Check §6 / §12)
+
+| Ticker | Shares | MV | % NLV | LOS | Frontier | Momentum | Diversification | RI | Rec |
 | ... | ... | ... | ... | ... | ... | ... | ... | ... | ... | ... |
-
-### B. Sleeve D LOS + Replacement Index (Health Check §8 / §11)
-
-| Ticker | Shares | MV | % NLV | Stage | LOS | Frontier | Momentum | Diversification | RI | Rec |
-| ... | ... | ... | ... | ... | ... | ... | ... | ... | ... | ... | ... |
 
 ### C. Portfolio Summary
 
 - Highest LOS holding(s)
 - Lowest LOS holding(s)
-- Mean / median LOS (Sleeve B + D only — Sleeve A excluded)
+- Mean / median LOS (Sleeve B only — Sleeve A holds ETFs and is exempt)
 - Distribution by band:
     - Elite (90-100): N holdings, X% NLV
     - Buy (80-89):    N holdings, X% NLV
@@ -58,15 +58,15 @@ Output sections:
 ### D. Recommendations
 
 - Any holding LOS < 70 → flag as Pass; existing holders monitor;
-  evaluate via /los-replace if in Sleeve D
+  evaluate via /los-replace if in Sleeve B
 - Any holding LOS ≥ 90 → confirm conviction; document why held at
   current size (vs cap / vs available capital)
 - Cross-sleeve observations (e.g., "Sleeve B concentrated in Elite
-  names; Sleeve D has one Watch-band holding approaching Pass")
+  names; Sleeve B has one Watch-band holding approaching Pass")
 
 ### E. Date-stamped output
 
-End with: "Portfolio LOS as of YYYY-MM-DD. NLV: $X. Sleeve B+D
+End with: "Portfolio LOS as of YYYY-MM-DD. NLV: $X. Sleeve B
 LOS mean: XX. Confidence on overall assessment: XX%."
 
 Rules:
@@ -107,7 +107,7 @@ Portfolio LOS as of 2026-07-25. NLV: $202,012. Sleeve B+D LOS mean: 84.3. Confid
 
 ## Discipline reminders
 
-- **Re-score after every earnings** for Sleeve B and key D holdings.
+- **Re-score after every earnings** for Sleeve B holdings.
 - **Aging LOS values** (90+ days without re-score) should be flagged for refresh.
 - **Snapshot archival**: paste the dashboard into the snapshot file under a "Portfolio LOS" section.
 
@@ -115,5 +115,5 @@ Portfolio LOS as of 2026-07-25. NLV: $202,012. Sleeve B+D LOS mean: 84.3. Confid
 
 - See `los-top.md` — quick top-by-LOS
 - See `los-sleeve-b.md` — Sleeve B only
-- See `los-sleeve-d.md` — Sleeve D only
+- See `los-sleeve-b.md` — Sleeve B only
 - See `commands/health-check.md` — full report uses this output

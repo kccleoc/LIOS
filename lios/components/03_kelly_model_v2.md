@@ -1,10 +1,17 @@
+> **RETIRED — Kelly Model v2.0.** This file is named for the Kelly Model, and that
+> model is **retired**. It was repealed in v3.0 and does not exist in v5: there is no
+> Kelly Factor, no Kelly Reserve, no Kelly sizing and no Kelly multiplier on the
+> contribution. Do not reintroduce it under any other name. The file is kept at this
+> path for link stability and carries the **Regime Index**, a dashboard with no
+> mechanical effect. The Kelly history below is retained as history only.
+
 # 03 · Regime Index — Dashboard Only
 
 > File kept at this path for link stability. The v2.x file here was the Kelly
 > Model, repealed. It became a "Regime Index" in v3.0 and is now the
 > **Regime Index**, with no mechanical effect.
 
-**Component version:** v4.1
+**Component version:** v5
 **Status:** Method (not constitutional)
 **Last updated:** 2026-11-15
 
@@ -42,10 +49,11 @@ notice change between cycles.
 
 | Attempt | Verdict |
 |---|---|
-| Cut or raise equity on the reading | ❌ P2 — risky weight is set by age |
-| Deploy or withhold capital | ❌ P3 — Top-up is mechanical |
-| Shift the A/B/C split | ❌ removed in v4.1 |
-| Override a band or cap | ❌ P6, P7 |
+| Cut or raise equity on the reading | ❌ P2′ — risky weight is set by age |
+| Deploy or withhold capital | ❌ P3′ — Top-up is mechanical |
+| Shift the A/B/C split | ❌ removed in v4.1; no such split exists in v5 |
+| Size a position or move a sleeve target | ❌ P2′ — B is cap-only, A is the residual |
+| Override a band or cap | ❌ P6′, P7′ |
 
 ---
 
@@ -64,7 +72,10 @@ That was removed for three reasons:
 
 ---
 
-## Why it replaced the Kelly Factor
+## History: why it replaced the Kelly Factor
+
+Retained as the record of the repeal. Kelly is not a live mechanism in v5 and no
+part of this section is an instruction.
 
 The Kelly Factor was not the Kelly criterion. It computed no edge, no payoff
 ratio and no bankroll, and it sized a flow rather than wealth.
@@ -73,6 +84,10 @@ Kelly, computed properly, is `f* = (μ − r)/σ²` or `w* = (1/γ)Σ⁻¹(μ �
 linear in an unestimable μ. The plausible range for a broad index at current
 valuations moves `f*` from roughly 0% to over 100% of wealth. Useful as a
 diagnostic; unusable as a monthly controller.
+
+**Disposition:** repealed in v3.0. In v5 the monthly contribution is allocated by
+the Top-up rule alone (`core/deployment.md`): gap-driven across A, C and Z, with B
+excluded from the target set. Nothing multiplies it.
 
 ---
 

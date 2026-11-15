@@ -1,7 +1,6 @@
-> **v4.1 conformance note.** Written for LIOS v2.x. In v4.1 the sleeves are
-> **A/B/C/D/Z** measured against NLV, the Kelly Factor is replaced by the
-> **Regime Index**, and the Strategic Reserve is repealed. Where this file
-> and `lios/v4.1.md` disagree, v3.0 wins.
+> **v5 conformance note.** Sleeves are **A/B/C/Z** measured against NLV. There
+> is no Sleeve D, no Kelly Factor, no Strategic Reserve and no `ABC` denominator.
+> Where this file and `lios/v4.1.md` disagree, the init prompt wins.
 
 
 # `/los-candidates` — Candidate Research Workflow
@@ -43,14 +42,21 @@ Step 1: LOS Gate
   - LOS 80+ → DEEP RESEARCH
 
 Step 2: For LOS 80+ candidates, additional checks:
-  - Sleeve fit: A / B / C / D / SR?
+  - Sleeve fit: A / B / C / Z?
   - Funding source: does it respect the funding-source matrix?
-  - Staging (if Sleeve D): what stage would it enter?
+  - If the candidate is an ETF, it belongs in A — state the written view statement
+    (intended exposure, horizon, invalidation condition).
+  - If it is a company, it belongs in B — state the LOS, the fit case, and whether
+    B has ceiling headroom (B is cap-only and never receives Top-up).
   - Catalyst: what's the entry trigger?
 
 Step 3: For LOS 80+ candidates passing Step 2:
-  - Recommend: "Run /regime-recalc for sizing decision"
-  - Or: "Hold for IC review"
+  - Size is NOT set by a score. The Regime Index has no mechanical effect (P2′).
+  - An ETF candidate enters Sleeve A under its written view statement; within-A
+    sizing respects the thematic cap.
+  - A company candidate enters Sleeve B only with IC approval and ceiling
+    headroom. B has no target, so there is no size to compute from a gap.
+  - Recommend: "Hold for IC review"
 
 Output format:
 
@@ -63,7 +69,7 @@ Rules:
 - LOS < 70 candidates are NOT pursued (no exceptions)
 - LOS 70-79 go to watchlist with monitoring conditions
 - LOS 80+ require explicit funding-source + sleeve-fit verification
-- Sleeve D candidates at LOS 80+ still need RI approval before staging
+- Sleeve B candidates at LOS 80+ still need IC approval and Replacement Index fit before entry
 
 Begin.
 ```
@@ -78,10 +84,10 @@ Per-candidate workflow status + next-step directives.
 
 | Candidate | LOS | Band | Workflow Step | Action | Confidence |
 |---|---:|---|---|---|---|
-| EXAMPLE-T2 | 85 | Buy | Deep Research | Sleeve B fit; run /regime-recalc | 75% |
+| `<TICKER>` | 85 | Buy | Deep Research | Sleeve B fit; hold for IC review | 75% |
 | EXAMPLE-T1 | 58 | Pass | STOP | Do not pursue | 90% |
 | EXAMPLE-T3 | 78 | Watch | Watchlist | Add to los-watchlist | 70% |
-| XYZ (quantum) | 82 | Buy | Deep Research | Sleeve D Stage 1 candidate; needs RI check | 65% |
+| `<TICKER>` | 82 | Buy | Deep Research | B candidate; needs IC approval and RI fit | 65% |
 
 ## Discipline reminders
 
@@ -93,6 +99,6 @@ Per-candidate workflow status + next-step directives.
 
 - See `los.md` — single-company scoring
 - See `los-watchlist.md` — watchlist management
-- See `kelly-recalc.md` — sizing decision
-- See `los-sleeve-d.md` — Sleeve D fit check
+- See `core/deployment.md` — Top-up and Rebalance (there is no sizing score)
+- See `los-sleeve-b.md` — Sleeve B fit check
 - See `../lios/components/02_capital_architecture.md` — funding sources

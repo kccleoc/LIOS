@@ -15,14 +15,16 @@ or build artifacts — there are none. Adjust expectations.
 - **No commit without explicit user request.** Lc has a strict
   no-auto-commit rule. Stage freely (`git add`), but never run
   `git commit` or `git push` unless explicitly asked.
-- **Eight Portfolio Rules, P1–P8, are constitutional** (see
+- **Eight Portfolio Rules, P1′–P8′, are constitutional** (see
   `constitution/constitution.md`). Do not propose changes that violate them
   without flagging a major version bump plus an ADR.
-  - **The eight rules:** P1 five sleeves one denominator · P2 targets from the
-    glidepath, risky weight by age · P3 two operations only (Top-up, Rebalance) ·
-    P4 Rebalance direction limits · P5 Sleeve B exits only on thesis break, via a
-    30-day review · P6 caps outrank every rule · P7 a cap breach is a Rebalance
-    trigger · P8 reporting.
+  - **The eight rules:** P1′ four sleeves, one denominator · P2′ targets from
+    the glidepath, risky weight by age, Sleeve B cap-only · P3′ two operations
+    only (Top-up, Rebalance), soft limits quarterly within tolerance · P4′
+    Rebalance direction limits · P5′ exits follow the instrument: B exits only
+    on thesis break, via a 30-day review · P6′ look-through caps outrank every
+    rule · P7′ a cap breach is a Rebalance trigger (hard immediate, soft
+    quarterly) · P8′ reporting: 15 sections, dollars, confidence.
   - **Method lives elsewhere.** `constitution/method.md` holds LOS/LFS weights,
     bands, the Replacement Index and report templates. Change it with a CHANGELOG
     entry — no version bump.
@@ -76,8 +78,8 @@ unreferenced. CHANGELOG.md marks supersession.
 
 | Bump type | When | Required actions |
 |---|---|---|---|
-| **Minor** | New module, new commands, refined docs, snapshot updates | 1. RFC in `rfcs/`  2. CHANGELOG entry  3. Update affected files  4. Update `constitution/constitution.md` if a new L-number is added |
-| **Major** | A P-rule change (P1–P8) | Same as minor + ADR in `decisions/` + constitutional amendment note in CHANGELOG |
+| **Minor** | New module, new commands, refined docs, snapshot updates | 1. RFC in `rfcs/`  2. CHANGELOG entry  3. Update affected files  4. Update `constitution/constitution.md` if a new rule is added |
+| **Major** | A P-rule change (P1′–P8′) | Same as minor + ADR in `decisions/` + constitutional amendment note in CHANGELOG |
 | **Patch** | Typo fixes, small corrections | CHANGELOG entry only |
 
 ---
@@ -93,11 +95,19 @@ grep -rn "components/\|commands/\|snapshots/\|docs/" --include="*.md" .
 # 2. No stale version refs (paste-ready files should point at current version)
 grep -rn "v1.3.md" --include="*.md" . | grep -v "superseded\|previous"
 
-# 3. Leak prevention (v3.0 — must return zero on public repo; CI-enforceable)
-grep -rE 'NVDA|PLTR|CRWD|GEV|BOTZ|RMBS|QTUM|\bMU\b|GOOG|IBTA|VWRA|CSPX|IB01|COHR|MRVL' . \
-    | grep -vE 'constitution/constitution.md.*pre-v3|docs/glossary.md.*pre-v3'
-grep -rE '\$[0-9]{4,}' . \
-    | grep -v 'examples/snapshots'
+# 3. Leak prevention (must return zero on the public repo)
+# The instrument list itself lives OUTSIDE the public tree, in the private
+# bin/push-framework.sh. Never write real tickers into a framework/ file —
+# the list of holdings is itself portfolio information.
+grep -rE '\$[0-9]{4,}' . | grep -v 'examples/snapshots'
+grep -rE '\bNLV\s*[:=]\s*[0-9]' .   # real NLV values must not appear
+```
+
+Run the authoritative check from the private repo root, which owns the
+instrument list:
+
+```bash
+bin/push-framework.sh <tag> --dry-run   # runs the leak gate without pushing
 ```
 
 ---

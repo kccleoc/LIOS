@@ -1,9 +1,9 @@
-# LIOS v4.1 — State Contract
+# LIOS v5.0 — State Contract
 # Every field marked # TODO must be populated by the user.
 # This file is the schema. Copy examples/state.example.yaml for a populated demo.
 # NEVER commit a real state file to the public framework repo.
 
-version: "v3.0"
+version: "v5.0"
 
 # ── Valuation ──────────────────────────────────────────────────────────────
 nlv: 0                        # TODO: Σ(position.market_value) + Σ(cash pools)
@@ -11,58 +11,58 @@ as_of: "YYYY-MM-DD"           # TODO: price date
 source: ""                    # TODO: broker / print source
 
 # ── Sleeves ────────────────────────────────────────────────────────────────
-# One denominator: NLV. Targets must sum to 100.
+# Four sleeves, one denominator: NLV. A + B is the risky block, C + Z the
+# defensive block. B is cap-only: no target, no Top-up, ever (P2′, P6′).
 sleeves:
   a:
-    target_pct: 0             # TODO: core index weight
+    target_pct: 0             # residual: risky_target − B_actual; never hand-set
+    thematic_max_pct: 0       # TODO: thematic share of sleeve A (P1′)
     allocation:               # within-sleeve weights must sum to 100
       - ticker: "EXAMPLE-A1"  # TODO
         target_pct: 0
   b:
-    target_pct: 0             # TODO: conviction weight (1-4 names)
+    ceiling_pct: 0            # TODO: soft ceiling — 10% of NLV by default (P6′)
     position_cap_pct: 0       # TODO: single-name EFFECTIVE exposure ceiling
-    names:                    # 1-4; equal weight at entry
-      - ticker: "EXAMPLE-B1"  # TODO
-        target_pct: 0
+    names:                    # individual companies; no target, no equal weight
+      - ticker: "EXAMPLE-B1"  # TODO: thesis, LOS and horizon live in research records
   c:
-    target_pct: 0             # TODO: satellite weight
-    ceiling_pct: 0            # TODO: hard ceiling
-    max_names: 0              # TODO
-  d:
-    target_pct: 0             # TODO: duration weight
-    instrument: "EXAMPLE-D"   # TODO: >3y duration, hedged
+    target_pct: 0             # TODO: duration weight — 15% of NLV by default
+    instrument: "EXAMPLE-C"   # TODO: >3y duration, hedged to the liability currency
   z:
     target_pct: 0             # TODO: cash equivalents
-    floor_pct: 0              # TODO
+    floor_pct: 0              # TODO: hard floor — 3% of NLV by default; breach
+                              # fires an immediate Rebalance (P6′, P7′)
     ceiling_pct: 0            # TODO
 
 # ── Constraints ────────────────────────────────────────────────────────────
 constraints:
-  factor_cap_pct: 0           # TODO: single-factor exposure ceiling
-  risky_min_pct: 0            # TODO: total risky weight floor
-  risky_max_pct: 0            # TODO: total risky weight ceiling
-  # bands are computed: clamp(0.5 × target, 2pp, 8pp)
+  lookthrough_company_cap_pct: 0   # TODO: single-company exposure cap — direct +
+                                   # fund look-through + index-embedded (P6′)
+  factor_cap_pct: 0           # TODO: single-sector exposure ceiling
+  rebalance_tolerance_pct: 2.5   # soft-limit tolerance; inside = report, not trade
+  # sleeve bands are computed: clamp(0.5 × target, 2pp, 8pp)
   us_situs_ceiling: 0         # TODO: estate-tax exemption in your jurisdiction
   us_situs_exposure: 0        # TODO: current US-domiciled ETFs + US shares
 
 # ── Glidepath ──────────────────────────────────────────────────────────────
 glidepath:
-  policy: contribution_tilt      # contribution_tilt | hard
-  bands:                      # TODO: adjust to your horizon
+  policy: contribution_tilt      # contribution_tilt | hard (hard lifts the P4′
+                                 # prohibition on selling A into C/Z)
+  bands:                      # TODO: one row per age band; risky + c + z = 100
     - age_min: 45
       age_max: 50
-      a: 0
-      b: 0
-      c: 0
-      d: 0
-      z: 0
+      risky: 0                # TODO: total risky weight (A + B), set by age (P2′)
+      b_ceiling: 0            # TODO: Sleeve B ceiling within the band
+      c: 0                    # TODO: duration target
+      z: 0                    # TODO: cash target
+      # a is the residual: a = risky − b_actual
 
 # ── Contributions ──────────────────────────────────────────────────────────
 monthly_dca: 0                # TODO: current monthly contribution
 dca_step_up: "min(salary growth, 5%)"   # never decrease
 dca_review_month: 1
 
-# ── Current Bull–Bear Index ────────────────────────────────────────────────
+# ── Regime Index ───────────────────────────────────────────────────────────
 bbi:
   as_of: "YYYY-MM-DD"
   market_valuation: 0         # TODO 0-100, higher = more bearish
@@ -76,7 +76,7 @@ bbi:
 # ── Positions ──────────────────────────────────────────────────────────────
 positions:
   - ticker: "EXAMPLE-A1"
-    sleeve: a                 # a | b | c | d | z
+    sleeve: a                 # a | b | c | z
     shares: 0
     avg_cost: 0
     market_price: 0

@@ -2,21 +2,25 @@
 
 ## Purpose
 
-When considering whether to replace an existing holding, scan candidates and rank them by LOS + LFS + Replacement Index compatibility. Answers: "If I replace X, who is the best alternative?"
+When considering whether to replace an existing holding, scan candidates and rank them by LOS + Replacement Index compatibility. Answers: "If I replace X, who is the best alternative?"
+
+**The Replacement Index governs Sleeve B.** It applies to nothing else. Sleeve A
+holds ETFs and is rotated on view, not ranked. Sleeve C holds bonds, is bought to
+target, and is never ranked against itself. Sleeve D does not exist.
 
 ## When to use
 
-- When a Sleeve D holding is underperforming or LOS is deteriorating
-- When a Sleeve B holding is near cap and needs trimming consideration
-- Before quarterly Sleeve D review
+- When a Sleeve B holding's thesis is weakening or its LOS is deteriorating
+- Before the quarterly Sleeve B replacement review
+- When Sleeve B is at its ceiling and a candidate would displace an incumbent
 - When Lc asks "what else could I own instead of X?"
 
 ## Inputs required
 
 1. Live portfolio snapshot
-2. Incumbent ticker being evaluated for replacement
+2. Incumbent ticker being evaluated for replacement (Sleeve B only)
 3. Candidate list (or "auto-scan" the LOS watchlist)
-4. Replacement Index scores for incumbent (generate if unavailable)
+4. Replacement Index scores for the incumbent (generate if unavailable)
 
 ## Command
 
@@ -24,16 +28,16 @@ When considering whether to replace an existing holding, scan candidates and ran
 
 ```
 Find the best replacement candidates for the specified incumbent
-holding, using the LIOS v1.5 framework.
+holding, using LIOS v5.
 
 Current Portfolio Snapshot:
 <paste snapshot>
 
-Incumbent: <TICKER>
-- Sleeve: <B or D>
+Incumbent: <TICKER>  (must be a Sleeve B holding)
 - Current LOS: <NN>
 - Current LFS: <NN>
-- Current Replacement Index (if Sleeve D): <NN>
+- Current Replacement Index: <NN>
+- Current weight: <NN% of NLV>, <dollars>
 - Reason for replacement evaluation: <reason>
 
 Candidates: <TICKER1, TICKER2, ... or "AUTO: scan LOS watchlist">
@@ -44,39 +48,52 @@ Output the following:
 
 ### A. Replacement Candidate Ranking
 
-| Rank | Candidate | LOS | LFS | RI (if D) | Economic Engine | LFS vs Incumbent | Recommendation |
+| Rank | Candidate | LOS | LFS | RI | RI vs Incumbent | Engine | Recommendation |
 |---|---|---|---|---|---|---|---|
-| 1 | ... | ... | ... | ... | ... | Higher / Lower | Replace / Watch / Pass |
+| 1 | ... | ... | ... | ... | +NN.N | New / Overlap | Replace / Watch / Pass |
+
+Composite: Replacement_Index = 0.40*Frontier + 0.35*Momentum + 0.25*Diversification
 
 ### B. Prerequisite Checks
 
 For each candidate:
 
-1. LOS gate check: LOS ≥ 70? (If no, reject — L13)
-2. LOS quality check: LOS ≥ 75 for Sleeve D? (If no, requires IC override)
-3. LFS check: Does candidate improve portfolio fit vs incumbent?
-4. Engine check: Does candidate add or maintain engine diversification?
+1. LOS gate: LOS >= 80 for a new Sleeve B name. LOS < 70 is an automatic Pass
+2. Replacement Index: candidate composite strictly greater than incumbent
+3. Qualitative conditions: at least 2 of 4
+   - incumbent missed earnings or issued weak guidance
+   - incumbent thesis weakened materially
+   - candidate materially cheaper on forward valuation
+   - candidate's wave conviction materially higher
+4. Portfolio fit: does the candidate improve or maintain LFS?
+5. Engine check: does the candidate add or maintain economic-engine diversification?
 
-### C. Joint Evaluation (Sleeve D)
+### C. Sizing and Ceiling Check
 
-For Sleeve D incumbents, perform the full joint workflow:
-
-1. Candidate LOS gate (≥ 75 typically required)
-2. Replacement Index: Candidate RI > Incumbent RI?
-3. Qualitative check: ≥ 2 of 4 conditions met? (earnings miss, thesis weakens, valuation, wave conviction)
-4. LFS comparison: Candidate LFS vs Incumbent LFS
-5. Overall verdict
+1. Replacement is size-neutral: one out, one in, at the SAME dollar value
+2. Post-trade Sleeve B weight vs the ceiling (`state.yaml: sleeves.b.ceiling_pct`),
+   in dollars and percent of NLV
+3. Post-trade look-through single-company and sector exposure vs the P6' caps
+4. IC approval required before the trade. State it as a required step, not a
+   formality
 
 ### D. Recommendations
 
-- Best replacement candidate with rationale
-- Any candidate that should be added WITHOUT replacing (if under sleeve cap)
+- Best candidate with rationale and Confidence %
+- Any candidate worth adding WITHOUT replacing — only if Sleeve B is below its
+  ceiling AND Sleeve A funds it as an IC decision. New capital from Top-up is not
+  available to Sleeve B, ever
 - Any candidate that fails the LOS gate — do not advance
 
 Rules:
-- Sleeve D replacement requires BOTH LOS gate AND Replacement Index superiority.
-- Sleeve B replacement is rare — caps are binding, replacement is separate from cap management.
-- L17 applies: high LFS alone cannot qualify a low-LOS candidate for replacement.
+- Sleeve B replacement requires BOTH the LOS gate AND Replacement Index superiority,
+  plus 2 of 4 qualitative conditions. Two out of three is not enough
+- Replacement never adds dollars to Sleeve B. If the result would raise B, it is
+  not a replacement — it is an A-to-B funding decision and needs an IC
+- A candidate's price rising is not a reason to replace, and the incumbent's
+  unrealised loss is not a reason either. Sunk cost is not a metric
+- Sleeve B caps are not replacement triggers. At the ceiling, trim the largest
+  position at the quarterly review; replacement is a separate judgment
 - If no candidate is clearly superior, recommend "Hold — re-evaluate next quarter."
 
 Begin.
@@ -86,17 +103,23 @@ Begin.
 
 ## What you get back
 
-Ranked replacement candidates with full LOS + LFS + Replacement Index evaluation.
+Ranked replacement candidates with full LOS + Replacement Index evaluation, a
+size-neutral sizing check, and a ceiling and look-through compliance line.
 
 ## Discipline reminders
 
-- **Replacement is not rotation.** Replacement requires a specific problem with the incumbent. Rotation is opportunistic improvement.
-- **Sleeve B caps are not replacement triggers.** A cap is a buying-pause, not an exit signal.
-- **If the best candidate has lower LFS than the incumbent**, replacing would reduce portfolio fit — flag this explicitly.
+- **The Replacement Index is Sleeve B's instrument.** Misapplied to A or C it
+  produces rotation advice that v5 prohibits.
+- **Replacement requires a problem with the incumbent** — proven by composite
+  superiority plus 2 of 4 conditions. Opportunity alone is not a reason.
+- **Sleeve B caps are not replacement triggers.** A cap is a buying pause, not an
+  exit signal.
+- **If the best candidate has lower LFS than the incumbent**, replacing reduces
+  portfolio fit — flag it explicitly.
 
 ## Related
 
-- See `los-replace.md` — v1.4 replacement command (uses LOS + Replacement Index)
-- See `portfolio-rotation.md` — rotation analysis (for improving overall fit)
-- See `../lios/components/04_replacement_index.md` — Replacement Index spec
-- See `../lios/components/09_portfolio_construction_intelligence.md` — LFS spec
+- See `los-replace.md` — LOS + Replacement Index workflow
+- See `portfolio-rotation.md` — the two legitimate rotation seams
+- See `../core/replacement-index.md` — Replacement Index specification
+- See `../core/sleeves.md` — Sleeve B entry, ceiling and trim rules

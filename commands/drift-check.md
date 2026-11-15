@@ -2,12 +2,16 @@
 
 ## Purpose
 
-Report the distance between each sleeve and its target. In v3.0 **gap and drift
-are the same number** — there is one calculation, not two.
+Report the distance between each sleeve and its target. In v5, **gap and drift are
+the same number** — there is one calculation, not two.
+
+Sleeve B is the exception: it has a **ceiling, not a target**, so it has no gap to
+fund. Its line reports distance to the ceiling.
 
 ## When to use
 
 - Monthly, before the DCA
+- Quarterly, as the Rebalance review
 - After any trade or large price move
 - Before invoking Rebalance
 
@@ -15,41 +19,48 @@ are the same number** — there is one calculation, not two.
 
 1. `portfolio/state/portfolio.yaml`
 2. Sleeve targets from the glidepath band for the current age
-3. Per-sleeve bands: clamp(0.5 × target, 2pp, 8pp)
+3. Per-sleeve bands: `clamp(0.5 × target, 2pp, 8pp)`, and the tolerance from
+   `state.yaml: rebalance_tolerance_pct`
+4. Look-through holdings data for the funds in Sleeve A
 
 ## Command
 
 ---
 
 ```
-Produce the LIOS v4.1 gap / drift report.
+Produce the LIOS v5 gap / drift report.
 
 State:
 <paste state.yaml here>
 
-One denominator only: NLV. There is no ABC base, no Strategic Reserve line,
-no Kelly Reserve line.
+One denominator only: NLV. There are four sleeves: A, B, C, Z. There is no
+Sleeve D, no ABC base, no Strategic Reserve line, no Kelly Reserve line.
 
-For each sleeve in A, B, C, D, Z:
+For each sleeve in A, B, C, Z:
   value ($ and % of NLV)
-  target ($ and % of NLV)
+  target ($ and % of NLV)     — for B, report the CEILING instead of a target
   gap ($) = target $ − value $
   gap (pp) = target % − actual %
-  band status: inside / breach (± the rebalance band)
+  band status: inside / beyond tolerance / breach
 
 Then:
-1. Confirm Σ gaps = 0
-2. Name every sleeve that breaches the band
-3. If any breach: state that Rebalance is triggered and give the proceed sizes
-   (sell overweight to target, buy underweight pro-rata, Z never below floor)
-4. Within-A weight drift against the within-A allocation
-5. Within-B slot drift against the equal-weight slot bands
+1. Confirm Σ gaps over {A, C, Z} = 0
+2. Compute risky weight as (A + B) / NLV — NOT (A + B + C). C is bonds.
+3. Name every sleeve whose deviation exceeds the tolerance band
+4. State whether each trigger is HARD (immediate) or SOFT (next quarterly review)
+5. If a hard breach: give the cure in dollars, subject to the P4′ direction limits
+6. If a soft breach: state the dollar size and the date of the next quarterly review
+7. Within-A: core-beta vs thematic split against the thematic cap
+8. Within-A: look-through top-10 companies in dollars and % of NLV, each against
+   the look-through cap
+9. Sleeve B: ceiling status only, and state that B received $0.00 from Top-up
 
 Rules:
 - Dollars first, percentages second
 - Gap and drift are the same number — do not compute them twice
-- Definitions: a 0–1y Treasury instrument is Z, never A or D
-- Explicit directive per sleeve: no action / flag / rebalance
+- B has no target. A positive distance to its ceiling is NOT fundable.
+- A 0–1y Treasury instrument is Z, never A or C
+- Explicit directive per sleeve: no action / flag / rebalance now / rebalance at review
 - Confidence % on the rebalance recommendation
 
 Begin.
@@ -60,27 +71,28 @@ Begin.
 ## Definitions
 
 ```
-G_s = w_s × (NLV + DCA) − V_s
+G_s = w_s × (NLV + DCA) − V_s      for s in {A, C, Z}
 ```
 
-Positive = underweight. Negative = overweight.
+Positive = underweight. Negative = overweight. **B is excluded** — it has no target.
 
-| Sleeve | Definition |
-|---|---|
-| A | Broad-index ETFs only |
-| B | Individual equities, 1–4, equal weight at entry |
-| C | Satellite / rotation, winner-weighted, ceiling 7% |
-| D | Duration > 3y, hedged |
-| Z | Duration ≈ 0, floor 3%, ceiling 8% |
+| Sleeve | Definition | Limit |
+|---|---|---|
+| A | ETFs, broad-index **and** thematic | target band |
+| B | Satellites — individual companies | **ceiling only** |
+| C | Duration > 3y, hedged | target band |
+| Z | Duration ≈ 0 | target band, floor 3% |
 
 ## Thresholds
 
-| Gap | Action |
-|---|---|
-| Inside the per-sleeve band | none |
-| Band breach | Rebalance |
-| Cap breach (P7) | Rebalance, or escalate if P4 forbids the cure |
-| D +25% relative to target | Rebalance |
+| Condition | Type | Action |
+|---|---|---|
+| Inside tolerance (`rebalance_tolerance_pct`, default 2.5pp) | none | report only |
+| Soft breach beyond tolerance | SOFT | Rebalance at the next quarterly review |
+| Look-through company or sector above cap | **HARD** | Rebalance now |
+| US-situs above ceiling | **HARD** | Rebalance now |
+| Z below floor | **HARD** | Rebalance now |
+| Sleeve B above ceiling beyond tolerance | SOFT | Trim to ceiling at the next review |
 
 ## Related
 

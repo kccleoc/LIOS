@@ -1,6 +1,6 @@
 # Glidepath — Contribution Tilt Schedule
 
-**Component version:** v4.1
+**Component version:** v5
 **Status:** Method, not constitutional (targets are `state.yaml` parameters)
 **Last updated:** 2026-11-15
 
@@ -15,9 +15,22 @@ investor ages.
 policy it is a *contribution tilt*: it decides where new money goes. Existing
 equity is not sold to reach a lower target.
 
-That distinction matters. The previous version called this a glidepath while
-forbidding the selling that would implement one. It was decoration. Renaming it
-makes the mechanics honest.
+---
+
+## What counts as risky
+
+```
+risky = A + B
+defensive = C + Z
+```
+
+**A is risky even when it holds a broad-index fund.** It is equity. Thematic ETFs
+inside A are the riskiest holdings in the book.
+
+**C is defensive.** It holds bonds with duration beyond three years. In v4.1 the
+same sleeve letter held a satellite equity book, and counting it as risky was
+correct then. In v5 it is not. Any formula that computes `(A + B + C) / NLV` is
+wrong and will route every future contribution into bonds.
 
 ---
 
@@ -29,36 +42,63 @@ makes the mechanics honest.
 | **Contribution tilt** (default) | Targets govern new money only. No de-risking sales | Drifts 10–20pp above target |
 
 Choose **hard** if the capital will fund living expenses, where sequence risk
-dominates. Choose **contribution tilt** if it is a legacy or longevity engine
-that will not be drawn down.
+dominates. Choose **contribution tilt** if it is a legacy or longevity engine that
+will not be drawn down.
 
 Under the contribution-tilt policy, `state.yaml: glidepath.policy` must say
-`contribution_tilt`. Under a hard policy, P4's prohibition on selling A into D/Z
+`contribution_tilt`. Under a hard policy, P4′'s prohibition on selling A into C/Z
 is lifted, and the state file says so explicitly.
 
 ---
 
 ## Age bands
 
-| Age | A | B | C | D | Z | Risky |
-|---|---:|---:|---:|---:|---:|---:|
-| 45–50 | 67% | 8% | 5% | 15% | 5% | **80%** |
-| 50–55 | 64% | 6% | 5% | 20% | 5% | **75%** |
-| 55–60 | 62% | 3% | 5% | 25% | 5% | **70%** |
-| 60–65 | 60% | 0% | 5% | 30% | 5% | **65%** |
-| 65+ | 55% | 0% | 5% | 35% | 5% | **60%** |
+Sleeve B is **cap-only**, so it has no target row. **A's target is the residual:**
 
-Sleeve B decays to zero. Individual conviction positions should not survive to
-retirement: the research effort rises while the payoff horizon shortens, and a
-single-name failure at 65 cannot be recovered by future earnings.
+```
+A_target = risky_target − B_actual
+```
+
+That is what keeps `A + B + C + Z = 100%` while B floats anywhere from 0 to its
+ceiling. At B = 0 the sleeve takes the whole risky budget; at B = ceiling it takes
+the ceiling's share.
+
+| Age | A (residual) | C | Z | Risky (A+B) | B ceiling |
+|---|---:|---:|---:|---:|---:|
+| 45–50 | 80 − B | 15 | 5 | **80%** | 10% |
+| 50–55 | 75 − B | 20 | 5 | **75%** | 8% |
+| 55–60 | 70 − B | 25 | 5 | **70%** | 5% |
+| 60–65 | 65 − B | 30 | 5 | **65%** | 0% |
+| 65+ | 60 − B | 35 | 5 | **60%** | 0% |
+
+**Consequence worth stating:** an A→B transfer under IC decision is
+**gap-neutral**. Moving a dollar from A to B lowers A's value by one dollar and
+lowers A's target by the same dollar, because A's target is the residual. The
+transfer changes *concentration*, not *allocation*. Any rule that treated A's
+target as fixed would double-count the transfer and order a second trade.
+
+B's ceiling decays with the band:
+
+| Age | B ceiling |
+|---|---:|
+| 45–50 | 10% |
+| 50–55 | 8% |
+| 55–60 | 5% |
+| 60–65 | 0% |
+| 65+ | 0% |
+
+Satellites should not survive to retirement: the research effort rises while the
+payoff horizon shortens, and a single-name failure at 65 cannot be recovered by
+future earnings. At 60 the ceiling reaches zero and B is wound down by ordinary
+Rebalance into A.
 
 ---
 
 ## The age-step problem
 
-When the age band drops — say 80% risky to 75% at age 50 — the portfolio is
-usually above the new ceiling on day one. Under the previous rules that was an
-instant, silent breach of P2.
+When the age band drops — say 80% risky to 75% at age 50 — the portfolio is usually
+above the new ceiling on day one. Under a naive reading that is an instant, silent
+breach of P2′.
 
 **Resolution:**
 
@@ -69,9 +109,9 @@ instant, silent breach of P2.
 4  At the end of grace, any remaining excess is closed by Rebalance.
 ```
 
-Twelve months of Top-up at a realistic contribution rate rarely closes a 5pp
-gap. That is fine — the point is that the rule is *stated*, with a defined end,
-rather than being quietly ignored.
+Twelve months of Top-up at a realistic contribution rate rarely closes a 5pp gap.
+That is fine — the point is that the rule is *stated*, with a defined end, rather
+than being quietly ignored.
 
 ---
 
@@ -101,7 +141,7 @@ Two consequences to state plainly, every cycle:
 1. The glidepath **cannot** reduce equity exposure after contributions stop.
 2. At age 65 the target says 60% but realised exposure may be 80%+.
 
-If that is not acceptable, the policy must be **hard**, and P4's direction limit
+If that is not acceptable, the policy must be **hard**, and P4′'s direction limit
 must be lifted. There is no third option.
 
 ---

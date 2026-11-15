@@ -78,4 +78,4 @@ Confidence: 80%.
 
 - See `portfolio-los.md` — full dashboard
 - See `los-sleeve-b.md` — Sleeve B specific
-- See `los-sleeve-d.md` — Sleeve D specific (LOS + Frontier)
+- See `los-sleeve-b.md` — Sleeve B specific (LOS + Replacement Index)

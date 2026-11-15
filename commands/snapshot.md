@@ -22,7 +22,7 @@ analysis, no recommendations — a faithful render of state.
 ---
 
 ```
-Generate a LIOS v4.1 portfolio snapshot from this state file.
+Generate a LIOS v5 portfolio snapshot from this state file.
 
 State:
 <paste state.yaml here>
@@ -32,16 +32,21 @@ Output the snapshot template with:
 2. Holdings: ticker, shares, price, market value, sleeve
 3. Totals: gross position value, cash, NLV
 4. Sleeve breakdown against targets:
-     A core index | B conviction | C satellite | D duration | Z cash
-   Show MV, % of NLV, target %, delta pp
+     A ETFs (core index + sector/thematic) | B satellites | C duration | Z cash
+   Show MV, % of NLV, target %, delta pp, band status
+   B has a CEILING and no target: show its distance to the ceiling instead of a
+   target and a delta
 5. Constraint snapshot:
-     effective single-name exposure, factor, duration, total risky, US-situs
-6. RI line: weighted value, band, date scored
+     look-through single-company exposure, single-sector exposure, duration,
+     total risky = (A + B) / NLV, US-situs, B ceiling headroom
+6. Replacement Index line: B holdings ranked, weakest named, date scored
 
 Rules:
-- Sleeves are A/B/C/D/Z. There is no SR, no ABC denominator
-- Z is cash equivalents only (duration ≈ 0)
-- All percentages are of NLV
+- Sleeves are A/B/C/Z. There is no Sleeve D, no SR, no Kelly Reserve, no ABC denominator
+- C is bonds with duration greater than 3 years, hedged. Z is cash equivalents only
+  (duration near zero). A cash-like instrument is never rendered inside A or C
+- All percentages are of NLV. One denominator only
+- B is cap-only. Do not render a target or a gap for B
 - If a field is unavailable in state, write "not in state" — never estimate
 - No recommendations. This is a render, not an opinion
 

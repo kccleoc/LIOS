@@ -1,7 +1,8 @@
-> **v4.1 conformance note.** Written for LIOS v2.x. In v4.1 the sleeves are
-> **A/B/C/D/Z** measured against NLV, the Kelly Factor is replaced by the
-> **Regime Index**, and the Strategic Reserve is repealed. Where this file
-> and `lios/v4.1.md` disagree, v4.1 wins.
+> **v5 conformance note.** Written for LIOS v2.x. Since v5.0.0 the sleeves are
+> **A/B/C/Z** measured against NLV, the Kelly Factor is replaced by the
+> **Regime Index** (dashboard only), and the Strategic Reserve is repealed.
+> Where this file and `lios/v4.1.md` (the v5 init prompt) disagree, the init
+> prompt wins.
 
 
 > Quick reference — full methodology at core/research-layer.md
@@ -39,7 +40,7 @@ Weighting deviations must be disclosed per score with one-line rationale.
 | **80–89** | **Buy** | Accumulate. Suitable for regular DCA. Eligible for Sleeve A or Sleeve B. |
 | **70–79** | **Watch** | Build watchlist. Buy on meaningful correction. Starter position acceptable. |
 | **60–69** | **Hold** | Existing holders monitor. New purchases require a strong catalyst. |
-| **Below 60** | **Pass** | Avoid. Candidate for replacement if currently owned. |
+| **Below 60** | **Pass** | Avoid. If currently held, opens the 30-day review under P5′. |
 
 ## Standard Research Output Format
 

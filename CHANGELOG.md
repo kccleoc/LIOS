@@ -5,14 +5,75 @@ LIOS follows semver: major bumps only on Locked Decision changes.
 
 ---
 
+## [5.0.0] — 2026-11-15
+
+### Major — four sleeves, ETF-basket conviction, cap-only satellites
+
+The constitution is rewritten. v4.1's five sleeves and its individual-equity
+Sleeve B are replaced by four sleeves in which a sector conviction is expressed as
+a **basket**, not a pick.
+
+**Why.** A single-company event in a single-name sleeve is a portfolio event. When
+a chief executive departs and a position falls roughly thirty percent while its
+sector does not, the v4.1 answer is "review, then sell" — a rule for after the
+damage. The operator asked for a structure that makes the damage smaller in the
+first place, holding total risk, contribution rate and glidepath constant.
+
+**The rules.**
+
+| Was (v4.1) | Is (v5) |
+|---|---|
+| P1 five sleeves A/B/C/D/Z | **P1′ four sleeves A/B/C/Z** — D deleted |
+| A = broad-index ETFs only | **A = ETFs, broad-index *and* sector/thematic** |
+| B = 1–4 equities, equal weight, targeted | **B = satellites, cap-only** |
+| C = satellite rotation, winner-weighted | **C = duration bonds** |
+| P2 risky = A+B+C | **P2′ risky = A + B** |
+| P3 rebalance on breach | **P3′ soft limits rebalance quarterly within a tolerance** |
+| P4 A→D/Z prohibited | **P4′ A→C/Z prohibited; A→B only by IC decision** |
+| P5 exits on thesis break | **P5′ exits follow the instrument; replacement is not an exit** |
+| P6 single-name cap 10% | **P6′ look-through company cap 5%, sector cap 25%** |
+| P7 breach is a trigger | **P7′ hard breaches immediate, soft breaches quarterly** |
+| P8 **16** sections | **P8′ 15 sections** |
+
+**Three defects fixed in the deployment engine.** These were live in v4.1 and would
+have produced wrong output on any v5 book:
+
+1. `risky_now` was `(A + B + C) / NLV`. C is the bond sleeve in v5, so the formula
+   over-reported risky weight badly enough to trip the risky-cap branch
+   permanently — routing every future contribution to bonds and never funding A
+   again. Now `(A + B) / NLV`.
+2. The risky-cap fallback allocated to "D and Z". D does not exist. Now C and Z.
+3. "Trim the weakest in C by Replacement Index" survived into a sleeve that holds
+   bonds. Bonds are not ranked for weakness. Deleted; the judgment lives in B.
+
+**Sleeve B mechanics.** No target, no Top-up, ever. Additions are an Investment
+Committee decision funded from A. Trims happen at the quarterly review when B
+exceeds its ceiling beyond the tolerance band — a winner is allowed to run between
+reviews, and the overage is reported every cycle rather than silently tolerated.
+
+**Tolerance.** Soft limits are tested against `rebalance_tolerance_pct` (default
+2.5pp). A deviation inside tolerance is reported, not traded. A rule that demands
+an exact strike gets ignored, so the tolerance is written down instead.
+
+**Unchanged.** Total risky weight, the age glidepath, the monthly contribution, and
+the two-operation structure. This is a repackaging, not a re-risking.
+
+**Also changed.** `core/sleeves.md`, `core/deployment.md`, `core/health-check.md`
+(16→15), `core/glidepath.md`, `commands/drift-check.md`, `commands/health-check.md`.
+New: `rfcs/RFC-005.md`, `decisions/ADR-007.md`.
+
+**Migration.** `LIOS-mine/execution/2026-11-15-v5-restructure.md` — capital-neutral,
+with the single-company-to-basket swap staged behind the pending earnings gate.
+
+---
+
 ## [4.1.2] — 2026-11-15
 
 ### Patch — remove the renamed file
 
 `framework/lios/v3.0.md` deleted. It was renamed to `lios/v4.1.md` in 4.1.1, but
 `bin/push-framework.sh` copies changed files and cannot propagate deletions, so
-the old path survived upstream with stale content. Removed directly on the public
-repo and in the vendored copy.
+the old path survived upstream with stale content.
 
 The repo now carries exactly one current init prompt: `lios/v4.1.md`.
 
@@ -23,412 +84,16 @@ The repo now carries exactly one current init prompt: `lios/v4.1.md`.
 ### Patch — one version number for methodology and framework
 
 `lios/v3.0.md` renamed to **`lios/v4.1.md`** (same content). From 4.1.0 onward the
-methodology carries the framework release number, so there is exactly one answer
-to "what version of LIOS am I running."
-
-**Why.** The prompt file was named v3.0 during the constitutional rewrite while
-the repo version kept incrementing independently — 4.0.0, 4.0.1, 4.0.2, 4.1.0 —
-because a repo major bump is required whenever the constitution changes. Two
-numbering systems for one concept, which is the same class of confusion the 4.1.0
-release removed from the rule set.
-
-**Changed.** 24 references updated across the framework and the commands.
-`VERSION.md`, the README tree and `AGENTS.md` now point at `lios/v4.1.md`.
-
-**Unchanged.** `lios/v2.0.md` and `lios/v2.1.md` stay frozen as history. The
-4.1.0 entry above still says `lios/v3.0.md` because that was the filename at the
-time.
+methodology carries the framework release number.
 
 ---
 
 ## [4.1.0] — 2026-11-15
 
-### Major — Constitution reduced from 20 rules to 8
+### Major — eight portfolio rules replace the Locked Decision layer
 
-**Constitutional change.** The L1–L23 "Locked Decisions" layer is replaced by
-eight Portfolio Rules, **P1–P8**. A major bump because it restructures the
-constitution itself.
+The constitution is reduced from twenty live Locked Decisions to eight rules.
+Method moves to `constitution/method.md` and can be edited with a changelog entry.
+The deployment engine reduces to two named operations.
 
-**Why.** Twenty live rules accumulated across five versions. Twelve were not
-decisions — they were method documentation (LOS weights, report formats,
-communication style) wearing a constitutional costume. Locking those made every
-scoring tweak a version bump and made the rule list unreadable.
-
-| Layer | Contents | Change requirement |
-|---|---|---|
-| `constitution/constitution.md` | **P1–P8** — the only rules | Major bump + ADR |
-| `constitution/method.md` | LOS/LFS, bands, Replacement Index, templates, glossary | CHANGELOG entry only |
-
-**The eight rules.**
-
-- **P1** five sleeves, one denominator (NLV)
-- **P2** targets from the glidepath; risky weight set by age
-- **P3** two operations only — Top-up and Rebalance
-- **P4** direction: defensive→risky, defensive→defensive, risky→risky; never A → D/Z
-- **P5** Sleeve B exits only on thesis break; LOS < 60 opens a 30-day review that
-  must resolve to a re-score ≥ 60 or an exit
-- **P6** caps outrank every rule, including effective single-name exposure
-- **P7** a cap breach is itself a Rebalance trigger
-- **P8** reports state dollars, confidence, fixed 16-section order
-
-**Deleted.** L4, L6, L7 (already dead); L19 (merged into P1); L21 (the regime
-index no longer acts, so nothing to constrain); Rule 3 discretionary channel
-(a rationalisation route worth about 1.2k/yr at best, and dead once risky weight
-drifts above the cap).
-
-**Changed mechanics.**
-
-| Item | Before | v4.1 |
-|---|---|---|
-| Bands | one absolute 8pp | `clamp(0.5 × target, 2, 8)` → A ±8 · B ±3 · C ±2 · D ±7.5 · Z ±2.5 |
-| Top-up at risky cap | undefined | routes 100% to D and Z |
-| Age-band step | silent P2 breach | 12-month grace, then Rebalance |
-| Transition mandate | no sunset fallback | sunset closes remaining gaps by Rebalance |
-| Regime index | shifted A/B/C targets up to 5pp | dashboard only, zero mechanical effect |
-| Trim selection | unstated | B trims the largest, C trims the weakest |
-| US-situs | fixed ceiling | early warning at 80% of ceiling, UCITS-first |
-| Sleeve B exit | automatic at LOS < 60 | 30-day review, two permitted outcomes |
-
-**Why the regime index lost its effect.** Shifting weight from high-beta single
-names into an index is market timing expressed as composition: it moves portfolio
-beta by about 0.025 with risky dollars unchanged. Changing target weights also
-caused Rebalance to sell names down to the new targets, contradicting "never acts
-by selling." A backtest of the split against a fixed allocation showed no
-reliable benefit.
-
-**New files.** `constitution/method.md`, `rfcs/RFC-004.md`, `decisions/ADR-006.md`.
-**Rewritten.** `constitution/constitution.md`, `core/deployment.md`,
-`core/regime-index.md`, `core/sleeves.md`, `core/glidepath.md`, `lios/v3.0.md`.
-
-Decision: ADR-006. Proposal: RFC-004.
-
----
-
-## [4.0.2] — 2026-11-14
-
-### Patch — v3.0 completion pass
-
-Retired `/los-sleeve-d` (sleeve letters changed: the satellite sleeve is now C,
-duration is D). Cut 22 files off stale v2.x rules rather than annotating them:
-`core/validation.md`, `core/event-pipeline.md`, `core/health-check.md`,
-`core/investment-committee.md`, `lios/components/06`, `lios/components/07`,
-`templates/*`, `commands/drift-check.md` (was pure `ABC`/SR logic), plus
-`commands/health-check`, `live-health-check`, `snapshot`, `portfolio-print`.
-Added `commands/sleeve-c-review.md`. Real tickers in research examples replaced
-with synthetic `EXAMPLE-*`. Parameter paths re-pointed `sleeve_b_caps` →
-`sleeves.b.caps`.
-
----
-
-## [4.0.1] — 2026-11-14
-
-### Patch — documentation cleanup, first pass
-
-Reworded L13 (it still referenced the repealed Kelly Model). Rebuilt
-`core/health-check.md`. Reduced `lios/components/07_locked_decisions.md` to a
-routing index — it duplicated the constitution and had already drifted. Rebuilt
-`templates/HealthCheck.md` and `templates/Snapshot.md`.
-
----
-
-## [4.0.0] — 2026-11-14
-
-### Major — LIOS v3.0: Five Sleeves, Gap Deployment, Bull–Bear Index
-
-**Locked Decision changes (constitutional).**
-
-- **L1 amended.** Five sleeves renamed and redefined: **A** core index,
-  **B** conviction, **C** satellite, **D** duration, **Z** cash equivalents.
-  One denominator: **NLV**. The `ABC` base is deleted.
-- **L4 repealed** (Kelly Model v2.0). The model computed no edge, payoff ratio
-  or bankroll term, multiplied a *flow* rather than *wealth*, and ignored the
-  distance to target. Replaced by the Bull–Bear Index (L21) + gap deployment
-  (L20). Five dimensions, weights and 0–100 scoring survive; output and role do
-  not. L-number preserved, gapped.
-- **L6 repealed** (Strategic Reserve). Negative expected value as stated
-  (payoff ratio must exceed ~5.7:1), and it duplicated the rebalance band.
-  L-number preserved, gapped.
-- **L19–L23 added:** one denominator (NLV); three money operations only; the
-  index never changes total risky exposure; Sleeve B sells only on thesis break;
-  US-situs estate-tax ceiling.
-
-**New files.**
-- `core/deployment.md` — the three deployment rules (replaces `core/kelly.md`)
-- `core/regime-index.md` — Bull–Bear Index 0–100
-- `core/glidepath.md` — age bands, drift-accepted policy, DCA step-up, decumulation
-- `lios/v3.0.md` — self-contained init prompt
-- `scores/Regime.md`, `playbooks/RegimeCheck.md`, `commands/regime-recalc.md`
-
-**Rewritten.**
-- `core/sleeves.md` — A/B/C/D/Z, constraint set, funding matrix
-- `constitution/constitution.md` — L1 amended, L4/L6 repealed, L19–L23 added
-- `core/kelly.md`, `core/strategic-reserve.md` — retirement stubs with rationale
-- `core/health-check.md` — 16 sections re-pointed to the new architecture
-- `examples/state.schema.yaml`, `examples/state.example.yaml` — v3.0 schema
-- `README.md`, `docs/glossary.md`
-
-**Retired.**
-- `commands/kelly-recalc.md` → `commands/regime-recalc.md`
-- `commands/sr-rank.md`, `commands/trigger-check.md` → rebalance rule
-- `playbooks/KellyCheck.md` → `playbooks/RegimeCheck.md`
-
-**Deleted concepts.** `ABC` denominator, Kelly Factor, Kelly Reserve, Strategic
-Reserve, free-table bucket, trigger ladder, cash-like holdings inside Sleeve A.
-
-**Migration.** Executed via `LIOS-mine/execution/2026-11-14-v2-to-v3-migration.md`.
-No position is sold to satisfy a rule; every trade is funded by a target gap.
-
-Decision: ADR-005. Proposal: RFC-003.
-
----
-
-## [3.0.1] — 2026-07-31
-
-### Patch — Flow-UP infrastructure
-
-- Added `bin/push-framework.sh` (clone-in-tempdir, PRIVATE-FORK-aware, symmetric with pull-framework.sh).
-- Added ADR-004 (Flow-UP design — clone-in-tempdir rationale, PRIVATE-FORK inversion rule, tag-safety refusals, post-push auto-re-pin). Closes the Flow-UNKNOWN gap documented in ADR-003 §B-negative.
-- Root README.md + AGENTS.md for LIOS-mine workspace re-orientation.
-- Decision: ADR-004.
-
-## [3.0.0] — 2026-07-30
-
-### Major — Open-Source Bifurcation
-
-**Repo split.** LIOS bifurcates into three repositories:
-- `kccleoc/LIOS` (public) — clean framework only; synthetic `examples/`; history from v2.0.0 boundary
-- `kccleoc/LIOS-mine` (private) — Leo's live portfolio data + vendored pinned framework
-- `kccleoc/LIOS-archive` (private, frozen) — original contaminated repo, renamed; old URL redirects
-Decision: ADR-003. Proposal: RFC-002.
-
-**Locked Decision reframes (L2, L3, L7).**
-- L2 form: "Sleeve A has permanent target allocation composed of broad-index ETFs held at fixed within-Sleeve weights summing to 100%." ETF tickers + weight percentages → `state.yaml: sleeve_a.allocation`.
-- L3 form: "Sleeve B per-position NLV caps are binding (both buying-pause AND trim-trigger)." Specific ticker + cap values → `state.yaml: sleeve_b_caps`.
-- L7: removed from public framework. The "permanently exited" discipline is portfolio-local, not a framework invariant. Concept relocated to `state.yaml: sleeve_a.permanently_exited`. L-number stub preserved per AGENTS.md's no-renumber rule.
-These reframes ride as minor changes *contingent on* the v3.0 OSS-split major. Future standalone L2/L3/L7 content amendments still require v3.0+ major bumps.
-
-**Parameter extraction (10b full sweep).**
-- Every ticker/dollar reference in framework dirs → extracted to state or replaced with synthetics
-- Sleeve C/D target percentages → `state.yaml` params (P2)
-- Monthly DCA amount → `state.yaml: monthly_dca`
-- Sleeve D holding stages → `stage:` field per position in `state.yaml`
-- All command-file example outputs converted to synthetic EXAMPLE-* tickers
-
-**New synthetic examples.**
-- `examples/state.schema.yaml` — empty contract with `# TODO` placeholders (CI grep-target for leak prevention)
-- `examples/state.example.yaml` — fully synthetic populated demo ($1M NLV, EXAMPLE-A/B/D tickers)
-- `examples/snapshots/2026-01-01_portfolio.md` — synthetic generated snapshot
-
-**Infrastructure.**
-- `framework/VERSION` + `bin/pull-framework.sh` (vendored-pin consumption; 13b behavior)
-- ADR-003, RFC-002, updated glossary with v3.0 terms, rewritten README for OSS onboarding
-- L1-L18 renumbered with L7 gapped (former IBTA exit → deleted; no renumber per AGENTS.md)
-- Constitution: L2/L3 reframed; L7 stubbed "removed v3.0"; anti-pattern table genericized
-- Core: sleeve targets → state refs; worked Health Check examples → synthetic
-- Commands: all 26 command files ticker-neutral; snapshot/portfolio-print/live-health-check genericized
-- All Locked Decision forms preserved. No investment philosophy changes. All scoring frameworks intact.
-
-**Archived.**
-- `lios/v1.3.md`, `v1.4.md`, `v1.5.md` → live only in `kccleoc/LIOS-archive` (private, frozen)
-- `archive/v1.X/*` → live only in `kccleoc/LIOS-archive`
-- `portfolio/*`, `reports/*`, `research/*`, `market/*`, `execution/*`, `watchlist/*`, `logs/*`, `workspace/*`, `snapshots/*`, `scores/*` (personal artifacts) → excluded from public repo; live only in private archive + Leo's private `LIOS-mine`
-
----
-
-## [2.1.2] — 2026-07-29
-
-### Patch
-- **Computed NLV SSOT:** Authoritative `nlv = Σ(position.market_value) + cash.balance`. `ibkr_nlv` retained as IBKR Reported NLV (reference only; API/time lag expected). Check 9 fails only on internal `|nlv − portfolio_total| > $1.00`; IBKR gap is INFO never abort.
-- **ADR-002 amendment:** Documents dual-field NLV policy.
-- **State + full pipeline:** `portfolio/state/portfolio.yaml` 2026-07-29; validation PASSED (delta $0.00); regenerated reports/*, portfolio/current/*, snapshot `2026-07-29_portfolio.md`, workspace/*.
-- **Docs:** `core/validation.md`, `core/event-pipeline.md`, `lios/v2.1.md`, `reports/reconciliation.md`.
-
-## [2.1.1] — 2026-07-29
-
-### Patch
-- **Hard-fail reconciliation:** Remove soft-pass language from Check 9 / reconciliation report. Internal delta > $1.00 always aborts (no "understood and documented" override).
-- Superseded operationally by 2.1.2 computed-NLV policy for IBKR lag.
-
----
-
-## [2.1.0] — 2026-07-28
-
-### Major Architecture Upgrade
-- **Single Source of Truth (SSOT):** `portfolio/state/portfolio.yaml` as canonical data source — every portfolio number lives in exactly one file
-- **Deterministic Report Generation:** 7 report templates under `reports/` — all derive from state, never independent data sources
-- **Automatic Reconciliation Engine:** Σ positions + cash = NLV within ±$1 tolerance; abort generation on failure
-- **Self-Healing Workspace Synchronization:** `workspace/today.md`, `next-actions.md`, `dashboard.md` auto-regenerate after portfolio events
-- **Validation Pipeline:** 9-check auto-validation (position count, shares, avg cost, sleeve, cash, SR, KR, market value, NLV reconciliation) — any fail = abort
-- **Research Database:** `research/database/` — migrated from `companies/`, enhanced v2.1 schema per company
-- **Execution State Engine:** `execution/pending.yaml` — no pending action exists only in markdown
-- **Market State Layer:** `market/market-state.yaml` — Kelly regime, macro, risk, volatility, opportunity score
-- **Versioned Decision Records:** ADR-002 finalized (v2.1 SSOT architecture), ADR-003 template created
-- **Automated Current Pointer Management:** `portfolio/current/` updated automatically after every snapshot
-- **Event Pipeline:** `core/event-pipeline.md` — 15-step workflow from IBKR update to GitHub push
-- **Watchlist Database:** `watchlist/` — queryable candidate tracking with research references
-- **Validation Logs:** `logs/validation/` — audit trail of every validation pass/fail
-
-### Bug Fixes
-- Fix NLV reconciliation bug — never use cached NLV, always recompute from live state
-- Fix stale `portfolio/current/` — now derives from `portfolio/state/` with auto-update
-- Fix stale workspace — `today.md`, `dashboard.md`, `next-actions.md` declare auto-regeneration
-- Prevent state divergence — any document with portfolio numbers must derive from state
-- Introduce reconciliation report — `reports/reconciliation.md`
-- Introduce validation log — `logs/validation/`
-
-### Unchanged
-- All 18 Locked Decisions (L1-L18) preserved verbatim
-- Kelly Model v2.0 — weights, scoring, mapping table unchanged
-- Sleeve A/B/C/D architecture and caps unchanged
-- Strategic Reserve funding and deployment rules unchanged
-- Research Intelligence Layer (LOS, LVS, LGS, LQS, LMS) unchanged
-- Portfolio Construction Intelligence (LFS) unchanged
-- Frontier methodology unchanged
-- Replacement Index rules unchanged
-- Health Check 16-section structure unchanged
-- All investment rules, formulas, and logic carried forward unmodified
-- All `lios/v1.X.md` files preserved as historical record
-- All changes are additive — no existing file deleted
-
----
-
-## [2.0.0] — 2026-07-28 — Superseded
-
-### Major Architecture Upgrade
-- Repository reorganized into modular agent-native structure
-- New directories: constitution/, core/, portfolio/, research/, scores/, playbooks/, workspace/, templates/, rfcs/, decisions/, archive/
-- VERSION.md (2.0.0), LICENSE (Proprietary) added
-- lios/v2.0.md — new paste-ready init prompt (backward compatible with v1.5)
-- ADR-001 — architectural decision record for v2.0
-- RFC-001 — v2.0 upgrade proposal (Accepted)
-- All investment rules unchanged (L1-L18 preserved verbatim)
-- All 27 existing commands remain valid at original paths
-- Full backward compatibility with LIOS v1.5
-
-### Unchanged
-- No investment philosophy, Kelly logic, Sleeve architecture, SR rules, RIL methodology, Health Check methodology, Replacement Index, or Constitution modified
-- This upgrade changes HOW LIOS is organized — not WHAT LIOS believes.
-
----
-
-## [1.5.0] — 2026-07-27 — Superseded
-
-### Added
-- **Portfolio Construction Intelligence (PCI)** — new framework for evaluating portfolio fit
-- **LFS — LIOS Fit Score** — new core metric measuring how much an investment improves the current portfolio
-- Five LFS dimensions: Diversification Value, Strategic Fit, Overlap, Conviction Compatibility, Portfolio Balance
-- LFS Scale (90-100 Exceptional / 80-89 Strong Fit / 70-79 Useful / 60-69 Neutral / <60 Poor Fit)
-- Investment Decision Matrix (LOS + LFS → Highest priority / Lower priority / Do not buy / Reject)
-- Economic Engine Principle — diversification measured by underlying economic drivers, not sector labels
-- LFS Constitution (5 rules) — including L18 Preference Rule (when LOS similar, prefer higher LFS)
-- 8 new LFS-specific commands (see `commands/lfs*.md`, `commands/portfolio-*.md`, `commands/economic-engine-map.md`, etc.)
-- New component: `09_portfolio_construction_intelligence.md`
-- LFS integration into Health Check sections 5, 6, 8, 10, 11, 15
-
-### Locked Decisions added (L15-L18)
-- **L15** — LFS is canonical (portfolio fit evaluation required after LOS passes)
-- **L16** — LOS is absolute, LFS is relative (both required, neither replaces the other)
-- **L17** — LFS cannot rescue a poor investment (LOS remains primary gate)
-- **L18** — LFS preference rule (when LOS similar, prefer higher LFS)
-
-### Changed
-- `06_health_check_structure.md` — LFS added alongside LOS in sections 5, 6, 8, 10, 11, 15; v1.5 example tables added
-- `07_locked_decisions.md` — added L15-L18; anti-patterns table extended with LFS violations
-- `README.md` — structure tree updated for v1.5
-- `commands/README.md` — v1.5 LFS commands added to reference table
-- `docs/glossary.md` — LFS terms added
-
-### Unchanged (v1.4 carried forward, L1-L14)
-- Five-layer capital architecture (A/B/C/D/SR)
-- Sleeve A targets (VWRA 50 / CSPX 30 / IB01 20)
-- Sleeve B caps (NVDA 20% / MU 5% / GOOG 6%)
-- Kelly Model v2.0 five-dimension scoring
-- Replacement Index for Sleeve D
-- Strategic Reserve funding/deployment rules
-- IBTA permanently exited
-- Governance principle
-- Communication standards
-- Health Check 16-section fixed order
-- Research Intelligence Layer (LVS/LGS/LQS/LMS/LOS) — fully intact
-- LOS interpretation bands and default weighting
-
----
-
-## [1.4.1] — 2026-07-26 — Superseded
-
-### Added
-- **`portfolio-print` command** — new canonical portfolio export format
-  with full cash breakdown (SR / KR / DCA / Free Tactical), average cost,
-  and unrealized P/L. Additive — no existing rules, commands, or locked
-  decisions modified.
-
----
-
-## [1.4.0] — 2026-07-25 — Superseded
-
-### Added
-- **Research Intelligence Layer (RIL)** — new universal scoring framework
-- Five new scores: **LVS** (Value), **LGS** (Growth), **LQS** (Quality), **LMS** (Momentum), **LOS** (Overall)
-- LOS interpretation bands — Elite / Buy / Watch / Hold / Pass
-- Standard research output format for any company research
-- Candidate research workflow (Discover → LOS → Watchlist/Deep Research → Kelly → Execution)
-- 9 new LOS-specific commands (see `commands/los*.md` and `commands/portfolio-los.md`)
-- LOS integration into Health Check sections 5, 6, 8, 11
-- New component: `08_research_intelligence_layer.md`
-
-### Locked Decisions added (L11–L14)
-- **L11** — Research Intelligence Layer is canonical (every security scored)
-- **L12** — LOS interpretation bands are fixed (5 tiers)
-- **L13** — LOS does not replace Kelly, Sleeves, or Replacement Index (additive)
-- **L14** — LOS default weighting orientation (LQS 35 / LGS 25 / LVS 25 / LMS 15) with disclosed deviations allowed
-
-### Changed
-- `04_replacement_index.md` — added v1.4 section showing LOS as complementary layer
-- `06_health_check_structure.md` — sections 5, 6, 8, 11 now include LOS; example tables added
-- `07_locked_decisions.md` — added L11–L14; anti-patterns table extended
-- Portfolio snapshot — Gross Position Value corrected to $192,006 (was $191,989 in v1.3 input — minor rounding reconciliation); NLV $202,012 unchanged
-
-### Unchanged (v1.3 carried forward, L1–L10)
-- Five-layer capital architecture (A/B/C/D/SR)
-- Sleeve A targets (VWRA 50 / CSPX 30 / IB01 20)
-- Sleeve B caps (NVDA 20% / MU 5% / GOOG 6%)
-- Kelly Model v2.0 five-dimension scoring
-- Replacement Index for Sleeve D
-- Strategic Reserve funding/deployment rules
-- IBTA permanently exited
-- "Rules permanent, decisions dynamic" governance principle
-- Communication standards
-- Health Check 16-section fixed order
-
----
-
-## [1.3.0] — 2026-07-25 — Superseded
-
-### Notes
-- First repo-versioned release
-- Initial repository structure with modular components
-- Seven quick commands under `commands/`
-- Date-stamped snapshot folder under `snapshots/`
-- Glossary under `docs/glossary.md`
-- Locked Decisions L1–L10 established (see `07_locked_decisions.md`)
-- Portfolio Snapshot 2026-07-25 — NLV $202,012; Gross Position $191,989; COHR/MRVL exited via Replacement Index surgery
-
----
-
-## [1.2.0] — earlier
-
-### Notes
-- Pre-repo version. Existed only as inline paste prompts.
-- Governance Principle ("Rules permanent, decisions dynamic") introduced
-- Kelly Model v2.0 (five-dimension) introduced
-- Sleeve D staged entry / exit rules established
-
----
-
-## [1.1.0] — earlier
-
-### Notes
-- Pre-repo version.
-- Five-layer capital architecture established (A/B/C/D + SR)
-- Initial Replacement Index (three-metric) defined
-- IBTA permanently exited
+See `decisions/ADR-006.md`.

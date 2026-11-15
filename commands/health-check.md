@@ -1,10 +1,8 @@
-> **v4.1 conformance note.** Written for LIOS v2.x. In v4.1 the sleeves are
-> **A/B/C/D/Z** measured against NLV, the Kelly Factor is replaced by the
-> **Regime Index**, and the Strategic Reserve is repealed. Where this file
-> and `lios/v4.1.md` disagree, v3.0 wins.
+> **v5 conformance note.** Sleeves are **A/B/C/Z** measured against NLV. Sleeve D
+> is deleted; duration lives in C. Reports are **15 sections**, not 16. The prompt
+> below is self-contained — paste it as-is.
 
-
-# `/health-check` — Full 16-Section Report
+# `/health-check` — Full 15-Section Report
 
 ## Purpose
 
@@ -33,39 +31,65 @@ the live snapshot:
 ---
 
 ```
-Run a full LIOS Health Check on my portfolio.
+Run a full LIOS Health Check on my portfolio (LIOS v5).
 
 Snapshot:
 <paste live snapshot here>
 
-Output the complete 16-section report in the canonical order:
-1. Portfolio Health          — NLV, sleeve totals vs targets, reconciliation
-2. Gap & Drift               — one table; gap and drift are the same number
-3. Regime Index           — five scores, weighted RI, band, band change
-4. Constraint Check          — single name, factor, duration, risky, US-situs
-5. Sleeve A Review
-6. Sleeve B Review           — LOS, thesis-exit status, slot drift
-7. Sleeve C Review           — rotation ranking, ceiling status
-8. Sleeve D Review           — duration, ammunition available
-9. Sleeve Z Review           — floor and ceiling
-10. Top-up Plan              — allocation in dollars
-11. Rebalance Status         — triggered / executed / escalated
-12. Frontier Scoreboard
-13. Execution Calendar
-14. Execution Plan
-15. Risk Assessment          — the drawdown ladder in dollars
-16. CIO Resolution
+Output the complete 15-section report in the fixed order:
+
+ 1. Portfolio Health             — NLV, sleeve totals vs targets, reconciliation
+ 2. Gap & Drift                  — one table; gap and drift are the same number
+ 3. Regime Index                 — five scores, weighted RI, band, band change (dashboard)
+ 4. Constraint Check             — look-through name, sector, duration, risky, US-situs, B ceiling
+ 5. Sleeve A Review              — holdings, view statements, within-A split, thematic drift
+ 6. Sleeve B Review              — LOS, thesis-exit status, ceiling status, replacement ranking
+ 7. Sleeve C Review              — duration, currency hedge, ammunition, build progress
+ 8. Sleeve Z Review              — floor and ceiling, vehicle policy
+ 9. Top-up Plan                  — allocation in dollars, A / C / Z only
+10. Rebalance Status             — triggered? hard or soft? executed? escalated?
+11. Look-Through Concentration   — top names and sectors across every wrapper
+12. Satellite Scoreboard         — B names by Replacement Index, plus candidates
+13. Execution Calendar           — earnings, index events, macro, next quarterly review
+14. Execution Plan               — Buy / Hold / Reduce / Exit with dollars
+15. Risk Assessment & CIO Resolution — drawdown ladder in dollars, then one paragraph
+
+Sleeve definitions. There are four, and no Sleeve D:
+  A — ETFs, broad-index AND sector/thematic. Every thematic holding needs a
+      written view statement, a horizon, and an invalidation condition.
+  B — satellites: individual companies and narrow bets. CAP-ONLY, ceiling 10% of NLV.
+      No target weight. No equal weight at entry.
+  C — bonds, duration greater than 3 years, hedged. Ballast and ammunition.
+  Z — duration near zero: T-bills, money market, cash. Liquidity.
+
+A + B is the risky block. C + Z is the defensive block.
+One denominator: NLV. No second denominator.
 
 Rules:
 - Conclusions first, reasoning second
-- Exact dollar amounts always (never percentages alone)
-- Explicit directives: Buy / Hold / Reduce / Exit
+- Exact dollar amounts always — never percentages alone
+- Explicit directives: Buy / Hold / Reduce / Exit / Pass / Watch
 - Facts separated from Assessments
-- Confidence % on every recommendation in sections 5, 6, 8, 14, 15
+- Confidence % on every recommendation
 - No skipped sections — if no news, state "no action" with one-line rationale
-- The RI is a gauge: it may NOT change total risky exposure (P2)
-- The only Sleeve B sell trigger is a thesis break, LOS < 60 (P5)
-- Money moves only via the three deployment rules (P3)
+- risky_now = (A + B) / NLV. C is bonds. Counting C as risky is an error and
+  must be flagged if you catch it in any input
+- Sleeve B has a ceiling, not a target. Report B's distance to the ceiling in
+  dollars; that distance is not fundable
+- Sleeve B receives $0.00 from this month's Top-up. State that line explicitly
+- The Regime Index is a dashboard. It sizes nothing, shifts no target, and
+  gates no operation. State this each cycle
+- The only Sleeve B exit is a thesis break. LOS below 60 opens a 30-day
+  deep-dive review that resolves to a documented re-score of 60 or above, or
+  exit. No third outcome. Price and drawdown are never exit triggers
+- An ETF is not sold because a constituent company's thesis breaks. That
+  triggers a look-through concentration review, not a sale
+- Money moves by two operations only: Top-up and Rebalance
+- A to B is an Investment Committee decision, never an automatic Rebalance
+  output, and is limited by B's ceiling headroom. A to C or Z is prohibited
+- Deviations inside rebalance_tolerance_pct are reported, not traded
+- Every directive in section 14 must cite the rule that produced it. An action
+  with no rule citation is deleted from the plan
 - End with CIO Resolution as one paragraph
 
 Begin.
@@ -75,22 +99,23 @@ Begin.
 
 ## What you get back
 
-A complete 16-section report following the spec in
-`../lios/components/06_health_check_structure.md`. Section 14
-(Execution Plan) is the actionable core — that's where the
-buy/hold/reduce/exit directives live.
+A complete 15-section report in the fixed P8′ order, specified in
+`../core/health-check.md` and rendered from `../templates/HealthCheck.md`.
+Section 14 (Execution Plan) is the actionable core — that's where the
+Buy / Hold / Reduce / Exit directives live.
 
-## Respect locked decisions
+## What the prompt enforces
 
-Every directive in section 14 must respect:
-- Sleeve A targets (L2)
-- Sleeve A targets (L2 form; values in `state.yaml: sleeve_a.allocation`)
-- Sleeve B caps (L3 form; values in `state.yaml: sleeves.b.caps`)
-- Kelly v2.0 framework (L4)
-- Replacement Index for D (L5)
-- SR funding/deployment rules (L6)
-- `state.yaml: sleeve_a.permanently_exited` is binding for your portfolio (was L7; portfolio-local since v3.0)
+Every directive in section 14 must trace to a rule:
 
-If a directive would violate a Locked Decision, the report must
-flag it explicitly and recommend either (a) the framework-compliant
-alternative or (b) a constitutional amendment — never silently violate.
+- **P1′** — four sleeves, one denominator (NLV)
+- **P2′** — targets from the glidepath; risky = A + B; B is cap-only
+- **P4′** — direction limits: C/Z → A,B ✅ · Z → C ✅ · B → A ✅ · A → B IC only · A → C/Z ❌
+- **P5′** — exits follow the instrument; replacement is not an exit
+- **P6′** — look-through company 5%, sector 25%, B ceiling 10%, C 15%,
+  Z floor 3%, US-situs below exemption
+- **P7′** — hard breach is immediate, soft breach waits for the quarterly review
+- `state.yaml: sleeve_a.permanently_exited` is binding for your portfolio
+
+If a directive would breach a cap, **the cap wins**. Report the
+framework-compliant alternative — never silently violate.

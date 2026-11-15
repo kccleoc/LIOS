@@ -1,16 +1,14 @@
-> **v4.1 conformance note.** Written for LIOS v2.x. In v4.1 the sleeves are
-> **A/B/C/D/Z** measured against NLV, the Kelly Factor is replaced by the
-> **Regime Index**, and the Strategic Reserve is repealed. Where this file
-> and `lios/v4.1.md` disagree, v3.0 wins.
+> **v5 conformance note.** Sleeves are **A/B/C/Z** measured against NLV. Sleeve D
+> is deleted; duration lives in C. Reports are **15 sections**, not 16. The prompt
+> below is self-contained — paste it as-is.
 
-
-# `/live-health-check` — Live-Market 16-Section Report
+# `/live-health-check` — Live-Market 15-Section Report
 
 ## Purpose
 
-Run the complete LIOS Health Check using **live market data** — real-time prices from Yahoo Finance plus current news and macro context. No stale snapshot pricing.
+Run the complete LIOS Health Check using **live market data** — real-time prices plus current news and macro context. No stale snapshot pricing.
 
-The same canonical 16-section report as `/health-check`, but every dollar figure is marked to market at the moment the command runs.
+The same canonical 15-section report as `/health-check`, but every dollar figure is marked to market at the moment the command runs.
 
 
 ## When to use
@@ -35,32 +33,39 @@ Paste the following into a LIOS-initialized session, after providing the portfol
 ---
 
 ```
-Run a full LIOS Health Check on my portfolio using LIVE market data.
+Run a full LIOS Health Check on my portfolio using LIVE market data (LIOS v5).
 
 Snapshot:
 <paste snapshot here>
 
+Sleeve definitions. There are four, and no Sleeve D:
+  A — ETFs, broad-index AND sector/thematic (thematic needs a written view statement)
+  B — satellites: individual companies and narrow bets. CAP-ONLY, ceiling 10% of NLV
+  C — bonds, duration greater than 3 years, hedged
+  Z — duration near zero: T-bills, money market, cash
+
+A + B is the risky block. C + Z is the defensive block. One denominator: NLV.
+
 === PHASE 1 — FETCH LIVE PRICES ===
 
-Step 1. Fetch current prices from Yahoo Finance for every symbol below.
-For each symbol S: fetch finance.yahoo.com/quote/S and extract the current price.
+Step 1. Fetch current prices for every symbol below.
+For each symbol S: fetch the quote page for S and extract the current price.
 
 
 Symbols to fetch (derived from `state.yaml: positions`; substitute your actual tickers below):
 
-  <TICKER-A1>  — Sleeve A       (e.g., all-world equity ETF)
-  <TICKER-A2>  — Sleeve A       (e.g., S&P 500 concentration ETF)
-  <TICKER-A3>  — Sleeve A       (e.g., short-duration Treasury ETF)
-  <TICKER-B1>  — Sleeve B       (first high-conviction holding)
-  <TICKER-B2>  — Sleeve B       (second holding; etc.)
+  <TICKER-A1>  — Sleeve A       (e.g., broad-index equity ETF)
+  <TICKER-A2>  — Sleeve A       (e.g., sector or thematic ETF)
+  <TICKER-A3>  — Sleeve A       (etc.; one line per holding with sleeve: A)
+  <TICKER-B1>  — Sleeve B       (satellite; one line per holding with sleeve: B)
+  <TICKER-B2>  — Sleeve B
   <TICKER-B3>  — Sleeve B
-  <TICKER-D1>  — Sleeve D       (frontier holding, stage 1/2/3)
-  <TICKER-D2>  — Sleeve D
-  <TICKER-D3>  — Sleeve D       (etc.; one line per `state.yaml: positions` row with sleeve: D)
-  ^GSPC         — S&P 500 index (for Trigger Check; remove if your reference indices differ)
-  ^IXIC         — Nasdaq index (for Trigger Check; remove if your reference indices differ)
+  <TICKER-C1>  — Sleeve C       (duration greater than 3y, hedged)
+  <TICKER-C2>  — Sleeve C       (etc.; one line per holding with sleeve: C)
+  <TICKER-Z1>  — Sleeve Z       (duration near zero: T-bill or money market fund)
 
-For US tickers use the bare symbol; for LSE-listed tickers append `.L`.
+For non-US listings append the local exchange suffix. Cash balances come from the
+snapshot, not from a fetch.
 
 Step 2. If any fetch fails: note the symbol, use the snapshot price for that holding,
 and flag it in the Delta Summary. Do NOT stop — fail-soft.
@@ -70,86 +75,100 @@ Step 3. Recalculate for each holding:
   Sleeve MV = sum of holding MVs in that sleeve
   NLV = Total Gross MV + Cash (from snapshot)
   Sleeve % of NLV = Sleeve MV / NLV * 100
-  Drift $ = Sleeve MV - (NLV * Target %)
+  Drift $ = Sleeve MV - (NLV * Target %)          for A, C, Z only
   Drift % = Drift $ / NLV * 100
-  Cap proximity = Holding MV / (NLV * Cap) * 100
+  Ceiling headroom $ = (NLV * B ceiling %) - B MV  for B; there is no B target
+  Position cap proximity = Holding MV / (NLV * position cap %) * 100
 
 
 === PHASE 2 — FETCH LIVE CONTEXT ===
 
-For each Sleeve B and D holding listed in `state.yaml: positions`:
+For each Sleeve B holding listed in `state.yaml: positions`:
   Search web for "TICKER stock news <current month>" — summarize in 1-2 sentences:
   earnings, guidance, major announcements, analyst moves.
 
-One macro search: "S&P 500 Nasdaq market news July 2026" — summarize key events
-(Fed, CPI, earnings season, sector rotations).
+For each Sleeve C holding: any issuer, rating, or duration-relevant news. No
+earnings sweep — C is not scored for quality.
+
+One macro search: "<index> market news <current month>" — summarize key events
+(central bank, inflation, earnings season, rate moves).
 
 === PHASE 3 — DELTA SUMMARY (OUTPUT FIRST) ===
 
-Before the 16 sections, output a **Changes Since Snapshot** block:
+Before the 15 sections, output a **Changes Since Snapshot** block:
 
   Snapshot date: <date from snapshot>
-  Snapshot NLV: $<snapshot NLV>
-  Live NLV: $<recalculated NLV>
-  NLV change: $<delta> (<pct>%)
+  Snapshot NLV: <snapshot NLV>
+  Live NLV: <recalculated NLV>
+  NLV change: <delta> (<pct>%)
   Biggest mover: <TICKER> (<snapshot price> -> <live price>, <pct>%)
-  Cash: $<snapshot cash> (unchanged)
+  Cash: <snapshot cash> (unchanged)
   Failed fetches: <list any> — using snapshot prices
 
-=== PHASE 4 — 16-SECTION HEALTH CHECK ===
+=== PHASE 4 — 15-SECTION HEALTH CHECK ===
 
-Output the complete 16-section report using live prices and fresh context.
-Follow the canonical order and format from `../core/health-check.md`.
+Output the complete 15-section report using live prices and fresh context.
+Fixed order, no deviations:
 
-Sections:
-1. Portfolio Health — summary table + 3-line headline (live NLV, what changed, what matters)
-2. Gap & Drift — one table; gap and drift are the same number
-3. Regime Index — five dimension scores + band (incorporate fresh macro)
-4. Constraint Check — single name effective, factor, duration, total risky, US-situs
-5. Sleeve A Review — live MV, within-A weight drift, `state.yaml: sleeves.a.permanently_exited` flag (was L7), no LOS/LFS (index ETFs)
-6. Sleeve B Review — live MV, % NLV, slot drift vs band, LOS, LFS, Decision Matrix, thesis-exit status, directive
-7. Sleeve C Review — rotation ranking, ceiling status, laggard cut list
-8. Sleeve D Review — duration, currency hedge, ammunition available for Rebalance
-9. Sleeve Z Review — floor 3%, ceiling 8%, duration ≈ 0 only
-10. Top-up Plan — allocation in dollars; state whether the risky-cap fallback applies
-11. Rebalance Status — triggered? executed? escalated under P7?
-12. Frontier Scoreboard — all C names + watchlist, RI composite, LOS, LFS
-13. Execution Calendar — upcoming earnings (B/C), macro events (next 30 days)
-14. Execution Plan — BUY/HOLD/REDUCE/EXIT with dollars, confidence %, rationale
-15. Risk Assessment — constraints, concentration, economic-engine gaps, drawdown ladder in dollars
-16. CIO Resolution — one paragraph, conclusions first, dollars, confidence
+ 1. Portfolio Health             — summary table + 3-line headline (live NLV, what changed, what matters)
+ 2. Gap & Drift                  — one table; gap and drift are the same number; B shown against its ceiling
+ 3. Regime Index                 — five dimension scores + band + band change (dashboard; no mechanical effect)
+ 4. Constraint Check             — look-through name, sector, duration, risky, US-situs, B ceiling
+ 5. Sleeve A Review              — live MV, within-A core vs thematic, view statement and invalidation
+                                   status per thematic holding, `state.yaml: sleeve_a.permanently_exited`
+ 6. Sleeve B Review              — live MV, % NLV, ceiling status in dollars, LOS and components,
+                                   thesis-exit status, replacement ranking by RI, directive
+ 7. Sleeve C Review              — live MV, duration, currency hedge, ammunition available for Rebalance
+ 8. Sleeve Z Review              — floor and ceiling status, vehicle policy, duration near zero only
+ 9. Top-up Plan                  — allocation in dollars; state risky_now = (A + B) / NLV and whether
+                                   the risky-cap branch applies; state that B receives $0.00
+10. Rebalance Status             — triggered? hard or soft? executed? escalated under P7'?
+11. Look-Through Concentration   — top underlying companies across every wrapper, in dollars and % NLV
+12. Satellite Scoreboard         — B names by Replacement Index, watchlist candidates, weakest named
+13. Execution Calendar           — B earnings, A index and distribution events, macro, next quarterly review
+14. Execution Plan               — BUY/HOLD/REDUCE/EXIT with dollars, confidence %, rule cited
+15. Risk Assessment & CIO Resolution — drawdown ladder in dollars, then one paragraph
 
 
 === RULES ===
 - Conclusions first, reasoning second
 - Exact dollar amounts always — never percentages alone
-- Explicit directives: Buy / Hold / Reduce / Exit
+- Explicit directives: Buy / Hold / Reduce / Exit / Pass / Watch
 - Facts separated from Assessments in every section
-- Confidence % on every recommendation in sections 5, 6, 8, 14, 15
+- Confidence % on every recommendation
 - No skipped sections — if no news, state "no action" with one-line rationale
+- risky_now = (A + B) / NLV. C is bonds
+- Sleeve B has a ceiling, not a target; the distance to that ceiling is not fundable
+- The only Sleeve B exit is a thesis break. LOS below 60 opens a 30-day review
+  resolving to a re-score of 60 or above, or exit
+- C is bought, not rotated. No ranking, no Replacement Index inside C
+- Money moves by two operations only: Top-up and Rebalance
+- A to B is an Investment Committee decision; A to C or Z is prohibited
+- Every directive in section 14 cites the rule that produced it
 - End with CIO Resolution as one paragraph
-- Any directive violating a Locked Decision must be flagged with compliant alternative
 ```
 
 ---
 
 ## What you get back
 
-A complete 16-section report following the spec in
-`../lios/components/06_health_check_structure.md`, preceded by a
+A complete 15-section report in the fixed P8′ order, preceded by a
 Delta Summary. Every dollar figure is marked to market at the moment
-the command runs. Section 14 (Execution Plan) is the actionable core.
+the command runs. Structure is specified in `../core/health-check.md`.
+Section 14 (Execution Plan) is the actionable core.
 
-## Respect locked decisions
+## What the prompt enforces
 
-Every directive in section 14 must respect:
-- Sleeve A targets (L2 form; values in `state.yaml: sleeve_a.allocation`)
-- Sleeve B per-position caps (L3 form; values in `state.yaml: sleeves.b.caps`)
-- Kelly v2.0 framework (L4)
-- Replacement Index for D (L5)
-- SR funding/deployment rules (L6)
-- `state.yaml: sleeve_a.permanently_exited` list is binding for your portfolio (was L7; portfolio-local discipline since v3.0)
+Every directive in section 14 must trace to a rule:
 
-If a directive would violate a Locked Decision, the report must
-flag it explicitly and recommend either (a) the framework-compliant
-alternative or (b) a constitutional amendment — never silently violate.
+- **P1′** — four sleeves, one denominator (NLV)
+- **P2′** — targets from the glidepath; risky = A + B; B is cap-only
+- **P4′** — direction limits: C/Z → A,B ✅ · Z → C ✅ · B → A ✅ · A → B IC only · A → C/Z ❌
+- **P5′** — exits follow the instrument; replacement is not an exit
+- **P6′** — look-through company 5%, sector 25%, B ceiling 10%, C 15%,
+  Z floor 3%, US-situs below exemption
+- **P7′** — hard breach is immediate, soft breach waits for the quarterly review
+- `state.yaml: sleeve_a.permanently_exited` is binding for your portfolio
+
+If a directive would breach a cap, **the cap wins**. Report the
+framework-compliant alternative — never silently violate.

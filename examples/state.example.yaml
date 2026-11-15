@@ -1,58 +1,52 @@
-# LIOS v4.1 — Synthetic Example State
+# LIOS v5.0 — Synthetic Example State
 # Fully fabricated demo. Every ticker is EXAMPLE-*; every number is invention.
 # Use this as a worked reference, never as a template for real data.
 
-version: "v3.0"
+version: "v5.0"
 nlv: 1000000
 as_of: "2026-01-01"
 source: "synthetic"
 
 sleeves:
   a:
-    target_pct: 67
+    target_pct: 66            # residual: risky 80 − B actual 13.4; recomputed each cycle
+    thematic_max_pct: 25      # thematic share of sleeve A
     allocation:
       - ticker: "EXAMPLE-A1"
-        target_pct: 62.5
+        target_pct: 75
       - ticker: "EXAMPLE-A2"
-        target_pct: 37.5
+        target_pct: 25
   b:
-    target_pct: 8
-    position_cap_pct: 10
+    ceiling_pct: 10           # soft ceiling; no target, no Top-up
+    position_cap_pct: 5
     names:
       - ticker: "EXAMPLE-B1"
-        target_pct: 33.33
       - ticker: "EXAMPLE-B2"
-        target_pct: 33.33
       - ticker: "EXAMPLE-B3"
-        target_pct: 33.34
   c:
-    target_pct: 5
-    ceiling_pct: 7
-    max_names: 6
-  d:
     target_pct: 15
-    instrument: "EXAMPLE-D"
+    instrument: "EXAMPLE-C1"
   z:
     target_pct: 5
     floor_pct: 3
-    ceiling_pct: 8
+    ceiling_pct: 10
 
 constraints:
+  lookthrough_company_cap_pct: 5
   factor_cap_pct: 25
-  risky_min_pct: 60
-  risky_max_pct: 80
-  # bands are computed: clamp(0.5 × target, 2pp, 8pp)
-  us_situs_ceiling: 60000
-  us_situs_exposure: 80000
+  rebalance_tolerance_pct: 2.5
+  # sleeve bands are computed: clamp(0.5 × target, 2pp, 8pp)
+  us_situs_ceiling: 110000
+  us_situs_exposure: 91000
 
 glidepath:
   policy: contribution_tilt
   bands:
-    - { age_min: 45, age_max: 50, a: 67, b: 8, c: 5, d: 15, z: 5 }
-    - { age_min: 50, age_max: 55, a: 64, b: 6, c: 5, d: 20, z: 5 }
-    - { age_min: 55, age_max: 60, a: 62, b: 3, c: 5, d: 25, z: 5 }
-    - { age_min: 60, age_max: 65, a: 60, b: 0, c: 5, d: 30, z: 5 }
-    - { age_min: 65, age_max: 99, a: 55, b: 0, c: 5, d: 35, z: 5 }
+    - { age_min: 45, age_max: 50, risky: 80, b_ceiling: 10, c: 15, z: 5 }
+    - { age_min: 50, age_max: 55, risky: 75, b_ceiling: 8, c: 20, z: 5 }
+    - { age_min: 55, age_max: 60, risky: 70, b_ceiling: 5, c: 25, z: 5 }
+    - { age_min: 60, age_max: 65, risky: 65, b_ceiling: 0, c: 30, z: 5 }
+    - { age_min: 65, age_max: 99, risky: 60, b_ceiling: 0, c: 35, z: 5 }
 
 monthly_dca: 10000
 dca_step_up: "min(salary growth, 5%)"
@@ -69,15 +63,13 @@ bbi:
   band: Cautious
 
 positions:
-  - { ticker: "EXAMPLE-A1", sleeve: a, shares: 3000, avg_cost: 100, market_price: 138, market_value: 414000, us_situs: false }
-  - { ticker: "EXAMPLE-A2", sleeve: a, shares: 2000, avg_cost: 150, market_price: 124, market_value: 248000, us_situs: false }
-  - { ticker: "EXAMPLE-B1", sleeve: b, shares: 500, avg_cost: 80, market_price: 96, market_value: 48000, us_situs: true }
-  - { ticker: "EXAMPLE-B2", sleeve: b, shares: 300, avg_cost: 120, market_price: 108, market_value: 32400, us_situs: true }
-  - { ticker: "EXAMPLE-B3", sleeve: b, shares: 800, avg_cost: 60, market_price: 55, market_value: 44000, us_situs: false }
-  - { ticker: "EXAMPLE-C1", sleeve: c, shares: 400, avg_cost: 40, market_price: 50, market_value: 20000, us_situs: false }
-  - { ticker: "EXAMPLE-C2", sleeve: c, shares: 600, avg_cost: 30, market_price: 27, market_value: 16200, us_situs: false }
-  - { ticker: "EXAMPLE-D", sleeve: d, shares: 1500, avg_cost: 95, market_price: 100, market_value: 150000, us_situs: false }
-  - { ticker: "EXAMPLE-Z1", sleeve: z, shares: 1200, avg_cost: 100, market_price: 100, market_value: 120000, us_situs: true }
+  - { ticker: "EXAMPLE-A1", sleeve: a, shares: 3500, avg_cost: 100, market_price: 140, market_value: 490000, us_situs: false }
+  - { ticker: "EXAMPLE-A2", sleeve: a, shares: 1000, avg_cost: 120, market_price: 154, market_value: 154000, us_situs: false }
+  - { ticker: "EXAMPLE-B1", sleeve: b, shares: 600, avg_cost: 60, market_price: 80, market_value: 48000, us_situs: true }
+  - { ticker: "EXAMPLE-B2", sleeve: b, shares: 500, avg_cost: 70, market_price: 86, market_value: 43000, us_situs: true }
+  - { ticker: "EXAMPLE-B3", sleeve: b, shares: 860, avg_cost: 40, market_price: 50, market_value: 43000, us_situs: false }
+  - { ticker: "EXAMPLE-C1", sleeve: c, shares: 1500, avg_cost: 95, market_price: 100, market_value: 150000, us_situs: false }
+  - { ticker: "EXAMPLE-Z1", sleeve: z, shares: 720, avg_cost: 100, market_price: 100, market_value: 72000, us_situs: false }
 
 cash:
   balance: 0
@@ -88,10 +80,20 @@ portfolio_total: 1000000
 reconciliation_delta: 0
 
 # Notes on this synthetic book:
-# - Sleeve B is 12.4% of NLV (over the 8% target) — the DCA waterfall gives B
-#   zero allocation until it falls back to target.
-# - Sleeve Z is 12% (over the 5% target and over the 8% ceiling) — the rebalance
-#   rule is triggered and must redeploy toward D.
-# - us_situs_exposure is over the ceiling and must be reduced.
-# - Total risky is 81.2%, above the 80% glidepath ceiling — the next rebalance
-#   moves money from A/B/C into D/Z.
+# - Sleeve B is 13.4% of NLV against a 10% ceiling — 3.4pp beyond the 2.5pp
+#   tolerance. This is the soft-breach case: flagged every cycle, and the
+#   largest position (EXAMPLE-B1) is trimmed at the next quarterly Rebalance.
+#   B receives no Top-up in the meantime; B has no target, only the ceiling.
+# - risky_now = (A + B) / NLV = 77.8%, below the 80% glidepath weight for the
+#   45–50 band. C is bonds and is not counted as risky.
+# - Sleeve A target is the residual: 80 − 13.4 = 66.6%; actual 64.4% is inside
+#   its ±8pp band. Thematic share (EXAMPLE-A2) is 23.9% of A, inside the 25% cap.
+# - Sleeve C is at its 15% target. Bonds are not ranked — no rotation, no
+#   Replacement Index in C.
+# - Sleeve Z is inside its band (±2.5pp around 5%) and above its 3% floor —
+#   no action.
+# - us_situs_exposure is 91,000 against a 110,000 ceiling — past the 80%
+#   early-warning line (88,000): stop adding, prefer non-US domiciles.
+# - Look-through: the largest single-company exposure is 4.7% of NLV (the
+#   direct holding EXAMPLE-B2 plus its index-embedded weight inside
+#   EXAMPLE-A1) against the 5% cap — inside, reported.

@@ -1,7 +1,6 @@
-> **v4.1 conformance note.** Written for LIOS v2.x. In v4.1 the sleeves are
-> **A/B/C/D/Z** measured against NLV, the Kelly Factor is replaced by the
-> **Regime Index**, and the Strategic Reserve is repealed. Where this file
-> and `lios/v4.1.md` disagree, v4.1 wins.
+> **v5 conformance note.** The portfolio has four sleeves — A, B, C, and Z —
+> measured against NLV. The Kelly Factor and Strategic Reserve are repealed.
+> Where this file and `constitution/constitution.md` disagree, the constitution wins.
 
 
 > **Source:** Extracted verbatim from LIOS v1.5. Method content, consolidated in constitution/method.md in v4.1. Describes the PCI execution layer — how LOS, LFS and sleeves integrate.
@@ -62,7 +61,7 @@ Both are required. Neither replaces the other.
 
 ---
 
-## LFS Constitution (L15–L18)
+## LFS Method
 
 ### LFS Rule A — LOS is Absolute
 LOS evaluates the investment itself. It is independent of portfolio
@@ -186,7 +185,7 @@ LOS and LFS must be evaluated together:
 
 ## Worked Example: LFS is Dynamic
 
-### TXN — Initial Evaluation
+### `<TICKER>` — Initial Evaluation
 
 | Metric | Value |
 |---|---|
@@ -194,7 +193,7 @@ LOS and LFS must be evaluated together:
 | LFS | 92 (Exceptional) |
 | Rationale | Adds analog/mixed-signal semiconductor engine — highly complementary to digital AI compute positions |
 
-### TXN — After Becoming a Large Position
+### `<TICKER>` — After Becoming a Large Position
 
 | Metric | Value |
 |---|---|
@@ -267,26 +266,27 @@ Execution
 ### Deployment (v4.1 — replaces Kelly Factor)
 - The Kelly Model and its Factor are repealed. Deployment is governed by
   `core/deployment.md`: **Top-up** (monthly, gap-driven, never sells) and
-  **Rebalance** (on band or cap breach, sells, direction-limited by P4).
+  **Rebalance** (on band or cap breach, sells, direction-limited by P4′).
 - LFS informs **priority ranking** among LOS-qualified candidates. It does not
   size the contribution — the gap does.
 - When multiple LOS-qualified candidates compete for capital, higher LFS receives
   capital first.
 
-### Sleeves (v1.3 — unchanged)
-- Sleeve targets and caps (L2, L3) unchanged.
+### Sleeves (v5)
+- Sleeve targets and caps follow P2′ and P6′.
 - Sleeve assignment rules are untouched.
 - LFS may influence **which sleeve** when LOS values are similar.
 - Sleeve A (broad-index ETFs) does not receive LFS scoring.
 
-### Replacement Index (v1.3 — unchanged)
-- L5 unchanged. Replacement Index still gates all Sleeve D surgery.
+### Replacement Index (Sleeve B)
+- The Replacement Index method governs Sleeve B replacements, subject to P6′ caps.
 - LFS is an **additional input** when comparing candidates with similar Replacement Indices.
 - LFS does not override Replacement Index superiority.
 
 ### Health Check
-- P8 (16-section fixed order) unchanged.
-- Each holding in sections 5, 6, 8 now shows LFS beside LOS.
+- P8′ requires the 15-section fixed order.
+- Sleeve C is the duration sleeve. The satellite review is Sleeve B in section 6,
+  where each holding shows LFS beside LOS.
 - New subsection in §15 (Risk Assessment) for portfolio construction intelligence.
 
 ---
@@ -295,9 +295,9 @@ Execution
 
 | Trigger | Why it's not a valid LFS use |
 |---|---|
-| "LFS 92, so buy it despite LOS 58" | P6 — LFS cannot rescue a poor investment. LOS is the primary gate. |
+| "LFS 92, so buy it despite LOS 58" | P6′ — LFS cannot rescue a poor investment. LOS is the primary gate. |
 | "LFS is low so sell a great company" | Strong LOS + low LFS = excellent company, lower portfolio priority. Not a sell signal. |
-| "Use LFS instead of the Replacement Index" | The Replacement Index still governs all Sleeve C surgery. LFS is additive. |
+| "Use LFS instead of the Replacement Index" | The Replacement Index governs Sleeve B replacements. LFS is additive. |
 | "The sector is different so LFS is automatically high" | Economic Engine Principle — sector labels alone do not determine diversification. |
 | "Calculate LFS once and it's permanent" | LFS is dynamic. Re-score after portfolio changes. |
 | "Replace LOS with LFS" | They measure different things. Both are required. |
@@ -335,7 +335,7 @@ LFS values are dynamic. Re-score after:
 ## Related
 
 - See `lios/v1.5.md` — full paste-ready init prompt including LFS
-- See `07_locked_decisions.md` — L15–L18 are the new LFS locked decisions
+- See `constitution/method.md` — LFS method
 - See `06_health_check_structure.md` — where LFS appears in Health Check
 - See `commands/lfs.md`, `commands/los-lfs.md`, etc. — v1.5 command files
 - See `08_research_intelligence_layer.md` — LOS framework (complementary)

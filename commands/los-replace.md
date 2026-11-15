@@ -1,26 +1,28 @@
 > **v4.1 conformance note.** Written for LIOS v2.x. In v4.1 the sleeves are
-> **A/B/C/D/Z** measured against NLV, the Kelly Factor is replaced by the
-> **Regime Index**, and the Strategic Reserve is repealed. Where this file
-> and `lios/v4.1.md` disagree, v3.0 wins.
+> **v5 conformance note.** Sleeves are **A/B/C/Z** measured against NLV. The
+> Replacement Index governs **Sleeve B** (satellites). Replacements are
+> **size-neutral**: one out, one in, same dollars, so B's weight and the ceiling
+> headroom do not change. Where this file and `lios/v4.1.md` disagree, the init
+> prompt wins.
 
 
-# `/los-replace` — Sleeve D Replacement (LOS + RI Joint Workflow)
+# `/los-replace` — Sleeve B Replacement (LOS + RI Joint Workflow)
 
 ## Purpose
 
-Evaluate a Sleeve D replacement using both the LOS framework AND
+Evaluate a Sleeve B replacement using both the LOS framework AND
 the Replacement Index. This is the official LIOS workflow for any
-Sleeve D surgery decision.
+Sleeve B surgery decision.
 
 ## When to use
 
-- Lc is considering replacing a Sleeve D incumbent
+- a Sleeve B incumbent is the weakest by Replacement Index
 - After any D holding earnings or thesis event surfaces weakness
-- During quarterly Sleeve D review
+- At the quarterly Rebalance review
 
 ## Inputs required
 
-1. Current Sleeve D holding to evaluate (incumbent)
+1. Current Sleeve B holding to evaluate (incumbent)
 2. Proposed replacement (candidate)
 3. Live portfolio snapshot
 
@@ -29,7 +31,7 @@ Sleeve D surgery decision.
 ---
 
 ```
-Evaluate a Sleeve D replacement under LIOS (joint LOS + RI).
+Evaluate a Sleeve B replacement under LIOS (joint LOS + RI).
 
 Incumbent: <TICKER>
 Candidate: <TICKER>
@@ -65,7 +67,7 @@ Gate 2 — Replacement Index (L5):
       - Candidate valuation substantially more attractive
       - Candidate wave significantly higher conviction
 
-Gate 3 — Funding source + Sleeve D staging:
+Gate 3 — Size neutrality + Sleeve B ceiling:
   - Funding source respects matrix (external capital only for D)
   - Candidate would enter Stage 1 / 2 / 3 per current rules
 
@@ -111,7 +113,7 @@ Verdict: REPLACE. Confidence: 80%.
 
 - **All three gates must pass.** LOS alone is insufficient.
 - **No surgery on LOS < 75 candidate.** Even if incumbent is weaker.
-- **Funding source compliance is non-negotiable.** Sleeve D capital has strict sources.
+- **Size neutrality is non-negotiable.** A replacement is one-out-one-in at the same dollar size. It does not consume Sleeve B ceiling headroom and needs no funding from A.
 - **Staging is not bypassed.** Even approved replacements follow Stage 1 → 2 → 3.
 
 ## Related

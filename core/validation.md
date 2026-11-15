@@ -1,7 +1,7 @@
-# LIOS v4.1 Auto-Validation Rules
+# LIOS v5 Auto-Validation Rules
 
-**Version:** 3.0
-**Last updated:** 2026-11-14
+**Version:** 5.0.0
+**Last updated:** 2026-11-15
 
 Every report generation runs these **9 checks** against
 `portfolio/state/portfolio.yaml`. If any check fails, generation is aborted.
@@ -51,32 +51,32 @@ A failure halts the pipeline and reports the failure with details.
 
 ### Check 4 · Sleeve Assignment
 
-**Verifies:** every position is assigned to a valid v3 sleeve.
+**Verifies:** every position is assigned to a valid v5 sleeve.
 
 **Source:** `positions[].sleeve`
 
-**Failure:** any sleeve value not in `{a, b, c, d, z}`.
+**Failure:** any sleeve value not in `{a, b, c, z}`.
 
 **Abort:** "Validation failed: invalid sleeve assignment for [TICKER]."
 
-**Note:** the v3 sleeve set is **A, B, C, D, Z**. `sleeve: sr` is invalid —
+**Note:** the v5 sleeve set is **A, B, C, Z**. `sleeve: sr` is invalid —
 the Strategic Reserve was repealed in v3.0.
 
 ---
 
-### Check 5 · Sleeve Targets Sum to 100
+### Check 5 · Sleeve Allocation and Risky Target
 
-**Verifies:** target percentages are internally consistent and match the age
-band in `glidepath`.
+**Verifies:** sleeve allocation reconciles to NLV and the risky target matches the age band in `glidepath`.
 
-**Source:** `sleeves.a.target_pct` … `sleeves.z.target_pct`, `glidepath.bands`
+**Source:** `sleeves.a.target_pct`, `sleeves.b.ceiling_pct`, `sleeves.c.target_pct`,
+`sleeves.z.*`, `glidepath.bands`
 
 **Failure:**
-- targets do not sum to 100 (±0.1)
-- the target set does not equal the glidepath band for the investor's age
-- `A + B + C` falls outside `constraints.risky_min_pct` … `risky_max_pct`
+- sleeve totals do not sum to 100% of NLV (±0.1)
+- A target does not equal the risky target minus actual B weight
+- risky target does not match the glidepath band for the investor's age
 
-**Abort:** "Validation failed: sleeve targets sum to X, expected 100."
+**Abort:** "Validation failed: sleeve allocation or risky target is inconsistent."
 
 ---
 
@@ -87,7 +87,7 @@ band in `glidepath`.
 **Source:** `positions[]` joined with instrument metadata
 
 **Failure:**
-- a cash-like instrument (duration < 1y) assigned to sleeve `a` or `d`
+- a cash-like instrument (duration < 1y) assigned to sleeve `a` or `c`
 - a duration-bearing instrument (duration > 3y) assigned to sleeve `z`
 - an individual equity assigned to sleeve `a`
 - a broad-index ETF assigned to sleeve `b`
@@ -141,11 +141,11 @@ cash.
 
 **Source:** `nlv`, `portfolio_total`, optional `ibkr_nlv`
 
-**NLV policy (v3.0):**
+**NLV policy (P1′):**
 - `nlv` must equal `Σ(positions[].market_value) + cash.balance` — computed
 - `ibkr_nlv`, if present, is broker-reported and is **reference only**
 - every LIOS calculation uses `nlv`, never `ibkr_nlv`
-- there is one denominator. `ABC` does not exist in v3.0
+- there is one denominator. The former `ABC` denominator is not used.
 
 **Failure:** `|nlv − portfolio_total| > $1.00`. No exceptions, no soft pass.
 

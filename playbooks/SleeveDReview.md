@@ -1,17 +1,10 @@
-# Playbook: SleeveDReview
+# Playbook: SleeveDReview — RETIRED in LIOS v5.0
 
-## Purpose
-TBD — agent-native workflow definition.
+**Status:** Superseded. Do not use.
 
-## Prerequisites
-- LIOS v2.0 framework acknowledged
-- Live portfolio snapshot loaded
+Sleeve D no longer exists. The v4.1 duration sleeve is **Sleeve C** in v5, and
+the v4.1 satellite sleeve is **Sleeve B**. Use `../commands/sleeve-c-review.md`
+for the duration review and `../commands/los-sleeve-b.md` for the satellite
+review.
 
-## Procedure
-1. TBD
-
-## Output Format
-TBD
-
-## Related Commands
-TBD
+See `../core/sleeves.md`.

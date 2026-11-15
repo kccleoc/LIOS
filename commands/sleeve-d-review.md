@@ -1,18 +1,21 @@
-# `/sleeve-d-review` — RETIRED in LIOS v4.1
+# `/sleeve-d-review` — RETIRED
 
 **Status:** Superseded. Do not use.
 
-In v3.0 the sleeve letters changed:
+**Sleeve D does not exist in v5.** Duration is Sleeve C; individual companies and
+narrow bets are Sleeve B.
 
-| v2.x | v3.0 |
+Where this file's function now lives:
+
+| Old function | Current home |
 |---|---|
-| Sleeve D — Frontier Innovation (satellite/thematic) | **Sleeve C — Satellite** |
-| Sleeve C — Tactical cash | **Sleeve Z — Cash equivalents** |
-| (no duration sleeve) | **Sleeve D — Duration** |
+| Satellite review (companies, narrow bets) | `los-sleeve-b.md` — reviewed under Sleeve B |
+| Duration review (ballast and ammunition) | Sleeve C, in section 7 of the 15-section Health Check (`health-check.md`). C is bought, not ranked — there is no rotation review |
+| Replacement Index ranking | `../core/replacement-index.md` + `replacement-candidates.md` |
 
-Use:
+This file is retained as history only. The v2.x body is preserved in git history.
 
-- **`/sleeve-c-review`** — satellite rotation review (this file's function)
-- `core/sleeves.md` — sleeve definitions
+## Related
 
-The v2.x body of this command is preserved in git history if needed.
+- `../core/sleeves.md` — sleeve definitions
+- `../commands/los-sleeve-b.md` — Sleeve B review

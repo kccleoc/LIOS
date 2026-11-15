@@ -18,7 +18,7 @@ source: portfolio state
 
 | Ticker | Shares | Price | Market Value | Sleeve |
 |---|---:|---:|---:|---|
-| TBD | TBD | TBD | TBD | A / B / C / D / Z |
+| TBD | TBD | TBD | TBD | A / B / C / Z |
 
 ## Totals
 
@@ -32,10 +32,9 @@ source: portfolio state
 
 | Sleeve | MV | % of NLV | Target | Δ pp |
 |---|---:|---:|---:|---:|
-| A core index | TBD | TBD | TBD | TBD |
-| B conviction | TBD | TBD | TBD | TBD |
-| C satellite | TBD | TBD | TBD | TBD |
-| D duration | TBD | TBD | TBD | TBD |
+| A conviction ETFs | TBD | TBD | residual | TBD |
+| B satellites | TBD | TBD | none — ceiling | TBD |
+| C duration | TBD | TBD | TBD | TBD |
 | Z cash equivalents | TBD | TBD | TBD | TBD |
 | **Total** | **TBD** | **100** | **100** | |
 
@@ -43,12 +42,12 @@ source: portfolio state
 
 | Constraint | Limit | Actual | Status |
 |---|---:|---:|---|
-| Single name effective | TBD | TBD | |
-| Single factor | TBD | TBD | |
-| Duration | TBD | TBD | |
-| Total risky | TBD | TBD | |
-| US-situs | TBD | TBD | |
-| Satellite ceiling | TBD | TBD | |
+| Look-through single-company | 5% NLV | TBD | |
+| Single-sector | 25% NLV | TBD | |
+| Sleeve B ceiling | 10% NLV | TBD | |
+| Duration (C) | 15% NLV | TBD | |
+| US-situs | below exemption | TBD | |
+| Sleeve Z floor | 3% NLV | TBD | |
 
 ## Regime
 

@@ -8,7 +8,7 @@ single table. Surfaces relative attractiveness quickly.
 ## When to use
 
 - Picking among candidates for a Sleeve B addition
-- Deciding between a Sleeve D incumbent and a replacement candidate
+- Deciding between a Sleeve B incumbent and a replacement candidate
 - Validating that a new idea is genuinely better than what we hold
 
 ## Inputs required
@@ -76,5 +76,5 @@ Confidence: 72%.
 ## Related
 
 - See `los.md` — single-company scoring
-- See `los-replace.md` — when comparing incumbent vs candidate for Sleeve D
+- See `los-replace.md` — when comparing incumbent vs candidate for Sleeve B
 - See `los-sleeve-b.md` — Sleeve B LOS review

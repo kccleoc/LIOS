@@ -1,9 +1,9 @@
-> **Source:** Replaces `core/kelly.md` (Kelly Model v2.0, repealed) and the v3.0 "three rules".
+> **Source:** Replaces the v4.1 two-operation engine. Bands, tolerance and cap-only B are v5.
 
 # Deployment — Top-up and Rebalance
 
-**Component version:** v4.1
-**Status:** Constitutional (P3, P4, P7)
+**Component version:** v5
+**Status:** Constitutional (P3′, P4′, P7′)
 **Last updated:** 2026-11-15
 
 ---
@@ -16,7 +16,7 @@ when the structure itself is changing.
 | Operation | Job | Frequency | Sells? |
 |---|---|---|---|
 | **Top-up** | Allocate the monthly contribution | Monthly | **No** |
-| **Rebalance** | Correct a band or cap breach | On breach | **Yes** |
+| **Rebalance** | Correct a band or cap breach | Quarterly, or on a hard-cap breach | **Yes** |
 | Transition mandate | Migrate to a new structure | Once, sunsets | Yes |
 
 There is no third path. No discretionary channel, no reserve, no trigger ladder.
@@ -28,21 +28,21 @@ There is no third path. No discretionary channel, no reserve, no trigger ladder.
 When two rules could both act:
 
 ```
-1  Caps (P6)                 — absolute; nothing overrides a cap
-2  Rebalance (P3)            — overrides Top-up in any month both would act,
-                               but only to the extent it actually executes a trade
-3  Top-up (P3)               — the default monthly action
-4  Transition mandate (P3a)  — bounded by the caps; cannot raise risky above P2
+1  Hard caps (P6′)            — absolute; nothing overrides a cap
+2  Rebalance (P3′)            — overrides Top-up in any month both would act,
+                                but only to the extent it actually executes a trade
+3  Top-up (P3′)               — the default monthly action
+4  Transition mandate (P3a)   — bounded by the caps; cannot raise risky above P2′
 ```
 
-A Rebalance trigger that executes no trade does **not** block Top-up. That
-distinction matters: without it, a stuck sleeve freezes contributions forever.
+A Rebalance trigger that executes no trade does **not** block Top-up. Without that
+distinction, a stuck sleeve freezes contributions forever.
 
 ---
 
 ## Per-sleeve bands
 
-One absolute band cannot serve sleeves of 4% and 70%. Bands scale:
+Bands scale with the sleeve:
 
 ```
 band_s = clamp(0.5 × target_s, 2pp, 8pp)
@@ -50,15 +50,18 @@ band_s = clamp(0.5 × target_s, 2pp, 8pp)
 
 | Sleeve | Target | Band | Upper edge | Lower edge |
 |---|---:|---:|---:|---:|
-| A | 70% | ±8.0pp | 78.0% | 62.0% |
-| B | 6% | ±3.0pp | 9.0% | 3.0% |
-| C | 4% | ±2.0pp | 6.0% | 2.0% |
-| D | 15% | ±7.5pp | 22.5% | 7.5% |
-| Z | 5% | ±2.5pp | 7.5% | 2.5% |
+| A | per state | ±8.0pp max | — | — |
+| B | **cap-only** | ceiling ± tolerance | ceiling | floor 0 |
+| C | 15% | ±7.5pp | 22.5% | 7.5% |
+| Z | 5% | ±2.5pp | 7.5% | floor 3% |
 
-**A sleeve ceiling always binds before its band** if it is lower. C's ceiling is
-7% but its band tops at 6%, so 6% is the effective trigger. Do not write a
-ceiling above a band and call it enforcement.
+**Sleeve B has no band.** It has a ceiling. A sleeve with no target cannot drift
+from a target; it can only breach a ceiling.
+
+**Tolerance.** Soft limits — sleeve bands and the B ceiling — are tested against
+`state.yaml: rebalance_tolerance_pct` (default 2.5pp). A deviation inside the
+tolerance is **reported, not traded**. This exists because a rebalance cannot
+strike targets exactly, and a rule that demands an exact strike gets ignored.
 
 ---
 
@@ -68,81 +71,97 @@ Runs monthly. Never sells. No discretion.
 
 ```
 NLV' = NLV + DCA
-T_s  = w_s × NLV'
-G_s  = T_s − V_s                     positive = underweight
+T_s  = w_s × NLV'  for s in {A, C, Z}        ← B is excluded: no target
+G_s  = T_s − V_s                              positive = underweight
 G+   = max(G_s, 0)
 
-risky_now = (A + B + C) / NLV
+risky_now = (A + B) / NLV                     ← C is bonds, NOT risky
 
 if risky_now >= risky_cap:
-        allocate the whole DCA to D and Z, split by their target weights
+        allocate the whole DCA to C and Z, split by their target weights
 else if sum(G+) = 0:
         allocate by target weight w_s
 else:
         allocate DCA × G+ / sum(G+)
 ```
 
+**Three things that must not be got wrong.**
+
+1. **`risky_now = (A + B) / NLV`.** In v4.1 this was `(A + B + C)`. C was a
+   satellite then; it is the bond sleeve now. Counting it as risky reports a
+   portfolio that is far more aggressive than it is, trips the risky-cap branch
+   permanently, and routes every future contribution to bonds. That is a
+   silent conversion of the portfolio into a bond fund.
+
+2. **B is excluded from the target set.** B has no `w_s`, so it cannot receive a
+   share of the contribution. This is the mechanical expression of "B is never
+   topped up."
+
+3. **The risky-cap fallback targets C and Z.** Not "D and Z" — D does not exist.
+
 At balance this degenerates to the target split: no tilt, no decision.
 
 **Why the standstill term matters.** The target grows with NLV, so a sleeve at
 target must still receive `w_s × DCA` just to hold its weight. A rule that
 allocates only the gap converges to a permanent positive gap and never closes it.
-The `sum(G+) = 0` branch is the expression of that.
-
-**The risky-cap fallback** is what keeps Top-up from ever breaching P2. When the
-risky block is already at the age-band ceiling, every new dollar goes to D and Z.
+The `sum(G+) = 0` branch expresses that.
 
 ---
 
 ## Rebalance
 
-Runs on a band breach or a cap breach (P7). This is the only routine operation
-that sells.
+Runs on a hard-cap breach immediately, or at the quarterly review otherwise. This
+is the only routine operation that sells.
 
 ### Trigger
 
-Any of:
-- a sleeve outside its band
-- a cap breach: single name, factor, duration, US-situs, sleeve ceiling
-- an age-band change, after a 12-month grace period (see `core/glidepath.md`)
+**Hard — immediate:**
+- look-through single-company exposure above cap
+- single-sector exposure above cap
+- US-situs above the ceiling
+- Z below its floor
 
-### Direction limits (P4)
+**Soft — quarterly review, beyond tolerance:**
+- a sleeve outside its band
+- Sleeve B above its ceiling
+- an age-band change, after the 12-month grace period
+
+### Direction limits (P4′)
 
 | Sell → buy | Permitted |
 |---|---|
-| D or Z → A, B, C | ✅ the crash response |
-| Z → D | ✅ fixes a cash overweight |
-| B or C → A | ✅ fixes concentration |
-| A → D or Z | ❌ **prohibited** — that is de-risking, which the glidepath decides |
+| C or Z → A, B | ✅ the crash response |
+| Z → C | ✅ fixes a cash overweight |
+| B → A | ✅ fixes concentration |
+| A → B | ✅ **IC decision only**, never automatic |
+| A → C or Z | ❌ **prohibited** — that is de-risking |
 
-Under a *hard* glidepath this restriction is lifted. `state.yaml: glidepath.policy`
-says which applies.
+Under a *hard* glidepath the A → C/Z restriction is lifted. `state.yaml:
+glidepath.policy` says which applies.
 
 ### Action
 
 ```
-1  Identify overweight sleeves and cap-breached names
-2  Sell the smallest set that cures the breach, subject to P4
+1  Identify hard-cap breaches, then soft breaches beyond tolerance
+2  Sell the smallest set that cures the breach, subject to P4′
 3  Buy underweight sleeves pro-rata to their remaining gaps
-4  Z is never sold below its floor
+4  B is bought only under an explicit IC decision
+5  Z is never sold below its floor
 ```
 
 ### Trim selection
 
-When a sleeve is over its band, *which* name gets trimmed:
-
 | Sleeve | Trim |
 |---|---|
+| **A** | the largest within-A holding, back to its within-A weight |
 | **B** | the **largest** position — trims reduce concentration |
-| **C** | the **weakest** position by Replacement Index — C is winner-weighted |
-| A | the largest within-A holding, back to its within-A weight |
-| D / Z | no intra-sleeve selection needed; sell pro-rata |
+| C / Z | no intra-sleeve selection; sell pro-rata |
 
-Trimming the largest in B and the weakest in C is deliberate: B is a conviction
-book where size should follow conviction, and C is a rotation book where laggards
-get cut.
+**A trim is not an exit.** Exits are governed by P5′.
 
-**A trim is not an exit.** Exits are governed by P5.
+**C is not ranked.** The v4.1 rule "trim the weakest in C by Replacement Index"
+is deleted: C holds bonds, and bonds are not ranked against each other for
+weakness. That judgment lives in B, applied to companies.
 
 ---
 
@@ -150,15 +169,19 @@ get cut.
 
 A one-time structural migration is permitted, with four requirements:
 
-1. **A sunset date.** Hard. After it, P1–P7 apply unchanged.
+1. **A sunset date.** Hard. After it, P1′–P7′ apply unchanged.
 2. **Completion criteria.** Per-sleeve target ranges, in dollars.
-3. **A fallback.** At sunset, any unmet gap is closed by Rebalance — planning
-   does not continue indefinitely because a target was missed.
-4. **Cap compliance throughout.** The mandate cannot raise total risky weight
-   above the P2 ceiling, and cannot breach any P6 cap.
+3. **A fallback.** At sunset, any unmet gap is closed by Rebalance.
+4. **Cap compliance throughout.** The mandate cannot raise total risky weight above
+   the P2′ ceiling, and cannot breach any P6′ cap.
 
-Without requirement 3, a transition quietly becomes a permanent exception. That
-is how the previous architecture accumulated its exemptions.
+Without requirement 3, a transition quietly becomes a permanent exception.
+
+**Substitution clause.** Replacing direct single-name exposure with a fund holding
+the same exposure — a capital-neutral swap — is permitted under a transition
+mandate, because the factor weight is unchanged. It is **not** an exit under P5′.
+The mandate must state the swap in dollars, hold risky weight constant, and pass
+the look-through caps on the post-swap book.
 
 ---
 
@@ -169,10 +192,11 @@ is how the previous architecture accumulated its exemptions.
 | "Deploy cash because the market looks cheap" | ❌ no such operation |
 | "Skip this month's contribution" | ❌ Top-up is mechanical |
 | "Increase the contribution because a score improved" | ❌ contribution is a contribution |
-| "Sell equities to raise cash for safety" | ❌ P4 |
-| "Trim a winner to fund a laggard in C" | ❌ C cuts laggards |
-| "Sell B on a price drop" | ❌ P5 |
-| "Move A → D because D is underweight" | ❌ P4 |
+| "Sell equities to raise cash for safety" | ❌ P4′ |
+| "Top up the satellites, they're doing well" | ❌ P6′ — B is never topped up |
+| "Sell a satellite on a price drop" | ❌ P5′ |
+| "Move A → C because C is underweight" | ❌ P4′ |
+| "Rebalance now because the gap is annoying" | ❌ soft limits wait for the quarterly review and the tolerance |
 | "One more exception, just this quarter" | ❌ the transition mandate is the only exception, and it sunsets |
 
 ---
@@ -181,12 +205,15 @@ is how the previous architecture accumulated its exemptions.
 
 | Concept | Fate |
 |---|---|
-| Kelly Factor × DCA | Deleted |
-| Kelly Reserve | Deleted |
-| Strategic Reserve and trigger ladder | Deleted |
-| Rule 3 discretionary channel | Deleted |
-| `ABC` denominator | Deleted |
-| Single absolute 8pp band | Replaced by per-sleeve bands |
+| Kelly Factor × DCA | Deleted (v3.0) |
+| Kelly Reserve | Deleted (v3.0) |
+| Strategic Reserve and trigger ladder | Deleted (v3.0) |
+| `ABC` denominator | Deleted (v3.0) |
+| Single absolute 8pp band | Replaced by per-sleeve bands (v4.1) |
+| **Sleeve D in the risky-cap fallback** | **Deleted (v5)** — C and Z |
+| **`risky_now = (A+B+C)`** | **Deleted (v5)** — C is bonds |
+| **Targets for Sleeve B** | **Deleted (v5)** — cap-only |
+| **"Trim the weakest in C by Replacement Index"** | **Deleted (v5)** |
 
 ---
 

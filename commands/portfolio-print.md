@@ -1,8 +1,5 @@
-> **v4.1 conformance note.** Written for LIOS v2.x. In v4.1 the sleeves are
-> **A/B/C/D/Z** measured against NLV, the Kelly Factor is replaced by the
-> **Regime Index**, and the Strategic Reserve is repealed. Where this file
-> and `lios/v4.1.md` disagree, v3.0 wins.
-
+> **v5 conformance note.** Sleeves are **A/B/C/Z** measured against NLV. Sleeve D
+> is deleted; duration lives in C. Cash is one sleeve (Z) with no sub-buckets.
 
 # `/portfolio-print` — Canonical Portfolio Export
 
@@ -21,12 +18,6 @@ portfolio, never executes trades, never updates LIOS rules.
 - After any trade execution (to update the interchange format)
 - Before pasting into any LIOS command that expects a snapshot
 - Whenever you need to share the portfolio with another AI
-
-## Patch version
-
-LIOS Upgrade Patch v1.0 — additive. Does not modify existing rules,
-decision logic, Kelly framework, sleeve allocation, or investment
-philosophy. Respects L1–L14.
 
 ## Command
 
@@ -52,37 +43,40 @@ Obtain from your connected brokerage (IBKR or equivalent):
 
 ### Step 2 — Confirm cash
 
-LIOS v4.1 has one cash sleeve. Do not ask for sub-buckets.
+LIOS v5 has one cash sleeve. Do not ask for sub-buckets.
 
-```
-Cash (Sleeve Z): $____
-Z vehicle(s):    ____   (duration ≈ 0 only)
-```
+    Cash (Sleeve Z): ____
+    Z vehicle(s):    ____   (duration near zero only)
 
 Never assume the value. Always ask.
 
 ### Step 3 — Validate cash
 
-`Z` is the entire uninvested balance plus any duration-≈-0 ETF position. There is
-no Strategic Reserve, no Kelly Reserve and no free-tactical bucket in v3.0. If a
-sub-bucket split is offered, reject it and restate that cash is one sleeve.
+`Z` is the entire uninvested balance plus any duration-near-zero instrument. There
+is no Strategic Reserve, no Kelly Reserve, no free-tactical bucket, and no ABC
+denominator in v5. If a sub-bucket split is offered, reject it and restate that
+cash is one sleeve.
 
-If `Z` exceeds its ceiling (default 8% of NLV): flag it. The fix is a Rebalance
-rebalance, not a relabelling.
+Z carries a floor (default 3% of NLV) and a ceiling (`state.yaml: sleeves.z.*`).
+Outside that range it is a band breach — the fix is a Rebalance, not a relabelling.
 
 ### Step 4 — Classify every holding into its LIOS sleeve
 
-Sleeve A — Core Index:
-  (positions filtered to sleeve: a — broad-index ETFs only, duration ≥ 1y)
+Sleeve A — ETFs:
+  (positions filtered to sleeve: a — broad-index AND sector/thematic ETFs. A
+   thematic holding carries a written view statement, horizon and invalidation
+   condition, held in state; do not invent one)
 
-Sleeve B — Conviction:
-  (positions filtered to sleeve: b — individual equities)
+Sleeve B — Satellites:
+  (positions filtered to sleeve: b — individual companies and narrow bets.
+   Cap-only: this sleeve has a ceiling, not a target)
 
-Sleeve D — Frontier Innovation:
-  (tickers from `state.yaml: positions` filtered to sleeve: D; include `stage` field)
+Sleeve C — Duration:
+  (positions filtered to sleeve: c — bonds, duration greater than 3 years, hedged.
+   Duration-near-zero funds do not belong here; they are Z)
 
-Sleeve C — Tactical Cash:
-  Kelly Reserve + Current Month Undeployed DCA + Free Tactical Cash
+Sleeve Z — Cash Equivalents:
+  (cash balances plus positions filtered to sleeve: z — duration near zero)
 
 Use the user's existing LIOS sleeve mapping. Do not reclassify
 without explicit instruction.
@@ -96,38 +90,37 @@ Title: # LIOS Portfolio Snapshot
 Metadata block:
   Date: [current date]
   Source: portfolio print
-  Net Liquidation Value: $X
+  Sleeves: A / B / C / Z (LIOS v5)
+  Net Liquidation Value: [NLV]
 
 Sleeve tables:
 
-## Sleeve A — Core Compounding
+## Sleeve A — ETFs
 | Ticker | Price | Shares | Avg Cost | Market Value | Unrealized P/L | Weight |
-|---|---|---|---|---|---|---|---|
+|---|---|---|---|---|---|---|
 | ... | ... | ... | ... | ... | ... | ... |
 [Sub-total row]
 
-## Sleeve B — Proven Alpha
+## Sleeve B — Satellites
 [Same columns]
 
-## Sleeve D — Frontier Innovation
-[Same columns]
+## Sleeve C — Duration
+[Same columns; add a Duration column in years if available in state]
 
-## Cash Allocation
-| Bucket | Amount |
-|---|---|
-| Strategic Reserve | $ |
-| Kelly Reserve | $ |
-| Current Month Undeployed DCA | $ |
-| Free Tactical Cash | $ |
+## Sleeve Z — Cash Equivalents
+[Same columns; money-market and T-bill positions render as rows, cash renders as a
+ single Cash row]
 
 ## Portfolio Summary
-| Metric | Value |
-|---|---|
-| Sleeve A | $X (XX%) |
-| Sleeve B | $X (XX%) |
-| Sleeve D | $X (XX%) |
-| Total Cash | $X (XX%) |
-| Net Liquidation Value | $X (100%) |
+| Metric | Value | % of NLV | Target % | Delta pp |
+|---|---|---|---|---|
+| Sleeve A | ... | ... | ... | ... |
+| Sleeve B | ... | ... | no target — ceiling | ... |
+| Sleeve C | ... | ... | ... | ... |
+| Sleeve Z | ... | ... | ... | ... |
+| Risky block (A + B) | ... | ... | per glidepath | ... |
+| Defensive block (C + Z) | ... | ... | ... | ... |
+| Net Liquidation Value | ... | 100% | — | — |
 
 If avg cost and P/L are unavailable, print those columns as "—"
 but keep the column headers (so downstream parsers see consistent
@@ -149,31 +142,33 @@ Begin.
 ## What this command produces
 
 A standardized Markdown portfolio snapshot that:
-- Includes full cash breakdown (SR / KR / DCA / Free Tactical)
+- Splits holdings by the four v5 sleeves, A / B / C / Z
 - Includes Average Cost + Unrealized P/L (when available)
 - Sorts holdings by sleeve
-- Includes weight percentages for every sleeve
+- Shows each sleeve against its target, and Sleeve B against its ceiling
 - Is the canonical AI-readable interchange format for all LIOS commands
 
 ## Design principle
 
-This Markdown format becomes the **canonical portfolio interchange
-format** for LIOS. Future commands (health-check, drift-check,
-kelly-check, sleeve-d-check, frontier-scoreboard, rotation-analysis,
-replacement-analysis) should accept the portfolio-print output
-directly as input without requiring manual reformatting.
+This Markdown format is the **canonical portfolio interchange
+format** for LIOS. Every command that consumes a snapshot — health-check,
+drift-check, sleeve reviews, replacement analysis — accepts the
+portfolio-print output directly, without manual reformatting.
 
 ## Related
 
-- See `../lios/components/02_capital_architecture.md` — sleeve definitions
-- See `../lios/components/07_locked_decisions.md` — what may NOT change
-- See `commands/snapshot.md` — simpler raw-to-snapshot converter (no avg cost / P/L / cash allocation prompt)
-- See `commands/portfolio-los.md` — LOS-only dashboards (complementary, not overlapping)
+- See `../core/sleeves.md` — sleeve definitions
+- See `../constitution/constitution.md` — what may not change
+- See `snapshot.md` — simpler raw-to-snapshot converter (no avg cost / P/L prompt)
+- See `portfolio-los.md` — LOS-only dashboards (complementary, not overlapping)
 
 ## Discipline reminders
 
 - This is an **export-only** command. Never execute trades.
 - Cash allocation is **user-provided**, never assumed.
+- Cash is one sleeve. No Strategic Reserve, no Kelly Reserve, no free-tactical
+  bucket — those are deleted concepts, not categories.
+- Sleeve B has a ceiling, not a target. Print it that way.
 - If avg cost / P/L are unavailable from brokerage, omit them with
   "—" but keep column positions for parser consistency.
 - The output must be immediately pasteable into any LLM as-is.

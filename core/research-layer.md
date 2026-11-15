@@ -1,10 +1,9 @@
-> **v4.1 conformance note.** Written for LIOS v2.x. In v4.1 the sleeves are
-> **A/B/C/D/Z** measured against NLV, the Kelly Factor is replaced by the
-> **Regime Index**, and the Strategic Reserve is repealed. Where this file
-> and `lios/v4.1.md` disagree, v4.1 wins.
+> **v5 conformance note.** The portfolio has four sleeves — A, B, C, and Z —
+> measured against NLV. The Kelly Factor and Strategic Reserve are repealed.
+> Where this file and `constitution/constitution.md` disagree, the constitution wins.
 
 
-> **Source:** Extracted verbatim from LIOS v1.5. L11–L18 content moved to constitution/method.md in v4.1.
+> **Source:** Adapted from LIOS v1.5. Scoring method is consolidated in `constitution/method.md`.
 
 # Research Intelligence Layer (RIL) — LOS Framework
 
@@ -18,14 +17,14 @@
 
 The Research Intelligence Layer introduces a **standardized scoring
 language** so every security — current holding, watchlist candidate,
-Sleeve D prospect, or research idea — can be evaluated using the
+Sleeve B prospect, or research idea — can be evaluated using the
 same five-score framework before any capital allocation decision.
 
-RIL does **not** replace Kelly, the Sleeves, SR logic, or the
-Replacement Index. It is the **upstream research filter**:
+RIL does **not** replace portfolio rules, deployment, sleeve definitions,
+or the Replacement Index. It is the **upstream research filter**:
 
 - **LOS decides WHICH assets deserve investment.**
-- **Kelly decides HOW MUCH capital to deploy.**
+- **P2′ and deployment rules govern capital allocation.**
 - **Sleeves decide WHERE the capital lives.**
 
 Without RIL, every "is this a good investment?" question becomes
@@ -156,10 +155,10 @@ Summary: <one sentence>
 Confidence: <XX>%
 ```
 
-### Example (Texas Instruments)
+### Example
 
 ```
-Company: TXN
+Company: <TICKER>
 LOS:    81
 LVS:    82  — Forward P/E 18x vs 5-yr avg 22x; FCF yield ~5%
 LGS:    72  — Modest revenue growth (~5%); expanding industrial/auto TAM
@@ -182,19 +181,19 @@ Confidence: 78%
 - A LOS < 70 candidate does not receive capital.
 
 ### Sleeves
-- Sleeve targets and caps (P2, P6) are binding.
+- Sleeve targets and caps (P2′, P6′) are binding.
 - LOS ≥ 80 required for new Sleeve B additions (IC discipline).
 - Sleeve A (broad-index ETFs) does not receive LOS scoring (not applicable to index vehicles).
 
 ### Health Check
-- L10 (16-section fixed order) unchanged.
-- **Each holding in sections 5, 6, 8 now shows LOS beside it.**
-- Sleeve D Review (§8) shows both Replacement Index AND LOS per holding.
+- P8′ requires the 15-section fixed order.
+- Sleeve C is the duration sleeve. The satellite review is Sleeve B in section 6,
+  where each holding shows LOS.
 
-### Replacement Index (Sleeve D)
-- L5 unchanged. Replacement Index still gates all Sleeve D surgery.
-- LOS is **complementary**: a candidate must clear LOS threshold (typically ≥ 75) **AND** pass Replacement Index composite superiority + ≥2 of 4 qualitative conditions.
-- See `04_replacement_index.md` for the joint workflow.
+### Replacement Index (Sleeve B)
+- The Replacement Index method governs Sleeve B replacements, subject to P6′ caps.
+- LOS is **complementary**: a new Sleeve B name requires LOS ≥ 80 **AND** must pass Replacement Index composite superiority plus at least two of four qualitative conditions.
+- See `core/replacement-index.md` for the joint workflow.
 
 ---
 
@@ -211,7 +210,7 @@ Discover Candidate
        ↓
   LOS 80+  ──→ DEEP RESEARCH (manual due diligence)
        ↓
-   Kelly Allocation (if Sleeve A/B eligible, after Kelly recalc)
+    Sleeve assignment and deployment (P2′ and P3′)
        ↓
    Execution
 ```
@@ -242,7 +241,7 @@ not an automatic exit.
 |---|---|
 | "It has a high LOS so buy it regardless of valuation" | LOS embeds LVS — if LMS-driven, the high LOS is fragile |
 | "It dropped to LOS 65 so sell it" | Hold band (60-69) is monitor-only. Need a stronger catalyst to exit. |
-| "LOS < 60 means automatically replace in Sleeve D" | LOS < 60 flags as Pass; replacement still requires Replacement Index |
+| "LOS < 60 means automatically replace in Sleeve B" | LOS < 60 flags as Pass; replacement still requires Replacement Index |
 | "Calculate LOS using only LMS because momentum is hot" | Disclosure rule — must explain deviation if LMS dominates |
 | "Skip LOS for ETFs in Sleeve A" | Correct — Sleeve A vehicles are not LOS-scored |
 | "Generate LOS without rationale per component" | Violates the standard output format |
@@ -254,24 +253,24 @@ not an automatic exit.
 Suppose a Health Check surfaces three candidates. Same LQS (~90)
 across all three, but different other dimensions:
 
-| Ticker | LVS | LGS | LQS | LMS | LOS | Verdict |
+| Candidate | LVS | LGS | LQS | LMS | LOS | Verdict |
 |---|---:|---:|---:|---:|---:|---|
-| EXAMPLE-X1 | 55 | 92 | 92 | 88 | 84 | **Buy** — premium quality + growth, valuation is the only friction |
-| TXN | 82 | 72 | 95 | 64 | 81 | **Buy** — quality compounder, fair valuation, sluggish tape |
-| INTU | 70 | 78 | 90 | 75 | 80 | **Buy** — quality + steady growth, modest multiple |
-| EXAMPLE-T1 | 30 | 75 | 60 | 70 | 58 | **Pass** — quality concerns + stretched valuation offset growth story |
+| `<TICKER-A>` | 55 | 92 | 92 | 88 | 84 | **Buy** — premium quality + growth, valuation is the only friction |
+| `<TICKER-B>` | 82 | 72 | 95 | 64 | 81 | **Buy** — quality compounder, fair valuation, sluggish tape |
+| `<TICKER-C>` | 70 | 78 | 90 | 75 | 80 | **Buy** — quality + steady growth, modest multiple |
+| `<TICKER-D>` | 30 | 75 | 60 | 70 | 58 | **Pass** — quality concerns + stretched valuation offset growth story |
 
-All three "Buy" names eligible for Kelly allocation. EXAMPLE-T1 flagged
-for replacement if currently owned. None of this overrides the
-Sleeve B per-position cap rules (see `state.yaml: sleeves.b.caps` — caps are binding per L3 form).
+All three "Buy" names are eligible for further research. `<TICKER-D>` is
+flagged for review if currently owned. None of this overrides the
+Sleeve B position cap (`state.yaml: sleeves.b.position_cap_pct`), which is binding under P6′.
 
 ---
 
 ## Related
 
 - See `lios/v1.4.md` — full paste-ready init prompt including RIL
-- See `04_replacement_index.md` — LOS + Replacement Index joint workflow
-- See `06_health_check_structure.md` — where LOS shows up in Health Check
-- See `07_locked_decisions.md` — the eight Portfolio Rules
+- See `core/replacement-index.md` — LOS and Replacement Index workflow
+- See `core/health-check.md` — Health Check structure
+- See `constitution/constitution.md` — the eight Portfolio Rules
 - See `commands/los*.md` — 9 LOS-specific commands
 - See `docs/glossary.md` — definitions of LVS, LGS, LQS, LMS, LOS

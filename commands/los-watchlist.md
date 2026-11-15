@@ -1,7 +1,7 @@
 > **v4.1 conformance note.** Written for LIOS v2.x. In v4.1 the sleeves are
-> **A/B/C/D/Z** measured against NLV, the Kelly Factor is replaced by the
-> **Regime Index**, and the Strategic Reserve is repealed. Where this file
-> and `lios/v4.1.md` disagree, v3.0 wins.
+> **v5 conformance note.** Sleeves are **A/B/C/Z** measured against NLV. There
+> is no Sleeve D. Where this file and `lios/v4.1.md` disagree, the init prompt
+> wins.
 
 
 # `/los-watchlist` — Manage the LOS Watchlist
@@ -16,7 +16,7 @@ the structured pre-deployment queue.
 
 - After running `/los` on candidates that scored 70-79
 - Quarterly watchlist review
-- Before considering Sleeve D additions
+- Before considering Sleeve B additions
 
 ## Inputs required
 
@@ -51,7 +51,7 @@ Then a brief watchlist summary:
 
 Rules:
 - Watchlist threshold: LOS ≥ 70 (Locked Decision L11/L12)
-- Sleeve D candidates typically need LOS ≥ 75 to advance
+- Sleeve B candidates need LOS ≥ 80 and IC approval to enter
 - Sleeve B additions typically need LOS ≥ 80
 - Stale names (>90 days without action or re-evaluation) should be
   flagged for re-score or removal
@@ -79,11 +79,11 @@ Watchlist table + management summary.
 ## Discipline reminders
 
 - **Watchlist threshold is LOS ≥ 70**, not "interesting."
-- **Stage 2 (Pilot) requires Sleeve D staging rules** — LOS alone doesn't bypass them.
+- **Entry requires Sleeve B rules** — LOS ≥ 80, IC approval, and ceiling headroom. LOS alone does not bypass them.
 - **Re-score after earnings** — a 6-month-old LOS is stale.
 
 ## Related
 
 - See `los-candidates.md` — full candidate research workflow
-- See `../lios/components/02_capital_architecture.md` Sleeve D — staging rules
+- See `los-sleeve-b.md` — Sleeve B entry rules
 - See `portfolio-los.md` — current portfolio LOS context
