@@ -69,11 +69,28 @@ tolerance is **reported, not traded**. This exists because a rebalance cannot st
 exactly, and a rule that demands an exact strike gets ignored.
 
 **Escalation — a soft breach is not soft forever.** A deviation beyond **3× tolerance**, or
-one that survives **two consecutive quarterly reviews**, is treated as hard and triggers
-Rebalance at the next session with a permitted direction — unless an open Transition Mandate
-cures it inside its window. Reporting is not enforcement: without an escalation rule a
-chronic soft breach persists indefinitely as long as it is correctly reported, and a
-permanently-reported breach becomes furniture.
+one surviving **two consecutive quarterly reviews**, is treated as hard — unless an open
+Transition Mandate cures it inside its window. Reporting is not enforcement: without this, a
+chronic breach persists indefinitely as long as it is correctly reported.
+
+**The two directions escalate differently, and the asymmetry is deliberate.** An undershoot
+of risky weight has a permitted cure (C → A), so escalation produces a real trade. An
+overshoot has none (A → C is prohibited), so escalation produces a report and a Top-up, not
+a forced sale. Saying so plainly is better than a rule that pretends a cure exists.
+
+**Sunset is a trigger, not an expiry.** A mandate that reaches its sunset with a breach
+uncured makes that breach hard on the sunset date, and the following Rebalance must execute
+a named action. Where no permitted direction exists, the IC decides in writing within 10
+business days: amend the constitution, or accept the breach on the record. No third outcome,
+and silence is not one.
+
+**No borrowing, ever.** The account is margin-type so that unsettled sale proceeds can fund
+a same-session buy — not so the book can be levered. Gross exposure may not exceed NLV
+(`leverage ≤ 1.00×`). A buy leg is placed only after its funding sells have filled, and only
+up to settled cash plus those fills; a rolled or partial buy is capped at
+`min(remaining quantity, floor(available cash / limit price))`. Validation Check 12 aborts
+production on negative cash. **Buying power is not capital** — it is the broker's estimate
+of what could be borrowed, and nothing here borrows.
 
 ---
 
@@ -88,60 +105,65 @@ T_s  = w_s × NLV'  for s in {A, C}           ← B is excluded: no target
 G_s  = T_s − V_s                              positive = underweight
 G+   = max(G_s, 0)
 
-risky_now = (A + B) / NLV                     ← C is bonds, NOT risky
+risky_now = (A + B) / NLV                     ← C is defensive, NOT risky
+
+risky_cap = risky_pct + rebalance_tolerance_pct      (80% + 2.5pp = 82.5%)
 
 if risky_now >= risky_cap:
         allocate the whole DCA to C
-else if sum(G+) = 0:
-        allocate by target weight w_s
 else:
         allocate DCA × G+ / sum(G+)
 ```
 
 **Three things that must not be got wrong.**
 
-1. **`risky_now = (A + B) / NLV`.** In v4.1 this was `(A + B + C)`. C was a
-   satellite then; it is the bond sleeve now. Counting it as risky reports a
-   portfolio that is far more aggressive than it is, trips the risky-cap branch
-   permanently, and routes every future contribution to bonds. That is a
-   silent conversion of the portfolio into a bond fund.
+1. **`risky_now = (A + B) / NLV`.** C is the defensive sleeve and is never counted as
+   risky. Counting it trips the risky-cap branch permanently and routes every future
+   contribution into the defensive block — a silent conversion of the portfolio, with no
+   error and no flag.
+2. **B is excluded from the target set.** B has no `w_s`, so it cannot receive a share of
+   the contribution. That is the mechanical expression of "B is never topped up."
+3. **The risky-cap fallback targets C.** It is the only defensive sleeve, so the branch
+   that used to starve one while feeding the other does not exist.
 
-2. **B is excluded from the target set.** B has no `w_s`, so it cannot receive a
-   share of the contribution. This is the mechanical expression of "B is never
-   topped up."
+**Within C, the contribution buys pro-rata to C's existing composition** (cash, if C is
+empty). C has no target and no internal split, but an unallocated dollar is still a monthly
+decision for the owner. Pro-rata holds the duration average where it was and keeps the
+decision out of the loop. Without it, the same $1,500 can drift the sleeve in either
+direction every month, and the quarterly band test becomes a verdict rather than a control.
 
-3. **The risky-cap fallback targets C.** Not "D and Z" — neither exists. With one
-   defensive sleeve there is nowhere else for it to go, which removes a branch that
-   used to be able to starve C while feeding Z.
+**The fourth gate — the US-situs stop-adding line.** The formula allocates to *sleeves*.
+Inside A, an allocated dollar buys A's lines pro-rata to their within-A targets. Before
+that happens, test `constraints.us_situs_exposure` against its stop-adding line. At or above
+80% of the ceiling, A's share is directed only to A's **non-US-domiciled** lines; where A has
+none, that share goes to C. The gate binds **every** operation — Top-up, Rebalance, an IC
+decision, a mandate — and appreciation moves the figure too, so a breach is possible with no
+trade at all. The Top-up is the only operation that runs without a trigger, which is why it
+is the one that can breach a cap silently.
 
-**Fourth gate — the US-situs stop-adding line.** The formula above allocates to
-*sleeves*. Inside A, an allocated dollar buys A's lines pro-rata to their within-A
-targets. Before that happens, test `state.yaml: constraints.us_situs_exposure`
-against its stop-adding line. At or above 80% of the ceiling, A's share is directed
-only to A's **non-US-domiciled** lines; where A has none to buy, that share goes to
-C instead. This exists because a US-domiciled line inside A will otherwise be
-bought every month by the calendar, and a hard cap will be crossed by accumulation
-rather than by any decision. The Top-up is the only operation that runs without a
-trigger, so it is the only one that can breach a cap silently.
+**The fallback splits by gap, not by target weight.** Splitting by target weights looks tidy
+and feeds whichever sleeve is already overweight. With one defensive sleeve that failure
+mode is gone: the fallback is "all of it to C", and C's gap is whatever the residual says.
+This branch also gives A nothing even when A is underweight, which is correct — risk is at
+its cap — but must be **reported**, because an underweight sleeve receiving zero is
+indistinguishable from one that was forgotten.
 
-**The fallback splits by gap, not by target weight.** Splitting 75/25 by target weights
-looks tidy and feeds whichever defensive sleeve is already overweight. With one defensive
-sleeve that failure mode is gone: the fallback is simply "all of it to C", and C's gap is
-whatever the residual says it is. This branch also gives A nothing even when A
-is underweight, which is correct (risk is at its cap) but must be **reported**, because an
-underweight sleeve receiving zero is indistinguishable from one that was forgotten.
+**The standstill branch is gone, because it could never run.** It said: "if `sum(G+) = 0`,
+allocate by target weight". But `Σ(T_s − V_s)` over {A, C} is `NLV' − B − (A + C)`, which is
+exactly `DCA`. The gaps therefore always sum to the contribution, and `sum(G+) = 0` requires
+`DCA = 0` — in which case there is no Top-up to allocate. It was an unreachable branch
+carrying an undefined weight, which is worse than dead code: it looked like the rule that
+handled balance, so nothing else was written to handle balance.
 
-At balance this degenerates to the target split: no tilt, no decision.
+The concern it was meant to answer is real, and the formula already answers it: a sleeve at
+target receives `DCA × G+ / ΣG+`, non-zero exactly when the contribution is, so a sleeve at
+target keeps growing with NLV. No branch is needed.
 
-**Why the standstill term matters.** The target grows with NLV, so a sleeve at
-target must still receive `w_s × DCA` just to hold its weight. A rule that
-allocates only the gap converges to a permanent positive gap and never closes it.
-The `sum(G+) = 0` branch expresses that.
-
-In that branch `w_s = T_s / NLV'`. For A this is **not** a stored constant: A's target is
-residual, so `w_A = (risky_target × NLV' − B_actual) / NLV'`. Writing `w_A` as a fixed number
-is what makes this branch unexecutable in practice — and an unexecutable branch is how a
-rule quietly stops running.
+**A's gap cannot always be funded by the Top-up.** If `risky_now` is at the cap the whole
+contribution goes to C, and A stays underweight until either the cap falls or a Rebalance
+moves C → A. That is deliberate — but it means an underweight A while risk sits at the cap
+is a **Rebalance** condition, not a Top-up condition. Report it as one, or it presents as
+neglect.
 
 **A skipped month is deferred, not cancelled.** The contribution is a fixed rate, and the
 plan has no discretion to reduce it. A month that is not executed becomes arrears, repaid on
@@ -194,7 +216,8 @@ glidepath.policy` says which applies.
 4  B is bought only under an explicit IC decision, within `names_max` and
    `position_cap_pct` — a decision that breaches either is not an IC decision,
    it is a cap breach
-5  C is never sold below the money needed to keep the risky block in band
+5  C is never sold below the money needed to keep the risky block in band, and a sale
+   inside C is pro-rata across its holdings — never shortest-first
 6  Disposition any A holding carrying a 0% target (dust rule); proceeds to the
    most underweight A line
 ```

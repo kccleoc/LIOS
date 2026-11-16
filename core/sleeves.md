@@ -115,9 +115,21 @@ duration. Anything that is not equity beta and settles in a day.
 - **One sleeve, one control: the duration band.** Average effective duration 1–6
   years; no single holding above 10 years. The average is tested at the quarterly
   review; the single-holding cap is a hard breach.
+- **The average includes cash.** Cash is a C holding at 0 years, so the denominator is
+  the whole sleeve. Excluding it would lift the same book from 1.30y to 1.42y and quietly
+  move the band test.
+- **Money duration is capped, not just duration.** No single holding may contribute more
+  than **40% of C's money duration**. A 10-year bond at half of C passes both the average
+  (5.1y) and the per-holding cap (10y) while putting $2,444 at risk per 1pp on a $47k
+  sleeve — the average hides that, which is why the contribution is capped too.
 - **No internal distribution.** There is no cash target, no bond target, no split
   between them, and no sub-sleeve. Composition is a measurement, not an allocation
-  rule. The v5 split into a bond sleeve and a cash sleeve generated most of that
+  rule. But "no target" is not "no instruction": a contribution that reaches C buys
+  **pro-rata to C's existing composition** (cash if C is empty), so the average stays
+  where it was instead of the owner inventing a bond/cash split every month.
+- **Sales out of C are pro-rata**, never shortest-first. Draining the bills to buy
+  equities in a crash would spike the average toward the bond line and breach the ceiling
+  in the middle of the event the sleeve exists for. The v5 split into a bond sleeve and a cash sleeve generated most of that
   version's defects and changed no behaviour: a T-bill ETF and a bond ETF are both
   T+1 sellable and both non-risky in role.
 - C is the designated source for Rebalance into an underweight risky sleeve, and

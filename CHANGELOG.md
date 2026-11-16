@@ -5,6 +5,56 @@ LIOS follows semver: major bumps only on Locked Decision changes.
 
 ---
 
+## [6.0.1] — 2026-11-16
+
+### Patch — four holes an external review put a finger through, and one dead branch
+
+Two independent reviews of v6.0.0. What follows is what survived checking: every finding
+here was reproduced from the text before it was accepted.
+
+**A branch that could never execute.** The Top-up's standstill rule said "if
+`sum(G+) = 0`, allocate by target weight". But `Σ(T_s − V_s)` over {A, C} is
+`NLV' − B − (A + C)`, which is exactly `DCA` — so the gaps always sum to the contribution
+and the branch requires `DCA = 0`, where there is no Top-up. It was unreachable, carried an
+undefined weight, and looked like the rule that handled balance, so nothing else was
+written to handle it. Deleted, with the proof in its place.
+
+**No borrowing rule, on a margin account.** The account is margin-type so that unsettled
+proceeds can fund a same-session buy. Nothing said the book may not be levered. A buy leg
+larger than its funding sells would have converted a paired trade into leverage, duplicated
+the factor exposure and accrued interest, with no rule and no check noticing. Now: leverage
+≤ 1.00×, buys only after funding sells fill, a rolled buy capped by available cash, and new
+Check 12 aborts on negative cash.
+
+**A duration band that a barbell satisfies.** Average duration plus a per-holding cap does
+not bound *money* duration: half of C in a 10-year bond gives a 5.1y average, passes both
+tests, and puts $2,444 at risk per 1pp. No single holding may now contribute more than 40%
+of C's money duration. Sales inside C are pro-rata, because draining the bills in a crash
+would spike the average through the ceiling mid-event.
+
+**Caps wired to one operation.** The US-situs stop-adding line gated the Top-up only, while
+appreciation, a Rebalance, an IC decision, a mandate and a contribution routed to C could
+each add exposure. It now binds every operation, and names its cure — rotate a US-domiciled
+line into the non-US instrument holding the same exposure, inside the same sleeve.
+
+**A sector basis anyone could redefine.** Declaring the basis was a real improvement over
+leaving "sector" undefined, but a basis that can be edited to make a breach disappear is not
+a cap. Changing `constraints.sector_basis` now requires a version bump and an ADR.
+
+**Also fixed:** `risky_cap` was used in the pseudocode and never defined (now
+`risky_pct + tolerance`); A's target could go negative when B exceeds the risky budget (now
+floored at zero and reported as an IC-level failure); `names_max` is now hard and reported
+per cycle rather than only at the quarterly review; escalation is symmetric, with the
+asymmetry between overshoot and undershoot stated instead of implied; a mandate that reaches
+its sunset with a breach uncured now makes it hard on that date, with a 10-day written IC
+deadline; caps carry a 0.5pp measurement buffer because a hand-built look-through is not a
+point measurement; Check 5 now recomputes targets and gaps from holdings instead of trusting
+the stored block; a contribution reaching C buys pro-rata to C's existing composition, which
+was previously an unallocated monthly decision; and "closed by the Top-up tilt and by nothing
+else" now says "primarily", because a Rebalance into an underweight A does close it too.
+
+---
+
 ## [6.0.0] — 2026-11-16
 
 ### Major — one defensive sleeve, measured by duration

@@ -97,6 +97,18 @@ demands an exact strike will be ignored.
 defensive holding above its duration cap — fire immediately as a Rebalance trigger
 (P7′).
 
+**Escalation is symmetric and time-bounded.** A deviation beyond 3× tolerance, in either
+direction, is hard. The two directions are not equal, and the asymmetry is deliberate: an
+*undershoot* of risky weight has a permitted cure (C → A), so it triggers a real
+Rebalance; an *overshoot* has none (A → C is prohibited), so it is reported and closed by
+Top-up, never by a forced sale.
+
+**A mandate that expires without curing its breach does not lapse silently.** On the
+sunset date every uncured breach becomes hard, and the Rebalance that follows must
+execute a named action. Where no permitted direction exists, the Investment Committee
+must decide — in writing, within 10 business days — between amending the constitution and
+accepting the breach on the record. There is no third outcome, and "wait" is not one.
+
 A time-boxed **transition mandate** may exist (P3a) to migrate the portfolio from
 one structure to another. It has a sunset date and cannot exceed the caps in P6′.
 
@@ -111,6 +123,7 @@ Rebalance may sell:
 | Defensive → risky (C → A) | ✅ The crash response |
 | Risky → risky (B → A) | ✅ Fixes concentration |
 | Rotation **inside** C | ✅ Not a transfer — the duration band is cured here |
+| Sale **inside** C, pro-rata | ✅ preserves the band; shortest-first would spike the average |
 | **A → C** | ❌ **Prohibited** — that is de-risking |
 
 Selling core equity to buy bonds or cash is de-risking, and de-risking is what the
@@ -208,6 +221,19 @@ barbell of bills and one long bond can satisfy the average while behaving in two
 directions at once — the single-holding cap is what bounds it, which is why both
 numbers are required.
 
+**The sector basis is locked, not recorded.** Changing `constraints.sector_basis` is a
+constitutional change — a version bump and an ADR — because a cap whose basis can be
+redefined can be satisfied without trading. Re-stating the basis also re-states every
+prior quarter on the record.
+
+**Caps are point tests with a measurement buffer.** Look-through and sector weights are
+summed by hand from published fund holdings, which lag and truncate. Assets are therefore
+maintained at least **0.5pp inside** a cap; a measured value between cap − 0.5pp and the
+cap is reported as `AT CAP — no further addition`, not as passing with room.
+
+**`names_max` is hard.** A name count is a count, not a measurement: five is five. It is
+tested on every report, not only at the quarterly review.
+
 **Sleeve B ceiling is soft.** It enforces at the quarterly Rebalance review within
 the tolerance band. A satellite that appreciates past the ceiling is trimmed back
 to it at that review; between reviews it may exceed the ceiling, and this is
@@ -216,10 +242,12 @@ reported every cycle rather than silently tolerated.
 **Sleeve B receives no Top-up.** Ever. Satellites are funded only by an Investment
 Committee decision from Sleeve A under P6′, and never by the monthly contribution.
 
-**US-situs:** stop adding when exposure reaches 80% of the ceiling, and prefer
-non-US-domiciled instruments where the exposure is otherwise identical. A
-capital-neutral swap between two US-situs instruments does not change US-situs
-exposure and is not restricted by this line.
+**US-situs: stop adding at 80% of the ceiling — on every operation, not one.** This
+binds the Top-up, the Rebalance, an IC decision and a transition mandate. Position
+appreciation moves it too, so a breach is possible with no trade at all: at or above the
+ceiling it is a hard breach with a named cure — rotate a US-domiciled line into the
+non-US instrument holding the same exposure, inside the same sleeve. A capital-neutral
+swap between two US-situs instruments changes nothing and is not restricted.
 
 ---
 
@@ -234,7 +262,9 @@ No separate mechanism is needed.
   a flag in the interim.
 
 If a breach cannot be cured within the P4′ limits, it is escalated to the
-Investment Committee as a structural problem, not silently tolerated.
+Investment Committee as a structural problem, not silently tolerated: a written decision
+within 10 business days, between amending the constitution and accepting the breach on
+the record. **Reporting is not an outcome.**
 
 ---
 

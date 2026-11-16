@@ -13,7 +13,7 @@ IBKR / broker update
     ↓
 Update portfolio state       → portfolio/state/portfolio.yaml
     ↓
-Validate (11 checks)          → core/validation.md
+Validate (12 checks)          → core/validation.md
     ↓
 Recalculate sleeves          → core/sleeves.md
     ↓
@@ -174,7 +174,7 @@ Agents SHALL:
 
 - **Maintain state:** update `portfolio/state/portfolio.yaml` as the single
   source of truth
-- **Validate first:** run the 11-check validation before any generation
+- **Validate first:** run the 12-check validation before any generation
 - **Generate deterministically:** every report derives from state
 - **Compute gaps once:** gap and drift are one metric
 - **Compute effective exposure:** direct plus index-embedded, always

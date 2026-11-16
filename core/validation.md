@@ -3,7 +3,7 @@
 **Version:** 5.0.0
 **Last updated:** 2026-11-16
 
-Every report generation runs these **11 checks** against
+Every report generation runs these **12 checks** against
 `portfolio/state/portfolio.yaml`. If any check fails, generation is aborted.
 
 ## Validation Pipeline
@@ -76,12 +76,15 @@ the Strategic Reserve was repealed in v3.0.
 
 **Verifies:** sleeve allocation reconciles to NLV and the risky target matches the age band in `glidepath`.
 
-**Source:** `sleeves.a.target_pct`, `sleeves.b.ceiling_pct`, `sleeves.c.target_pct`,
-`sleeves.c.duration_*`, `glidepath.bands`
+**Source:** `positions[]`, `cash.balance`, `glidepath.bands` — **recomputed, not read**
 
 **Failure:**
-- sleeve totals do not sum to 100% of NLV (±0.1)
-- A target does not equal the risky target minus actual B weight
+- sleeve totals recomputed from `positions[]` do not equal the stored `computed.sleeve_*` (±$1.00)
+- recomputed NLV does not equal the stored `nlv` (±$1.00)
+- A target does not equal `risky_target − B_actual`, or C target does not equal
+  `NLV − risky_target` — both recomputed from holdings, never trusted from the stored block
+- A target is **negative** (B above the whole risky budget): report it as an IC-level
+  structural failure, not as a zero
 - risky target does not match the glidepath band for the investor's age
 
 **Abort:** "Validation failed: sleeve allocation or risky target is inconsistent."
@@ -168,7 +171,7 @@ cash.
 not abort.
 
 **Abort:** "RECONCILIATION FAILED. Delta: $X.XX. Do not generate reports until
-state is corrected and all 11 checks pass."
+state is corrected and all 12 checks pass."
 
 ---
 
@@ -217,6 +220,27 @@ future decision will lean on when it puts the whole sleeve in long duration.
 
 ---
 
+### Check 12 · No Borrowing
+
+**Verifies:** the book is not levered and cash is not negative.
+
+**Source:** `cash.balance`, `Σ(positions[].market_value)`, `nlv`
+
+**Failure:**
+- `cash.balance < 0` — a margin debit, whatever the broker calls it
+- `Σ(positions[].market_value) > nlv` beyond $1.00 (gross exposure above NLV)
+
+**Abort:** "Validation failed: negative cash or gross exposure above NLV — the book is
+levered. Do not generate reports or place orders."
+
+**Why.** The account is margin-type so that unsettled proceeds can fund a same-session
+buy. That is a settlement convenience, not permission to borrow: a buy leg larger than the
+cash it is funded by silently converts a paired trade into leverage, duplicates the factor
+exposure, and accrues interest. A negative cash balance is the only mechanical signal that
+it happened.
+
+---
+
 ## Validation Log
 
 Every run records, in `logs/validation/`:
@@ -233,7 +257,7 @@ Every run records, in `logs/validation/`:
 Before generating any report:
 
 1. Load `portfolio/state/portfolio.yaml`
-2. Run all 11 checks in order
+2. Run all 12 checks in order
 3. If any check fails → abort, record in `logs/validation/`, report the failure
 4. If all pass → record, proceed
 
