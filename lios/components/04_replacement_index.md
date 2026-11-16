@@ -3,7 +3,7 @@
 
 # 04 · Sleeve B — Replacement Index
 
-**Component version:** v5
+**Component version:** v6
 **Status:** Method (`constitution/method.md`) / dynamic scores
 **Last updated:** 2026-11-15
 

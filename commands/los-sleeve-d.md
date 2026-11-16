@@ -2,15 +2,15 @@
 
 **Status:** Superseded. Do not use.
 
-The sleeve letters moved twice. The current mapping is v5:
+The sleeve letters moved twice. The current mapping is v6:
 
-| v2.x | v3.0 | v5 (current) |
+| v2.x | v3.0 | v6 (current) |
 |---|---|---|
 | Sleeve D — Frontier Innovation (satellite) | Sleeve C — Satellite | **Sleeve B — Satellites** |
 | Sleeve C — Tactical cash | Sleeve Z — Cash equivalents | **Sleeve C — defensive, merged in v6** |
 | (no duration sleeve) | Sleeve D — Duration | **Sleeve C — Duration** |
 
-**Sleeve D does not exist in v5.** Duration is Sleeve C and is not LOS-scored.
+**Sleeve D does not exist in v6.** Duration is Sleeve C and is not LOS-scored.
 Satellites are Sleeve B.
 
 Use:

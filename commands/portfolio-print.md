@@ -1,4 +1,4 @@
-> **v5 conformance note.** Sleeves are **A/B/C** measured against NLV. Sleeve D
+> **v6 conformance note.** Sleeves are **A/B/C** measured against NLV. Sleeve D
 > is deleted; duration lives in C. Cash is one sleeve (Z) with no sub-buckets.
 
 # `/portfolio-print` — Canonical Portfolio Export
@@ -88,7 +88,7 @@ Title: # LIOS Portfolio Snapshot
 Metadata block:
   Date: [current date]
   Source: portfolio print
-  Sleeves: A / B / C (LIOS v5)
+  Sleeves: A / B / C (LIOS v6)
   Net Liquidation Value: [NLV]
 
 Sleeve tables:

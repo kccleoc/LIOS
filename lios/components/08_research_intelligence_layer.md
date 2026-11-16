@@ -5,7 +5,7 @@
 
 # 08 · Research Intelligence Layer (RIL) — LOS Framework
 
-**Component version:** v5
+**Component version:** v6
 **Status:** Method (`constitution/method.md`)
 **Last updated:** 2026-11-15
 

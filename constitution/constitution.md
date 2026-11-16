@@ -2,7 +2,7 @@
 
 # Portfolio Rules — P1′ to P8′
 
-**Component version:** v5
+**Component version:** v6
 **Status:** Constitutional. Changing any P-rule requires a major version bump.
 **Last updated:** 2026-11-15
 
@@ -12,7 +12,7 @@
 
 Eight rules. That is the whole constitution.
 
-v4.1 answered "what may I own?" by instrument type. v5 answers it by risk role and
+v4.1 answered "what may I own?" by instrument type. v6 answers it by risk role and
 allows any liquid instrument that expresses the role. The change is deliberate: a
 single company can fail in a way a basket cannot, and the operator's risk appetite
 — total risky weight, contribution rate, age glidepath — did not change.
@@ -165,7 +165,7 @@ permitted.
 
 **Replacing direct single-name exposure with a fund holding the same exposure is
 not an exit.** The factor weight is unchanged; only the wrapper changes. This is
-the operation v5 exists to permit, and it is bounded by the Transition Mandate
+the operation this system exists to permit, and it is bounded by the Transition Mandate
 rules in P3a.
 
 ---

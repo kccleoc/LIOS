@@ -2,7 +2,7 @@
 
 # The Four Sleeves — A / B / C
 
-**Component version:** v5
+**Component version:** v6
 **Status:** Constitutional (P1′, P2′, P6′)
 **Last updated:** 2026-11-15
 
@@ -217,7 +217,7 @@ defensive instruments is how the duration band is cured.
 | Free tactical bucket | Deleted (v3.0) |
 | **Sleeve D** | **Deleted (v5)** — duration role absorbed by C |
 | **Satellite rotation / winner-weighting** | **Deleted (v5)** |
-| **Single-name position-level caps** | **Replaced by look-through caps (v5)** |
+| **Single-name position-level caps** | **Replaced by look-through caps (v5), which is what makes the basket substitution possible** |
 | **Equal weight at entry** | **Deleted (v5)** — B is cap-only |
 
 ---

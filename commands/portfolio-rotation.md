@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Identify where capital may legitimately move under v5. There are exactly two
+Identify where capital may legitimately move under v6. There are exactly two
 rotation seams, and neither is a rotation book:
 
 | Seam | Operation | Bounded by |
@@ -36,7 +36,7 @@ mechanical (P3′).
 ---
 
 ```
-Analyze the current LIOS v5 portfolio for legitimate rotation opportunities.
+Analyze the current LIOS v6 portfolio for legitimate rotation opportunities.
 
 Current Portfolio Snapshot:
 <paste snapshot>

@@ -1,4 +1,4 @@
-> **v5 conformance note.** Sleeves are **A/B/C** measured against NLV. There
+> **v6 conformance note.** Sleeves are **A/B/C** measured against NLV. There
 > is no Sleeve D, no Kelly Factor, no Strategic Reserve and no `ABC` denominator.
 > Where this file and `lios/v4.1.md` disagree, the init prompt wins.
 

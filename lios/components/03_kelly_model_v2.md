@@ -11,7 +11,7 @@
 > Model, repealed. It became a "Regime Index" in v3.0 and is now the
 > **Regime Index**, with no mechanical effect.
 
-**Component version:** v5
+**Component version:** v6
 **Status:** Method (not constitutional)
 **Last updated:** 2026-11-15
 

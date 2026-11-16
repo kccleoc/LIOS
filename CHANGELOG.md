@@ -5,6 +5,22 @@ LIOS follows semver: major bumps only on Locked Decision changes.
 
 ---
 
+## [6.0.4] — 2026-11-16
+
+### Documentation — v6 is the current version everywhere it is read
+
+Live documentation still described v5 as the operating system in thirteen places: the
+`Component version` header on every core file, the validation document's own title, a
+15-section note in the health check that survived the move to 14, and command banners and
+prompts that introduced themselves as v5.
+
+All corrected. What was **not** touched is the history: "deleted in v5", "the v5 split",
+"15 in v5", the v5 ADRs and RFCs, and the v5 CHANGELOG entry. Those are facts about a
+prior version, and rewriting them would make the record untrue. The rule is: a document
+may say v5 only when it is describing the past.
+
+---
+
 ## [6.0.3] — 2026-11-16
 
 ### Patch — a name count is a forward cap, not a forced sale

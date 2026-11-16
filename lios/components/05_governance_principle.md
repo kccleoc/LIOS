@@ -7,7 +7,7 @@
 
 # 05 · Governance Principle — "Rules Permanent, Decisions Dynamic"
 
-**Component version:** v5
+**Component version:** v6
 **Status:** Method — the versioning and IC discipline behind the constitution
 **Last updated:** 2026-11-15
 

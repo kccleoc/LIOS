@@ -22,7 +22,7 @@ analysis, no recommendations — a faithful render of state.
 ---
 
 ```
-Generate a LIOS v5 portfolio snapshot from this state file.
+Generate a LIOS v6 portfolio snapshot from this state file.
 
 State:
 <paste state.yaml here>

@@ -3,7 +3,7 @@
 
 # 02 · Capital Architecture — Four Sleeves A/B/C
 
-**Component version:** v5
+**Component version:** v6
 **Status:** Constitutional (P1′, P2′, P6′)
 **Last updated:** 2026-11-15
 

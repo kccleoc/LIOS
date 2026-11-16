@@ -2,7 +2,7 @@
 
 **Status:** Superseded. Do not use.
 
-**Sleeve D does not exist in v5.** Duration is Sleeve C; individual companies and
+**Sleeve D does not exist in v6.** Duration is Sleeve C; individual companies and
 narrow bets are Sleeve B.
 
 Where this file's function now lives:

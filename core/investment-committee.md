@@ -1,5 +1,5 @@
 > **Source:** Derived from the LIOS governance principle and P1′–P8′.
-> **Version:** v5
+> **Version:** v6
 
 # Investment Committee
 

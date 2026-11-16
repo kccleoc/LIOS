@@ -2,7 +2,7 @@
 
 **Status:** Superseded. Do not use.
 
-This command reviewed a satellite rotation book. Two things changed in v5:
+This command reviewed a satellite rotation book. Two things changed in v5 and again in v6:
 
 1. **Sleeve C is duration bonds**, not satellites. Duration greater than 3 years,
    hedged. C is bought, not rotated: no ranking, no Replacement Index, no

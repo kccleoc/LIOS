@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Report the distance between each sleeve and its target. In v5, **gap and drift are
+Report the distance between each sleeve and its target. In v6, **gap and drift are
 the same number** — there is one calculation, not two.
 
 Sleeve B is the exception: it has a **ceiling, not a target**, so it has no gap to
@@ -28,7 +28,7 @@ fund. Its line reports distance to the ceiling.
 ---
 
 ```
-Produce the LIOS v5 gap / drift report.
+Produce the LIOS v6 gap / drift report.
 
 State:
 <paste state.yaml here>

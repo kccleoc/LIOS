@@ -272,7 +272,7 @@ Execution
 - When multiple LOS-qualified candidates compete for capital, higher LFS receives
   capital first.
 
-### Sleeves (v5)
+### Sleeves (v6)
 - Sleeve targets and caps follow P2′ and P6′.
 - Sleeve assignment rules are untouched.
 - LFS may influence **which sleeve** when LOS values are similar.

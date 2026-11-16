@@ -2,7 +2,7 @@
 
 # Sleeve B — Replacement Index
 
-**Component version:** v5
+**Component version:** v6
 **Status:** Method (`constitution/method.md`) / dynamic scores
 **Last updated:** 2026-11-15
 
@@ -124,7 +124,7 @@ Replacement Index approval does not override Sleeve B entry rules:
 - Replacement is size-neutral: one-out-one-in at the same dollar value.
 - Do not exceed `state.yaml: sleeves.b.ceiling_pct`.
 
-The v5 method has no staged-entry sequence.
+The v6 method has no staged-entry sequence.
 
 ---
 

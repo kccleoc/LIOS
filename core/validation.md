@@ -1,4 +1,4 @@
-# LIOS v5 Auto-Validation Rules
+# LIOS v6 Auto-Validation Rules
 
 **Version:** 5.0.0
 **Last updated:** 2026-11-16
@@ -58,16 +58,16 @@ cannot pass is a pipeline nobody runs.
 
 ### Check 4 · Sleeve Assignment
 
-**Verifies:** every position is assigned to a valid v5 sleeve.
+**Verifies:** every position is assigned to a valid v6 sleeve.
 
 **Source:** `positions[].sleeve`
 
-**Failure:** any sleeve value not in `{a, b, c}`. A `z` value is a v5 file that was
+**Failure:** any sleeve value not in `{a, b, c}`. A `z` value is a v5-era file that was
 not migrated — v6 has three sleeves.
 
 **Abort:** "Validation failed: invalid sleeve assignment for [TICKER]."
 
-**Note:** the v5 sleeve set is **A, B, C**. `sleeve: sr` is invalid —
+**Note:** the v6 sleeve set is **A, B, C**. `sleeve: sr` is invalid —
 the Strategic Reserve was repealed in v3.0.
 
 ---
@@ -115,8 +115,8 @@ Treasury fund as a bond sleeve. Duration is the test, not the issuer.
 
 **Verifies:** *if* the state carries a Regime Index block, it is internally consistent.
 
-**Source:** `regime.*` — **not** `bbi.*`. `bbi` was the v2.1 field; v5's Regime Index is a
-dashboard (P2′), and no v5 SSOT is required to carry one. This check was pointing at a field
+**Source:** `regime.*` — **not** `bbi.*`. `bbi` was the v2.1 field; v6's Regime Index is a
+dashboard (P2′), and no v6 SSOT is required to carry one. This check was pointing at a field
 that no longer exists, so it could not run at all.
 
 **Failure:**

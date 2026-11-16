@@ -28,7 +28,7 @@ target, and is never ranked against itself. Sleeve D does not exist.
 
 ```
 Find the best replacement candidates for the specified incumbent
-holding, using LIOS v5.
+holding, using LIOS v6.
 
 Current Portfolio Snapshot:
 <paste snapshot>
@@ -109,7 +109,7 @@ size-neutral sizing check, and a ceiling and look-through compliance line.
 ## Discipline reminders
 
 - **The Replacement Index is Sleeve B's instrument.** Misapplied to A or C it
-  produces rotation advice that v5 prohibits.
+  produces rotation advice that v6 prohibits.
 - **Replacement requires a problem with the incumbent** — proven by composite
   superiority plus 2 of 4 conditions. Opportunity alone is not a reason.
 - **Sleeve B caps are not replacement triggers.** A cap is a buying pause, not an

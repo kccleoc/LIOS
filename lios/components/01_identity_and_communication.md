@@ -6,7 +6,7 @@
 
 # 01 · Identity & Communication Standards
 
-**Component version:** v5
+**Component version:** v6
 **Status:** Method — binding on every session, not constitutional
 **Last updated:** 2026-11-15
 

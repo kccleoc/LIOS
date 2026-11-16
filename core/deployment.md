@@ -1,8 +1,8 @@
-> **Source:** Replaces the v4.1 two-operation engine. Bands, tolerance and cap-only B are v5.
+> **Source:** Replaces the v4.1 two-operation engine. Bands, tolerance, cap-only B and the single defensive sleeve are v6.
 
 # Deployment — Top-up and Rebalance
 
-**Component version:** v5
+**Component version:** v6
 **Status:** Constitutional (P3′, P4′, P7′)
 **Last updated:** 2026-11-16
 
@@ -284,7 +284,7 @@ the look-through caps on the post-swap book.
 | `ABC` denominator | Deleted (v3.0) |
 | Single absolute 8pp band | Replaced by per-sleeve bands (v4.1) |
 | **Sleeve D in the risky-cap fallback** | **Deleted (v5)** — and the C split with it in v6 |
-| **`risky_now = (A+B+C)`** | **Deleted (v5)** — C is bonds |
+| **`risky_now = (A+B+C)`** | **Deleted in v5** — C is defensive, never risky |
 | **Targets for Sleeve B** | **Deleted (v5)** — cap-only |
 | **"Trim the weakest in C by Replacement Index"** | **Deleted (v5)** |
 

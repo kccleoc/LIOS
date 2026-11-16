@@ -1,4 +1,4 @@
-> **v5 conformance note.** Sleeves are **A/B/C** measured against NLV. Sleeve D
+> **v6 conformance note.** Sleeves are **A/B/C** measured against NLV. Sleeve D
 > is deleted; duration lives in C. Reports are **14 sections**, not 16. The prompt
 > below is self-contained — paste it as-is.
 
@@ -31,7 +31,7 @@ the live snapshot:
 ---
 
 ```
-Run a full LIOS Health Check on my portfolio (LIOS v5).
+Run a full LIOS Health Check on my portfolio (LIOS v6).
 
 Snapshot:
 <paste live snapshot here>

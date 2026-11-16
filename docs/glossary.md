@@ -3,7 +3,7 @@
 > **Historical note.** Entries above the "v4.1 — Eight Rules and Two
 > Operations" section were written for earlier versions and may reference
 > L-numbers, Kelly, the Strategic Reserve, or Sleeve D. Those concepts are
-> retired. Where an entry conflicts with the v4.1 or v5 sections, the later
+> retired. Where an entry conflicts with the v4.1, v5 or v6 sections, the later
 > section wins.
 
 Terms used across LIOS docs. Sorted alphabetically.
@@ -164,7 +164,7 @@ Facts = observed/verifiable. Assessments = judgment calls with Confidence %.
 ## H
 
 ### Health Check
-**Definition:** The full portfolio report. Canonical output format. Always the same sections, always this order — **14 sections since v5** (was 16 in v4.1). See the v5 section below.
+**Definition:** The full portfolio report. Canonical output format. Always the same sections, always this order — **14 sections since v6** (16 in v4.1, 15 in v5). See the v6 section below.
 **Used in:** `core/health-check.md`, `commands/health-check.md`
 
 ---
@@ -249,7 +249,7 @@ Dimensions: Market Valuation 30% / Portfolio Valuation 25% / Macro & Liquidity 2
 ## R
 
 ### Replacement Index
-**Definition:** Three-metric weighted score governing satellite surgery in **Sleeve B**. In v4.1 it governed the old satellite sleeve; in v5 it governs B.
+**Definition:** Three-metric weighted score governing satellite surgery in **Sleeve B**. In v4.1 it governed the old satellite sleeve; in v6 it governs B.
 Frontier 40% / Momentum 35% / Diversification 25%. Replacement requires composite superiority plus at least two of four qualitative conditions, and is size-neutral (one out, one in, same dollars).
 **Used in:** `constitution/method.md`, `core/sleeves.md`
 
@@ -262,7 +262,7 @@ Frontier 40% / Momentum 35% / Diversification 25%. Replacement requires composit
 ## S
 
 ### Sleeve
-**Definition:** A capital layer in LIOS. Since v5, three sleeves: **A, B, C**. Every weight, cap and floor is a percentage of NLV. See the v5 section below for the current definitions.
+**Definition:** A capital layer in LIOS. Since v6, three sleeves: **A, B, C**. Every weight, cap and floor is a percentage of NLV. See the v6 section below for the current definitions.
 **Used in:** `core/sleeves.md`
 
 ### Snapshot
@@ -308,7 +308,7 @@ Frontier 40% / Momentum 35% / Diversification 25%. Replacement requires composit
 **Used in:** Sleeve B satellites, `04_replacement_index.md`
 
 ### Weighted Score
-**Definition:** **Retired.** The Kelly dimensions and Kelly Factor were repealed in v3.0 and do not exist in v5. The five-dimension weighted score survives only as the **Regime Index**, a dashboard with no mechanical effect.
+**Definition:** **Retired.** The Kelly dimensions and Kelly Factor were repealed in v3.0 and do not exist in v6. The five-dimension weighted score survives only as the **Regime Index**, a dashboard with no mechanical effect.
 **Used in:** `core/regime-index.md`
 
 ---
@@ -421,7 +421,7 @@ definitions below, **these win**.
 **Used in:** `core/sleeves.md`
 
 ### Sleeve D (Duration)
-**Definition:** **Deleted in v5.0.0.** The duration role is absorbed by **Sleeve C**; the satellite role moved to **Sleeve B** (see v5 section below). Historical definition: bonds with duration > 3 years, hedged to the liability currency. The only sleeve whose purpose is to appreciate when equities fall.
+**Definition:** **Deleted in v5.0.0.** The duration role is absorbed by **Sleeve C**; the satellite role moved to **Sleeve B** (see v6 section below). Historical definition: bonds with duration > 3 years, hedged to the liability currency. The only sleeve whose purpose is to appreciate when equities fall.
 **Used in:** `constitution/constitution.md` ("What replaced what")
 
 ### Sleeve C (Satellite)
@@ -448,7 +448,7 @@ definitions below, **these win**.
 Supersedes the L-number layer entirely.
 
 ### P1–P8 (Portfolio Rules)
-**Definition:** The eight constitutional rules as written in v4.1. P1 five sleeves one denominator · P2 targets from the glidepath, risky weight by age · P3 two operations only · P4 Rebalance direction limits · P5 Sleeve B exits only on thesis break, via a 30-day review · P6 caps outrank every rule · P7 a cap breach is a Rebalance trigger · P8 reporting. Superseded in v5 by **P1′–P8′** (three sleeves); see the v5 section below. Changing any of them requires a major version bump plus an ADR.
+**Definition:** The eight constitutional rules as written in v4.1. P1 five sleeves one denominator · P2 targets from the glidepath, risky weight by age · P3 two operations only · P4 Rebalance direction limits · P5 Sleeve B exits only on thesis break, via a 30-day review · P6 caps outrank every rule · P7 a cap breach is a Rebalance trigger · P8 reporting. Superseded by **P1′–P8′** (three sleeves); see the v6 section below. Changing any of them requires a major version bump plus an ADR.
 **Used in:** `constitution/constitution.md`
 
 ### Method
@@ -456,7 +456,7 @@ Supersedes the L-number layer entirely.
 **Used in:** `constitution/method.md`
 
 ### Top-up
-**Definition:** The monthly operation. Allocates the contribution pro-rata to each sleeve's gap, `G_s = w_s × (NLV + DCA) − V_s` — computed over **A and C only** (B has no target and is never topped up). Never sells. Falls back to routing 100% to **C** when total risky weight is at the age-band cap. v5: risky weight is `(A + B) / NLV`, and A's target is the residual `risky_target − B_actual`.
+**Definition:** The monthly operation. Allocates the contribution pro-rata to each sleeve's gap, `G_s = w_s × (NLV + DCA) − V_s` — computed over **A and C only** (B has no target and is never topped up). Never sells. Falls back to routing 100% to **C** when total risky weight is at the age-band cap. v6: risky weight is `(A + B) / NLV`, and A's target is the residual `risky_target − B_actual`.
 **Used in:** `core/deployment.md` (P3′)
 
 ### Rebalance
@@ -485,7 +485,7 @@ Supersedes the L-number layer entirely.
 
 ---
 
-# v5.0.0 — Four Sleeves (A / B / C)
+# v6.0 — Three Sleeves (A / B / C)
 
 Supersedes the v4.1 five-sleeve definitions above. Where an entry above
 conflicts with these, these win.
@@ -534,5 +534,5 @@ conflicts with these, these win.
 **Used in:** `core/sleeves.md`, `constitution/constitution.md` P1′
 
 ### 14-section Health Check
-**Definition:** The v5 report order: Portfolio Health · Gap & Drift · Regime Index (dashboard) · Constraint Check · Sleeve A/B/C Reviews · Top-up Plan · Rebalance Status · Look-Through Concentration · Satellite Scoreboard · Execution Calendar · Execution Plan · Risk Assessment & CIO Resolution. Replaces the 16-section v4.1 order.
+**Definition:** The v6 report order: Portfolio Health · Gap & Drift · Regime Index (dashboard) · Constraint Check · Sleeve A/B/C Reviews · Top-up Plan · Rebalance Status · Look-Through Concentration · Satellite Scoreboard · Execution Calendar · Execution Plan · Risk Assessment & CIO Resolution. Replaces the 16-section v4.1 order.
 **Used in:** `constitution/method.md`, `core/health-check.md`

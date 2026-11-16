@@ -2,7 +2,7 @@
 
 # Health Check Structure (15 Sections)
 
-**Component version:** v5
+**Component version:** v6
 **Status:** Constitutional (P8′) for structure; method for content
 **Last updated:** 2026-11-16
 
@@ -17,7 +17,7 @@ conditions.
 **Always 14 sections, always this order.** Deviating breaks cross-session
 comparability.
 
-**Why 15 and not 16.** v4.1 had a separate Sleeve D Review. v5 deletes sleeve D and
+**Why 14 and not 16.** v4.1 had a separate Sleeve D Review; v5 merged it into C and still carried a separate cash review; v6 deleted that sleeve too and merged the two defensive reviews.
 moves duration into C, so the "ballast and ammunition" section is now C's. A section
 that reports an empty sleeve is a section nobody reads.
 

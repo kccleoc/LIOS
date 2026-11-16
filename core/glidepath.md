@@ -1,6 +1,6 @@
 # Glidepath — Contribution Tilt Schedule
 
-**Component version:** v5
+**Component version:** v6
 **Status:** Method, not constitutional (targets are `state.yaml` parameters)
 **Last updated:** 2026-11-16
 
@@ -29,7 +29,7 @@ inside A are the riskiest holdings in the book.
 
 **C is defensive.** It holds bonds with duration beyond three years. In v4.1 the
 same sleeve letter held a satellite equity book, and counting it as risky was
-correct then. In v5 it is not. Any formula that computes `(A + B + C) / NLV` is
+correct then. Since v5 it is not, and in v6 C is not a bond sleeve at all. Any formula that computes `(A + B + C) / NLV` is
 wrong and will route every future contribution into bonds.
 
 ---
