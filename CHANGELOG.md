@@ -5,6 +5,26 @@ LIOS follows semver: major bumps only on Locked Decision changes.
 
 ---
 
+## [6.0.2] — 2026-11-16
+
+### Patch — a cap that forbade the simplest correct portfolio
+
+v6.0.1 capped any single holding at 40% of Sleeve C's **money duration**, to stop an
+average from hiding a large rate position. It was wrong, and the current book proves it:
+the sleeve's only bond fund is 15% of C by value and 74.5% of its money duration, because
+duration has to live somewhere. The cap therefore required at least three bond funds, or a
+bond allocation so small it defeated the purpose — regulation by fragmentation.
+
+Replaced with the quantity that actually separates "a bond allocation" from "a duration
+bet": **holdings with duration above 6 years may not exceed 50% of C's value.** The
+current book sits at 14.9%. A half-and-half barbell sits exactly at the limit, which is the
+deliberate line between a sleeve that carries duration and one that is a duration bet.
+
+The 1–6y average, the 10-year per-holding hard cap, and pro-rata sales inside C are
+unchanged.
+
+---
+
 ## [6.0.1] — 2026-11-16
 
 ### Patch — four holes an external review put a finger through, and one dead branch
@@ -27,10 +47,10 @@ the factor exposure and accrued interest, with no rule and no check noticing. No
 Check 12 aborts on negative cash.
 
 **A duration band that a barbell satisfies.** Average duration plus a per-holding cap does
-not bound *money* duration: half of C in a 10-year bond gives a 5.1y average, passes both
-tests, and puts $2,444 at risk per 1pp. No single holding may now contribute more than 40%
-of C's money duration. Sales inside C are pro-rata, because draining the bills in a crash
-would spike the average through the ceiling mid-event.
+not bound the stake: half of C in a 10-year bond gives a 5.1y average, passes both tests,
+and puts $2,444 at risk per 1pp. Holdings with duration above 6 years are now capped at 50%
+of C's **value**. Sales inside C are pro-rata, because draining the bills in a crash would
+spike the average through the ceiling mid-event.
 
 **Caps wired to one operation.** The US-situs stop-adding line gated the Top-up only, while
 appreciation, a Rebalance, an IC decision, a mandate and a contribution routed to C could

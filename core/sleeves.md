@@ -118,10 +118,14 @@ duration. Anything that is not equity beta and settles in a day.
 - **The average includes cash.** Cash is a C holding at 0 years, so the denominator is
   the whole sleeve. Excluding it would lift the same book from 1.30y to 1.42y and quietly
   move the band test.
-- **Money duration is capped, not just duration.** No single holding may contribute more
-  than **40% of C's money duration**. A 10-year bond at half of C passes both the average
-  (5.1y) and the per-holding cap (10y) while putting $2,444 at risk per 1pp on a $47k
-  sleeve — the average hides that, which is why the contribution is capped too.
+- **Long holdings are capped by value, not by money-duration share.** Holdings with
+  duration above **6 years** may not exceed **50% of C's value**. The average alone hides
+  the stake: half of C in a 10-year bond passes the 1–6y average (5.1y) and the 10-year
+  per-holding cap, while putting $2,444 at risk per 1pp on a $47k sleeve. A money-duration
+  share was the first attempt and was rejected: it forbids any sleeve that holds a single
+  bond fund — 74.5% of this sleeve's money duration sits in one 15% position, which is
+  correct behaviour, not a breach. Value share is the quantity that distinguishes "a bond
+  allocation" from "a duration bet".
 - **No internal distribution.** There is no cash target, no bond target, no split
   between them, and no sub-sleeve. Composition is a measurement, not an allocation
   rule. But "no target" is not "no instruction": a contribution that reaches C buys
