@@ -5,6 +5,23 @@ LIOS follows semver: major bumps only on Locked Decision changes.
 
 ---
 
+## [6.0.3] — 2026-11-16
+
+### Patch — a name count is a forward cap, not a forced sale
+
+v6.0.1 made `names_max` hard and retroactive, in response to a review finding that the
+book's seven names were a breach the breach report omitted. Making it *hard* was right;
+making it *retroactive* was not. A count cap that binds incumbents turns into a forced sale
+of whichever name is smallest — in this book a $772 position — which is compliance theatre,
+and the risk a name count actually guards against (sprawl) is stopped by refusing the next
+addition.
+
+`names_max` now binds additions: no new name above the limit, and no forced sale of an
+existing one to make the count come out. `position_cap_pct` remains a hard per-name test on
+every report, and both are reported every cycle.
+
+---
+
 ## [6.0.2] — 2026-11-16
 
 ### Patch — a cap that forbade the simplest correct portfolio

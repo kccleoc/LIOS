@@ -67,8 +67,10 @@ never become the portfolio's dominant exposure by drift. The cap lives in
 **Target:** none. B has no target weight.
 **Structure:** individual companies and narrow bets. No equal-weight rule.
 **Concentration inside B:** `sleeves.b.names_max` (default 5 names) and
-`sleeves.b.position_cap_pct` (default 5% of NLV per name). Both are tested at the
-quarterly Rebalance review; both are enforced, not merely declared.
+`sleeves.b.position_cap_pct` (default 5% of NLV per name).
+`position_cap_pct` is a hard test on every report. `names_max` is a **forward cap**: it
+binds additions, not incumbents — no new name above the limit, and no forced sale of an
+existing one to make a count come out. Both are reported every cycle.
 
 **Funding:**
 

@@ -231,8 +231,12 @@ summed by hand from published fund holdings, which lag and truncate. Assets are 
 maintained at least **0.5pp inside** a cap; a measured value between cap − 0.5pp and the
 cap is reported as `AT CAP — no further addition`, not as passing with room.
 
-**`names_max` is hard.** A name count is a count, not a measurement: five is five. It is
-tested on every report, not only at the quarterly review.
+**`names_max` is a forward cap, and it is hard.** No *new* name may take the count above
+the limit; existing names are not force-sold to satisfy a count. Selling a dust position to
+reach five is compliance theatre, and the risk a name count guards against — sprawl — is
+stopped by refusing the next addition. The count is reported every cycle. (v6.0.1 made this
+retroactive for one day; a count cap that forces a forced sale is the wrong instrument, and
+the position cap already bounds what a single name can become.)
 
 **Sleeve B ceiling is soft.** It enforces at the quarterly Rebalance review within
 the tolerance band. A satellite that appreciates past the ceiling is trimmed back
