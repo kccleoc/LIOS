@@ -1,4 +1,4 @@
-> **v5 conformance note.** Sleeves are **A/B/C/Z** measured against NLV. There
+> **v5 conformance note.** Sleeves are **A/B/C** measured against NLV. There
 > is no Sleeve D, no Kelly Factor, no Strategic Reserve and no `ABC` denominator.
 > Where this file and `lios/v4.1.md` disagree, the init prompt wins.
 
@@ -42,7 +42,7 @@ Step 1: LOS Gate
   - LOS 80+ → DEEP RESEARCH
 
 Step 2: For LOS 80+ candidates, additional checks:
-  - Sleeve fit: A / B / C / Z?
+  - Sleeve fit: A / B / C?
   - Funding source: does it respect the funding-source matrix?
   - If the candidate is an ETF, it belongs in A — state the written view statement
     (intended exposure, horizon, invalidation condition).

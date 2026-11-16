@@ -86,7 +86,7 @@ valuations moves `f*` from roughly 0% to over 100% of wealth. Useful as a
 diagnostic; unusable as a monthly controller.
 
 **Disposition:** repealed in v3.0. In v5 the monthly contribution is allocated by
-the Top-up rule alone (`core/deployment.md`): gap-driven across A, C and Z, with B
+the Top-up rule alone (`core/deployment.md`): gap-driven across A, C, with B
 excluded from the target set. Nothing multiplies it.
 
 ---

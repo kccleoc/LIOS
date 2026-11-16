@@ -21,7 +21,7 @@ equity is not sold to reach a lower target.
 
 ```
 risky = A + B
-defensive = C + Z
+defensive = C
 ```
 
 **A is risky even when it holds a broad-index fund.** It is equity. Thematic ETFs
@@ -46,7 +46,7 @@ dominates. Choose **contribution tilt** if it is a legacy or longevity engine th
 will not be drawn down.
 
 Under the contribution-tilt policy, `state.yaml: glidepath.policy` must say
-`contribution_tilt`. Under a hard policy, P4′'s prohibition on selling A into C/Z
+`contribution_tilt`. Under a hard policy, P4′'s prohibition on selling A into C
 is lifted, and the state file says so explicitly.
 
 ---
@@ -59,17 +59,23 @@ Sleeve B is **cap-only**, so it has no target row. **A's target is the residual:
 A_target = risky_target − B_actual
 ```
 
-That is what keeps `A + B + C + Z = 100%` while B floats anywhere from 0 to its
+That is what keeps `A + B + C = 100%` while B floats anywhere from 0 to its
 ceiling. At B = 0 the sleeve takes the whole risky budget; at B = ceiling it takes
 the ceiling's share.
 
-| Age | A (residual) | C | Z | Risky (A+B) | B ceiling |
-|---|---:|---:|---:|---:|---:|
-| 45–50 | 80 − B | 15 | 5 | **80%** | 10% |
-| 50–55 | 75 − B | 20 | 5 | **75%** | 8% |
-| 55–60 | 70 − B | 25 | 5 | **70%** | 5% |
-| 60–65 | 65 − B | 30 | 5 | **65%** | 0% |
-| 65+ | 60 − B | 35 | 5 | **60%** | 0% |
+| Age | A (residual) | C (residual) | Risky (A+B) | B ceiling |
+|---|---:|---:|---:|---:|
+| 45–50 | 80 − B | 20 | **80%** | 10% |
+| 50–55 | 75 − B | 25 | **75%** | 8% |
+| 55–60 | 70 − B | 30 | **70%** | 5% |
+| 60–65 | 65 − B | 35 | **65%** | 0% |
+| 65+ | 60 − B | 40 | **60%** | 0% |
+
+Two residuals, one decision. The glidepath sets **one** number per age band — how
+much is risky — and both A and C fall out of it: A takes the risky total minus B,
+C takes everything that is left. v5 carried three independent numbers (A, C, Z)
+and they disagreed in the shipped state, which is what a table with three
+independent numbers does.
 
 **Consequence worth stating:** an A→B transfer under IC decision is
 **gap-neutral**. Moving a dollar from A to B lowers A's value by one dollar and
@@ -115,14 +121,14 @@ than being quietly ignored.
 
 **What step 4 used to say, and why it could not be obeyed.** It said the excess "is
 closed by Rebalance". Under `glidepath.policy: contribution_tilt` no permitted direction
-lowers risky weight: `A → C` and `A → Z` are prohibited by P4′ because that is de-risking,
-`B → A` leaves risky unchanged, `C`/`Z → A` raises it, and `Z → C` leaves it unchanged. A
+lowers risky weight: `A → C` is prohibited by P4′ because that is de-risking, `B → A` leaves
+risky unchanged, and `C → A` raises it. A
 grace-end Rebalance would therefore fire and have nothing legal to execute — a rule that
 looks enforceable and is not, which is worse than an honest gap.
 
 Under `contribution_tilt` the new band is a **direction, not a deadline**. The gap closes
 when contributions and market moves close it, and it is reported every cycle until it does.
-Under `glidepath.policy: hard` the A→C/Z restriction lifts and step 4 becomes a real trade.
+Under `glidepath.policy: hard` the A→C restriction lifts and step 4 becomes a real trade.
 If a hard deadline is ever wanted under `contribution_tilt`, the only honest way to get one
 is an explicitly named, capped exception in the constitution — not a sentence in a method
 document that the direction table forbids. See `core/deployment.md`, Escalation.

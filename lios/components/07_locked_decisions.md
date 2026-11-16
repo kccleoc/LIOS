@@ -22,8 +22,8 @@
 |---|---|
 | L1–L23 Locked Decisions | Retired (v4.1.0). No L-numbers exist in v5. |
 | v4.1 rules P1–P8 | Replaced by **P1′–P8′** in `constitution/constitution.md` (v5) |
-| Five sleeves A/B/C/D/Z | Four sleeves A/B/C/Z (P1′) |
-| 16-section Health Check | 15-section Health Check (P8′) |
+| Five sleeves A/B/C/D/Z | Four sleeves A/B/C (P1′) |
+| 16-section Health Check | 14-section Health Check (P8′) |
 
 The method that used to sit behind several of these decisions — LOS and LFS weights,
 band thresholds, Replacement Index weights, report templates, communication style,
@@ -36,14 +36,14 @@ CHANGELOG entry, no version bump.
 
 | v4.1 | Text | v5 successor |
 |---|---|---|
-| **P1** | Five sleeves (A/B/C/D/Z), one denominator (NLV) | **P1′** four sleeves A/B/C/Z — D deleted, duration absorbed by C |
+| **P1** | Five sleeves (A/B/C/D/Z), one denominator (NLV) | **P1′** three sleeves A/B/C — D deleted, duration absorbed by C |
 | **P2** | Targets from the glidepath; risky weight set by age | **P2′** — risky = A + B; B is cap-only, no target |
 | **P3** | Two operations only — Top-up and Rebalance | **P3′** — plus quarterly tolerance for soft limits |
 | **P4** | Rebalance direction: never sell A into D or Z | **P4′** — C replaces D; A→B by IC decision only |
 | **P5** | Sleeve B exits only on thesis break, via a 30-day review | **P5′** — exits follow the instrument; a replacement is not an exit |
 | **P6** | Caps outrank every rule | **P6′** — look-through company and sector caps |
 | **P7** | A cap breach is itself a Rebalance trigger | **P7′** — hard immediate, soft quarterly |
-| **P8** | Reports state dollars, confidence, fixed 16-section order | **P8′** — 15 sections |
+| **P8** | Reports state dollars, confidence, fixed 16-section order | **P8′** — 14 sections |
 
 ---
 

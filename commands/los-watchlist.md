@@ -1,5 +1,5 @@
 > **v4.1 conformance note.** Written for LIOS v2.x. In v4.1 the sleeves are
-> **v5 conformance note.** Sleeves are **A/B/C/Z** measured against NLV. There
+> **v5 conformance note.** Sleeves are **A/B/C** measured against NLV. There
 > is no Sleeve D. Where this file and `lios/v4.1.md` disagree, the init prompt
 > wins.
 

@@ -33,10 +33,10 @@ Produce the LIOS v5 gap / drift report.
 State:
 <paste state.yaml here>
 
-One denominator only: NLV. There are four sleeves: A, B, C, Z. There is no
+One denominator only: NLV. There are three sleeves: A, B, C. There is no
 Sleeve D, no ABC base, no Strategic Reserve line, no Kelly Reserve line.
 
-For each sleeve in A, B, C, Z:
+For each sleeve in A, B, C:
   value ($ and % of NLV)
   target ($ and % of NLV)     — for B, report the CEILING instead of a target
   gap ($) = target $ − value $
@@ -44,7 +44,7 @@ For each sleeve in A, B, C, Z:
   band status: inside / beyond tolerance / breach
 
 Then:
-1. Confirm Σ gaps over {A, C, Z} = 0
+1. Confirm Σ gaps over {A, C} = 0
 2. Compute risky weight as (A + B) / NLV — NOT (A + B + C). C is bonds.
 3. Name every sleeve whose deviation exceeds the tolerance band
 4. State whether each trigger is HARD (immediate) or SOFT (next quarterly review)
@@ -59,7 +59,7 @@ Rules:
 - Dollars first, percentages second
 - Gap and drift are the same number — do not compute them twice
 - B has no target. A positive distance to its ceiling is NOT fundable.
-- A 0–1y Treasury instrument is Z, never A or C
+- A 0–1y Treasury instrument is C, never A
 - Explicit directive per sleeve: no action / flag / rebalance now / rebalance at review
 - Confidence % on the rebalance recommendation
 
@@ -71,7 +71,7 @@ Begin.
 ## Definitions
 
 ```
-G_s = w_s × (NLV + DCA) − V_s      for s in {A, C, Z}
+G_s = w_s × (NLV + DCA) − V_s      for s in {A, C}
 ```
 
 Positive = underweight. Negative = overweight. **B is excluded** — it has no target.
@@ -81,7 +81,7 @@ Positive = underweight. Negative = overweight. **B is excluded** — it has no t
 | A | ETFs, broad-index **and** thematic | target band |
 | B | Satellites — individual companies | **ceiling only** |
 | C | Duration > 3y, hedged | target band |
-| Z | Duration ≈ 0 | target band, floor 3% |
+| C | cash / bills / bonds | residual target; duration 1–6y average |
 
 ## Thresholds
 

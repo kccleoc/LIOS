@@ -2,8 +2,8 @@
 
 **Basis:** `portfolio/state/portfolio.yaml` as of <DATE>
 **NLV:** $X · **Reconciliation Δ:** $X
-**RI:** XX.X (<band>) · **Glidepath:** risky 80 · B ceiling 10 · C 15 · Z 5 · A residual
-**Risky now:** (A + B) / NLV = XX% — C is bonds, not risky
+**RI:** XX.X (<band>) · **Glidepath:** risky 80 · B ceiling 10 · C residual · A residual
+**Risky now:** (A + B) / NLV = XX% — C is defensive, not risky
 
 ---
 
@@ -13,8 +13,7 @@
 |---|---:|---:|---:|---:|
 | A conviction ETFs | | | residual | |
 | B satellites | | | none — ceiling only | |
-| C duration | | | | |
-| Z cash equivalents | | | | |
+| C defensive (residual) | | | | |
 | **NLV** | | 100 | 100 | |
 
 Three-line headline: where we are, what changed, what matters next.
@@ -50,9 +49,9 @@ Dashboard only: the index reports; it does not size anything (P2′).
 | 1 | Look-through single-company | 5% NLV | | |
 | 2 | Single-sector | 25% NLV | | |
 | 3 | Sleeve B ceiling | 10% NLV | | |
-| 4 | Duration (C) | 15% NLV | | |
-| 5 | US-situs | below exemption | | |
-| 6 | Sleeve Z floor | 3% NLV | | |
+| 4 | C duration — average | 1–6 years | | |
+| 5 | C duration — single holding | ≤ 10 years | | |
+| 6 | US-situs | below exemption | | |
 
 Effective exposure = direct + fund look-through + index-embedded. A hard breach
 is an immediate Rebalance (P7′); a soft breach beyond
@@ -75,21 +74,20 @@ B is cap-only: no target, no Top-up. The only sell trigger is a thesis break
 (P5′). State explicitly whether any name is below LOS 60 — that opens a 30-day
 deep-dive review.
 
-## 7. Sleeve C Review
+## 7. Sleeve C Review — one sleeve, one measurement
 
-Duration, currency hedge, ammunition available for Rebalance. C is not ranked:
-no rotation, no Replacement Index — those judgments live in B.
+Composition (cash / bills / bonds, in dollars and % of C — reported, never
+targeted), the duration table for every holding, the weighted average against
+the 1–6y band, and **money duration in dollars** with the cost of a 1pp move.
+Ammunition available for Rebalance. C is not ranked: no rotation, no Replacement
+Index — those judgments live in B. Say explicitly if the composition is a
+barbell, even when the average is inside the band.
 
-## 8. Sleeve Z Review
-
-Floor 3%. Duration ≈ 0 only. Below the floor fires an immediate Rebalance
-(P7′); above the band inside the tolerance is reported, not traded.
-
-## 9. Top-up Plan
+## 8. Top-up Plan
 
 Show `NLV'`, `G_s` per sleeve, `ΣG⁺`, and the allocation. The target set is A,
-C and Z — B is excluded and never receives DCA. State whether the risky-cap
-fallback applies; it allocates to C and Z.
+C — B is excluded and never receives DCA. State whether the risky-cap
+fallback applies; with one defensive sleeve it allocates to C.
 
 | Sleeve | Allocation | Share of positive gap |
 |---|---:|---:|
@@ -101,8 +99,8 @@ contribution and Top-up is not run separately that month.
 
 Not triggered / triggered and executed / triggered but no legal move (escalate
 under P7′). Which sleeves or caps breached, by how much, and the direction of
-any trade. Direction limits (P4′): C/Z → A,B yes · Z → C yes · B → A yes ·
-A → B IC decision only · A → C/Z prohibited.
+any trade. Direction limits (P4′): C → A yes · B → A yes · rotation inside C is
+not a transfer · A → B IC decision only · A → C prohibited.
 
 ## 11. Look-Through Concentration
 

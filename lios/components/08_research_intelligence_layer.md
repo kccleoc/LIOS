@@ -1,4 +1,4 @@
-> **v5 conformance note.** The portfolio has four sleeves — A, B, C, and Z — measured
+> **v5 conformance note.** The portfolio has three sleeves — A, B, C, and Z — measured
 > against NLV. The Kelly Model and the Strategic Reserve are repealed; deployment is
 > governed by P3′. LOS is a research filter, not a sizing tool. Where this file and
 > `constitution/constitution.md` disagree, the constitution wins.
@@ -183,10 +183,10 @@ Confidence: 78%
 - LOS ≥ 80 is required for a new Sleeve B name (IC discipline).
 - Sleeve A ETFs are not LOS-scored as companies. A thematic ETF is judged by its
   written view statement, not by an aggregate of its constituents.
-- Sleeve C is bonds and Sleeve Z is cash: neither receives LOS.
+- Sleeve C is the defensive block — cash, bills and bonds — and receives no LOS.
 
 ### Health Check (P8′)
-- The report structure is the fixed **15-section** order.
+- The report structure is the fixed **14-section** order.
 - LOS appears in section 6, the Sleeve B Review. Sleeve C's review is section 7 and
   carries no company scores.
 - The Satellite Scoreboard is section 12.

@@ -5,6 +5,69 @@ LIOS follows semver: major bumps only on Locked Decision changes.
 
 ---
 
+## [6.0.0] — 2026-11-16
+
+### Major — one defensive sleeve, measured by duration
+
+**Fourth sleeve deleted. Three sleeves: A, B, C. Constitution P1′ changes, so this is
+a major bump, not a patch.** ADR-008, RFC-006.
+
+#### The change
+
+Cash, money market, T-bills and bond ETFs merge into a single defensive sleeve **C**,
+which becomes the **residual**: `C = NLV − A − B`. The cash target, the 3% floor and
+the 7.5% ceiling are deleted. There is no internal distribution — composition is
+reported, never targeted.
+
+One control replaces the split: **average effective duration 1–6 years, and no single
+holding above 10 years.** Measured value-weighted from fact-sheet effective duration,
+with money duration reported in dollars. The average is a quarterly style guard; a
+single holding above 10 years is a hard breach.
+
+#### Why
+
+The C/Z boundary was drawn by an instrument property — duration — and used as if it
+were a risk role. Everything else followed:
+
+- One cash-like instrument was misclassified for weeks, and the error survived a
+  rewrite because nothing measured it.
+- A 5% target with a 2.5pp tolerance is **±50% of the sleeve**. That is not a limit;
+  it is a suggestion, and it breached continuously.
+- Two defensive targets could disagree — and in the shipped state they did, by
+  $6,204 of de-risking.
+- A whole transition mandate existed to move money between two defensive sleeves.
+
+All constituents settle in a day, so the split preserved no liquidity advantage.
+
+#### What this deletes
+
+| Deleted | Replaced by |
+|---|---|
+| Sleeve Z and its target 5% / floor 3% / ceiling 7.5% | C, residual |
+| Sleeve C's 15% duration target | C, residual |
+| The cash-vs-bond classification rule | The duration band |
+| `C → Z` and `Z → C` as separate directions | Rotation inside C, which is not a transfer |
+| "Duration sleeve 15%" cap | "C duration 1–6y avg, none > 10y" |
+| 15-section Health Check | 14 sections — the Z review merges into C |
+| 10 validation checks | 11 — new Check 11, C duration band |
+
+#### Structural simplifications
+
+- The glidepath carries **one** number per age band (risky), plus the B ceiling. A
+  and C are both residual, so three independent targets can no longer disagree.
+- The Top-up formula runs over `{A, C}`. The risky-cap fallback is simply "all to C" —
+  the branch that could starve one defensive sleeve while feeding the other is gone.
+- `risky = (A + B) / NLV` is unchanged, and so is everything about A and B.
+
+#### The cost, stated plainly
+
+A sleeve with a 1-year floor must hold at least 1 year of duration, so a book sitting
+in bills is out of band from adoption. That is deliberate: 0.37 years is a cash
+balance earning nothing, and the floor makes the cost of that visible instead of
+labelling it "defensive".
+
+---
+
 ## [5.0.2] — 2026-11-16
 
 Findings from an external adversarial review. Two of them are worse than anything

@@ -101,12 +101,12 @@ Rules:
 - Sleeve B replacement requires BOTH Replacement Index composite superiority AND
   at least 2 of the 4 qualitative conditions
 - Replacement is size-neutral. One out, one in, same dollars. No net addition
-- Sleeve B is never funded from Top-up, from C, or from Z
+- Sleeve B is never funded from Top-up, and never from C
 - Sleeve A to Sleeve B is an Investment Committee decision, limited by B ceiling
   headroom. It is never an automatic output of this analysis
 - An A thematic rotation needs a Transition Mandate: sunset date, completion
   criteria in dollars, and cap compliance throughout
-- C and Z appear here only as Rebalance sources when a risky sleeve is underweight
+- C appear here only as Rebalance sources when a risky sleeve is underweight
   and a band is breached. They are not rotation destinations
 - A recommended sale that is neither a breach cure, a thesis break, nor a mandate
   action is deleted from the plan

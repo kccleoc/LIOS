@@ -164,7 +164,7 @@ Facts = observed/verifiable. Assessments = judgment calls with Confidence %.
 ## H
 
 ### Health Check
-**Definition:** The full portfolio report. Canonical output format. Always the same sections, always this order — **15 sections since v5** (was 16 in v4.1). See the v5 section below.
+**Definition:** The full portfolio report. Canonical output format. Always the same sections, always this order — **14 sections since v5** (was 16 in v4.1). See the v5 section below.
 **Used in:** `core/health-check.md`, `commands/health-check.md`
 
 ---
@@ -262,7 +262,7 @@ Frontier 40% / Momentum 35% / Diversification 25%. Replacement requires composit
 ## S
 
 ### Sleeve
-**Definition:** A capital layer in LIOS. Since v5, four sleeves: **A, B, C, Z**. Every weight, cap and floor is a percentage of NLV. See the v5 section below for the current definitions.
+**Definition:** A capital layer in LIOS. Since v5, three sleeves: **A, B, C**. Every weight, cap and floor is a percentage of NLV. See the v5 section below for the current definitions.
 **Used in:** `core/sleeves.md`
 
 ### Snapshot
@@ -434,10 +434,10 @@ definitions below, **these win**.
 |---|---|---|
 | Kelly Factor | **Deleted** | Regime Index band |
 | Kelly Model v2.0 | **Repealed (L4)** | `core/regime-index.md` |
-| Kelly Reserve | **Deleted** | Sleeve Z |
+| Kelly Reserve | **Deleted** | Sleeve C |
 | Strategic Reserve / SR | **Repealed (L6)** | Sleeve D drift + rebalance band |
 | Trigger ladder | **Deleted** | Rebalance band |
-| Free tactical (TC) | **Deleted** | Sleeve Z + discretionary channel |
+| Free tactical (TC) | **Deleted** | Sleeve C + discretionary channel |
 | `ABC` denominator | **Deleted** | NLV |
 | DCA "governed by Kelly Factor" | **Superseded** | DCA governed by the gap (Top-up) |
 
@@ -448,7 +448,7 @@ definitions below, **these win**.
 Supersedes the L-number layer entirely.
 
 ### P1–P8 (Portfolio Rules)
-**Definition:** The eight constitutional rules as written in v4.1. P1 five sleeves one denominator · P2 targets from the glidepath, risky weight by age · P3 two operations only · P4 Rebalance direction limits · P5 Sleeve B exits only on thesis break, via a 30-day review · P6 caps outrank every rule · P7 a cap breach is a Rebalance trigger · P8 reporting. Superseded in v5 by **P1′–P8′** (four sleeves); see the v5 section below. Changing any of them requires a major version bump plus an ADR.
+**Definition:** The eight constitutional rules as written in v4.1. P1 five sleeves one denominator · P2 targets from the glidepath, risky weight by age · P3 two operations only · P4 Rebalance direction limits · P5 Sleeve B exits only on thesis break, via a 30-day review · P6 caps outrank every rule · P7 a cap breach is a Rebalance trigger · P8 reporting. Superseded in v5 by **P1′–P8′** (three sleeves); see the v5 section below. Changing any of them requires a major version bump plus an ADR.
 **Used in:** `constitution/constitution.md`
 
 ### Method
@@ -456,7 +456,7 @@ Supersedes the L-number layer entirely.
 **Used in:** `constitution/method.md`
 
 ### Top-up
-**Definition:** The monthly operation. Allocates the contribution pro-rata to each sleeve's gap, `G_s = w_s × (NLV + DCA) − V_s` — computed over **A, C, Z only** (v5: B has no target and is never topped up). Never sells. Falls back to routing 100% to **C and Z** when total risky weight is at the age-band cap. v5: risky weight is `(A + B) / NLV`, and A's target is the residual `risky_target − B_actual`.
+**Definition:** The monthly operation. Allocates the contribution pro-rata to each sleeve's gap, `G_s = w_s × (NLV + DCA) − V_s` — computed over **A and C only** (B has no target and is never topped up). Never sells. Falls back to routing 100% to **C** when total risky weight is at the age-band cap. v5: risky weight is `(A + B) / NLV`, and A's target is the residual `risky_target − B_actual`.
 **Used in:** `core/deployment.md` (P3′)
 
 ### Rebalance
@@ -485,7 +485,7 @@ Supersedes the L-number layer entirely.
 
 ---
 
-# v5.0.0 — Four Sleeves (A / B / C / Z)
+# v5.0.0 — Four Sleeves (A / B / C)
 
 Supersedes the v4.1 five-sleeve definitions above. Where an entry above
 conflicts with these, these win.
@@ -498,17 +498,20 @@ conflicts with these, these win.
 **Definition:** Individual companies and narrow bets. No target weight, no equal-weight rule, **no Top-up — ever**. Ceiling 10% of NLV, enforced at the quarterly review within the tolerance. Funded only by an Investment Committee decision from Sleeve A. Exits only on thesis break (P5′). The Replacement Index governs surgery here.
 **Used in:** `core/sleeves.md`, `constitution/method.md`
 
-### Sleeve C (Duration)
-**Definition:** Bonds, duration > 3 years, hedged. Target 15% of NLV. Ballast and ammunition — the designated source for Rebalance into an underweight risky sleeve. Bought, not rotated: no ranking, no Replacement Index. Absorbs the role of the deleted Sleeve D.
-**Used in:** `core/sleeves.md`, `constitution/constitution.md` P1′
+### Sleeve C (Defensive)
+**Definition:** Cash, money market, T-bills, 0–1y funds and bond ETFs of any duration. **Residual target** — `C = NLV − A − B`; no stored target, no floor, no ceiling. Ballast and ammunition: the designated source for Rebalance into an underweight risky sleeve. **One control: average effective duration 1–6 years, no single holding above 10.** Composition (cash vs bonds) is reported, never targeted — the v5 split into a bond sleeve and a cash sleeve was deleted in v6 because it generated defects without changing behaviour. Bought, not rotated: no ranking, no Replacement Index.
+**Used in:** `core/sleeves.md`, `constitution/constitution.md` P1′, P6′
 
 ### Sleeve D — deleted
 **Definition:** Removed in v5.0.0. The duration role moved to **Sleeve C**; the satellite rotation role moved to **Sleeve B**. No live instruction may reference a Sleeve D.
 **Used in:** `constitution/constitution.md` ("What replaced what")
 
-### Sleeve Z (Cash Equivalents)
-**Definition:** Duration ≈ 0 — T-bills, money market, bank cash. Floor 3% of NLV. Defined by risk factor, not issuer. Never reported as a bond sleeve or a hedge.
-**Used in:** `core/sleeves.md`
+### Sleeve Z — deleted in v6
+**Definition:** Removed in v6.0.0. Its contents (cash, bills, money market) merged into **Sleeve C**, which is now the whole defensive block. The floor and ceiling went with it: a 5% sleeve with a 2.5pp tolerance is ±50% of itself, which is a suggestion rather than a limit. No live instruction may reference a Sleeve Z.
+
+### Duration band
+**Definition:** The single control inside Sleeve C. Average effective duration of 1–6 years, and no single holding above 10. Measured as a value-weighted average of fact-sheet effective duration; the average is a quarterly style guard, the single-holding cap is a hard breach. Report **money duration in dollars** with it — a 1pp rate move costs money duration × 1%. A barbell of bills and one long bond can satisfy the average while behaving in two directions, which is why the single-holding cap exists.
+**Used in:** `constitution/constitution.md` P6′, `core/sleeves.md`, `core/validation.md` Check 11, Health Check §7
 
 ### Look-through exposure
 **Definition:** Exposure to a single company measured through every wrapper: direct holdings plus each fund's underlying weight in that company plus index-embedded weight. Two funds holding the same company are one exposure. Capped at 5% of NLV; single-sector exposure (25% of NLV) is measured the same way, including sector weight inside broad-index funds.
@@ -530,6 +533,6 @@ conflicts with these, these win.
 **Definition:** The written justification required for every Sleeve A holding: intended exposure, why a basket rather than a single name, the horizon, and the condition that invalidates it. A thematic ETF is entered and reviewed as a view, not as a position in a company.
 **Used in:** `core/sleeves.md`, `constitution/constitution.md` P1′
 
-### 15-section Health Check
-**Definition:** The v5 report order: Portfolio Health · Gap & Drift · Regime Index (dashboard) · Constraint Check · Sleeve A/B/C/Z Reviews · Top-up Plan · Rebalance Status · Look-Through Concentration · Satellite Scoreboard · Execution Calendar · Execution Plan · Risk Assessment & CIO Resolution. Replaces the 16-section v4.1 order.
+### 14-section Health Check
+**Definition:** The v5 report order: Portfolio Health · Gap & Drift · Regime Index (dashboard) · Constraint Check · Sleeve A/B/C Reviews · Top-up Plan · Rebalance Status · Look-Through Concentration · Satellite Scoreboard · Execution Calendar · Execution Plan · Risk Assessment & CIO Resolution. Replaces the 16-section v4.1 order.
 **Used in:** `constitution/method.md`, `core/health-check.md`

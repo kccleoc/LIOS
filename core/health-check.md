@@ -1,4 +1,4 @@
-> **Source:** Extracted from LIOS v1.5, rebuilt for four sleeves in v5. P8′ — the 15-section fixed order.
+> **Source:** Extracted from LIOS v1.5, rebuilt for three sleeves in v6. P8′ — the 14-section fixed order.
 
 # Health Check Structure (15 Sections)
 
@@ -14,7 +14,7 @@ The Health Check is the canonical output format for a full session review. It is
 the report run periodically to re-validate the portfolio against current
 conditions.
 
-**Always 15 sections, always this order.** Deviating breaks cross-session
+**Always 14 sections, always this order.** Deviating breaks cross-session
 comparability.
 
 **Why 15 and not 16.** v4.1 had a separate Sleeve D Review. v5 deletes sleeve D and
@@ -23,7 +23,7 @@ that reports an empty sleeve is a section nobody reads.
 
 ---
 
-## The 15 Sections
+## The 14 Sections
 
 | # | Section | Output |
 |---|---|---|
@@ -33,15 +33,14 @@ that reports an empty sleeve is a section nobody reads.
 | 4 | Constraint Check | Look-through name, sector, duration, risky, US-situs |
 | 5 | Sleeve A Review | Holdings, view statements, within-A split, thematic drift |
 | 6 | Sleeve B Review | LOS, thesis-exit status, ceiling status, replacement ranking |
-| 7 | Sleeve C Review | Duration, currency hedge, ammunition, build progress |
-| 8 | Sleeve Z Review | Floor and ceiling, vehicle policy |
-| 9 | Top-up Plan | Allocation in dollars (A, C, Z — never B) |
-| 10 | Rebalance Status | Triggered? Hard or soft? Executed? Escalated under P7′? |
-| 11 | Look-Through Concentration | Name and sector exposure through all wrappers |
-| 12 | Satellite Scoreboard | B names by RI, plus replacement candidates |
-| 13 | Execution Calendar | Earnings, macro, index events |
-| 14 | Execution Plan | Buy/Hold/Reduce/Exit with dollars |
-| 15 | Risk Assessment & CIO Resolution | Drawdown ladder in dollars, then one paragraph |
+| 7 | Sleeve C Review | Composition, duration table, money duration, band status, ammunition |
+| 8 | Top-up Plan | Allocation in dollars (A, C — never B) |
+| 9 | Rebalance Status | Triggered? Hard or soft? Executed? Escalated under P7′? |
+| 10 | Look-Through Concentration | Name and sector exposure through all wrappers |
+| 11 | Satellite Scoreboard | B names by RI, plus replacement candidates |
+| 12 | Execution Calendar | Earnings, macro, index events |
+| 13 | Execution Plan | Buy/Hold/Reduce/Exit with dollars |
+| 14 | Risk Assessment & CIO Resolution | Drawdown ladder in dollars, then one paragraph |
 
 ---
 
@@ -61,7 +60,7 @@ that reports an empty sleeve is a section nobody reads.
   allocates zero
 - **B appears in the table with a ceiling, not a target.** Its "gap" is the distance
   to the ceiling, and a positive distance is not fundable.
-- Σ gaps over {A, C, Z} must equal zero
+- Σ gaps over {A, C} must equal zero
 - Band: per sleeve, `clamp(0.5 × target, 2pp, 8pp)`. Soft breach beyond
   `rebalance_tolerance_pct` triggers Rebalance **at the quarterly review**
 - **Express gaps in dollars first, percentages second**
@@ -102,21 +101,21 @@ that reports an empty sleeve is a section nobody reads.
 - **Replacement ranking** by Replacement Index; name the weakest
 - Note explicitly that B received **$0.00** from this month's Top-up
 
-### 7. Sleeve C Review
-- Total, % NLV, target, gap
-- Duration in years, currency hedge ratio
-- Instrument list with maturity and credit quality
-- **Build progress** if C is below target, and the Top-up path that closes it
-- Ammunition available: the dollar amount C could deploy without breaching its band
+### 7. Sleeve C Review — defensive, and one sleeve
+- Total, % NLV, residual target and gap
+- **Composition**: cash / bills / bonds, in dollars and % of C — reported, never targeted
+- **Duration table**: every holding, its effective duration, its money duration, and
+  the weighted average against the 1–6y band
+- **Money duration in dollars**, and what a 1pp rate move costs — an average without
+  dollars hides the stake
+- Currency hedge ratio, credit quality, and the fact-sheet date each duration came from
+- **Ammunition available**: the dollar amount C could deploy without breaching its band
+- **A barbell is not a loophole**: if the composition is bills plus long bonds, say so
+  explicitly, even when the average is inside the band
 
-### 8. Sleeve Z Review
-- Total, % NLV, floor and ceiling status
-- Vehicle policy compliance
-- Confirm the emergency fund is outside NLV
-
-### 9. Top-up Plan
+### 8. Top-up Plan
 - `NLV' = NLV + DCA`
-- Allocation per sleeve in **dollars**, across A, C, Z only
+- Allocation per sleeve in **dollars**, across A and C only
 - State `risky_now = (A + B) / NLV` and whether the risky-cap branch was taken
 - **State that Sleeve B receives $0.00 by rule**
 

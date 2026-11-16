@@ -1,7 +1,7 @@
 > **Source:** Replaces the v4.1 five-sleeve architecture. Governed by P1′, P2′, P6′.
 > Sleeve D is deleted in v5; its duration role is absorbed by C.
 
-# 02 · Capital Architecture — Four Sleeves A/B/C/Z
+# 02 · Capital Architecture — Four Sleeves A/B/C
 
 **Component version:** v5
 **Status:** Constitutional (P1′, P2′, P6′)
@@ -11,11 +11,11 @@
 
 ## Purpose
 
-All capital sits in exactly four sleeves, measured against **one denominator:
+All capital sits in exactly three sleeves, measured against **one denominator:
 NLV**.
 
 ```
-NLV = A + B + C + Z
+NLV = A + B + C
 ```
 
 | Sleeve | Name | Holds | Risk role |
@@ -23,9 +23,9 @@ NLV = A + B + C + Z
 | **A** | ETFs | Broad-index **and** sector/thematic ETFs | Systematic and thematic beta |
 | **B** | Satellites | Individual companies and narrow bets — **cap-only, ceiling 10% of NLV** | Idiosyncratic alpha |
 | **C** | Duration | Bonds, duration > 3 years, hedged | Ballast and ammunition |
-| **Z** | Cash Equivalents | Duration ≈ 0 — T-bills, money market, cash | Liquidity |
+| **C** | Defensive | Cash, money market, bills, bond ETFs of any duration | Ballast and ammunition, **residual** |
 
-**A + B = the risky block. C + Z = the defensive block.**
+**A + B = the risky block. C = the defensive block, and the residual.**
 
 Every weight, cap and floor is a percentage of NLV. No second denominator
 exists. Drift and gap are the same number.
@@ -53,13 +53,13 @@ invalidates it.
 - A thematic ETF is entered and reviewed as a *view*, not as a *position in a
   company*. A constituent's management failure does not invalidate the view — it
   triggers a look-through review (P5′).
-- A is never sold to fund C or Z. That is de-risking, and de-risking is the
+- A is never sold to fund C. That is de-risking, and de-risking is the
   glidepath's job (P4′).
 - A rotation inside A is a Rebalance, and permitted in full only under a Transition
   Mandate (P3a).
 - Look-through concentration is measured fund by fund. Two funds holding the same
   company are one exposure (P6′).
-- No cash-like instrument sits inside A. A 0–1y Treasury fund is Z.
+- No cash-like instrument sits inside A. A 0–1y Treasury fund is C.
 - **A→B is an Investment Committee decision, not a Rebalance output.** B has no
   target, so it has no gap to fund automatically.
 
@@ -77,7 +77,7 @@ invalidates it.
 - B is funded only by an **Investment Committee decision from Sleeve A**, and only
   while B sits below its ceiling. The addition is gap-neutral: A's target is the
   residual, so the money comes out of A's own gap, not out of A's target.
-- B is never funded from C or Z (P4′).
+- B is never funded from C (P4′).
 
 **Two jobs B does:**
 
@@ -108,14 +108,19 @@ invalidates it.
 
 ---
 
-## Sleeve C — Duration
+## Sleeve C — Defensive (cash, bills, bonds)
 
-**Target:** `state.yaml: sleeves.c.target_pct` — **15% of NLV**
-**Instrument:** duration greater than 3 years, hedged to the liability currency.
+**Target:** **residual** — `C = NLV − A − B`. No stored target, no floor, no ceiling.
+**Contents:** cash, money market, T-bills, 0–1y funds, bond ETFs of any duration.
 
 **Rules:**
 
-- T-bills, money-market funds and 0–1y instruments are **not** C. They are Z.
+- **One control: the duration band.** Average effective duration 1–6 years; no single
+  holding above 10 years. The average is a quarterly style guard, the single-holding
+  cap is a hard breach.
+- **No internal distribution.** No cash target, no bond target, no sub-sleeve.
+  Composition is reported, never targeted. The v5 split into a bond sleeve and a
+  cash sleeve generated most of that version's defects and changed no behaviour.
 - C has two jobs: ballast, and ammunition. It is the designated source for a
   Rebalance into an underweight risky sleeve.
 - C never funds B directly. It funds A, and A may reach B only by Investment
@@ -128,18 +133,8 @@ invalidates it.
 
 ---
 
-## Sleeve Z — Cash Equivalents
-
-**Target / floor / ceiling:** `state.yaml: sleeves.z.*`
-**Contents:** duration ≈ 0 — T-bills, money market, bank cash.
-
-**Rules:**
-
-- Defined by risk factor, not issuer or ticker.
-- Never reported as a bond sleeve or a hedge.
-- The emergency fund sits **outside** NLV. Z is not an emergency fund.
-- Above ceiling → redeploy to C, or to a risky sleeve if one is underweight.
-- Below floor → funded first from Top-up. A Z floor breach is a hard cap breach (P7′).
+**The emergency fund sits outside NLV.** C is not an emergency fund. Rotation
+inside C is not a transfer — it is how the duration band is cured.
 
 ---
 
@@ -165,7 +160,7 @@ one denominator, NLV, for every weight, cap and floor.
 | 4 | Total risky weight, `(A + B) / NLV` | `glidepath.bands` |
 | 5 | US-situs assets | `constraints.us_situs_ceiling` |
 | 6 | Sleeve B ceiling | `sleeves.b.ceiling_pct` |
-| 7 | Sleeve Z floor | `sleeves.z.floor_pct` |
+| 7 | Sleeve C duration band | `sleeves.c.duration_*` |
 
 Targets are outputs of constraints. A target that violates a constraint is invalid
 and must be re-solved. **The cap wins** (P6′), and a hard breach is itself a
@@ -183,7 +178,7 @@ Rebalance trigger (P7′).
 | Free tactical bucket | Deleted (v3.0) |
 | Cash-like ETF inside A | Prohibited |
 | **Sleeve D** | **Deleted (v5)** — the duration role is absorbed by C |
-| **Five-sleeve architecture** | **Deleted (v5)** — four sleeves |
+| **Five-sleeve architecture** | **Deleted (v5)** — three sleeves |
 | **"Satellite" as a rotating, winner-weighted sleeve** | **Deleted (v5)** — that was C, and C is bonds |
 | **Equal weight at entry in B** | **Deleted (v5)** — B is cap-only |
 | **Single-name position-level cap in place of look-through** | **Replaced (v5)** by look-through caps |

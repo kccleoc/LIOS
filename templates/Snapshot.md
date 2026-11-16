@@ -18,7 +18,7 @@ source: portfolio state
 
 | Ticker | Shares | Price | Market Value | Sleeve |
 |---|---:|---:|---:|---|
-| TBD | TBD | TBD | TBD | A / B / C / Z |
+| TBD | TBD | TBD | TBD | A / B / C |
 
 ## Totals
 
@@ -35,7 +35,7 @@ source: portfolio state
 | A conviction ETFs | TBD | TBD | residual | TBD |
 | B satellites | TBD | TBD | none — ceiling | TBD |
 | C duration | TBD | TBD | TBD | TBD |
-| Z cash equivalents | TBD | TBD | TBD | TBD |
+| C defensive (cash/bills/bonds) | TBD | TBD | residual | TBD |
 | **Total** | **TBD** | **100** | **100** | |
 
 ## Constraint Snapshot
@@ -47,7 +47,7 @@ source: portfolio state
 | Sleeve B ceiling | 10% NLV | TBD | |
 | Duration (C) | 15% NLV | TBD | |
 | US-situs | below exemption | TBD | |
-| Sleeve Z floor | 3% NLV | TBD | |
+| C duration (avg 1–6y, none > 10y) | band | TBD | |
 
 ## Regime
 

@@ -1,5 +1,5 @@
 > **v5 conformance note.** Written for LIOS v2.x. Since v5.0.0 the sleeves are
-> **A/B/C/Z** measured against NLV, the Kelly Factor is replaced by the
+> **A/B/C** measured against NLV, the Kelly Factor is replaced by the
 > **Regime Index** (dashboard only), and the Strategic Reserve is repealed.
 > Where this file and `lios/v4.1.md` (the v5 init prompt) disagree, the init
 > prompt wins.

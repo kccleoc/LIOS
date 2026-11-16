@@ -1,4 +1,4 @@
-> **v5 conformance note.** Sleeves are **A/B/C/Z** measured against NLV. Sleeve D
+> **v5 conformance note.** Sleeves are **A/B/C** measured against NLV. Sleeve D
 > is deleted; duration lives in C. Cash is one sleeve (Z) with no sub-buckets.
 
 # `/portfolio-print` — Canonical Portfolio Export
@@ -43,22 +43,22 @@ Obtain from your connected brokerage (IBKR or equivalent):
 
 ### Step 2 — Confirm cash
 
-LIOS v5 has one cash sleeve. Do not ask for sub-buckets.
+LIOS v6 has one defensive sleeve. Do not ask for sub-buckets, and do not ask for a
+cash target — there isn't one.
 
-    Cash (Sleeve Z): ____
-    Z vehicle(s):    ____   (duration near zero only)
+    Cash balance: ____   (part of sleeve C)
 
 Never assume the value. Always ask.
 
 ### Step 3 — Validate cash
 
-`Z` is the entire uninvested balance plus any duration-near-zero instrument. There
-is no Strategic Reserve, no Kelly Reserve, no free-tactical bucket, and no ABC
-denominator in v5. If a sub-bucket split is offered, reject it and restate that
-cash is one sleeve.
+Cash is part of the defensive sleeve. There is no Strategic Reserve, no Kelly
+Reserve, no free-tactical bucket, no ABC denominator, and since v6 no separate cash
+sleeve. If a cash sub-bucket or a cash target is offered, reject it: composition is
+reported, never targeted.
 
-Z carries a floor (default 3% of NLV) and a ceiling (`state.yaml: sleeves.z.*`).
-Outside that range it is a band breach — the fix is a Rebalance, not a relabelling.
+C carries one control — average duration 1–6 years, no single holding above 10. That
+is a measurement, not a target, so the fix for a breach is a rotation inside C.
 
 ### Step 4 — Classify every holding into its LIOS sleeve
 
@@ -71,12 +71,10 @@ Sleeve B — Satellites:
   (positions filtered to sleeve: b — individual companies and narrow bets.
    Cap-only: this sleeve has a ceiling, not a target)
 
-Sleeve C — Duration:
-  (positions filtered to sleeve: c — bonds, duration greater than 3 years, hedged.
-   Duration-near-zero funds do not belong here; they are Z)
-
-Sleeve Z — Cash Equivalents:
-  (cash balances plus positions filtered to sleeve: z — duration near zero)
+Sleeve C — Defensive:
+  (positions filtered to sleeve: c — cash, money market, T-bills, bond ETFs of any
+   duration. Ask for one Duration (years) per holding, from the fact sheet. There is
+   no cash/bond split to confirm: composition is reported, never targeted.)
 
 Use the user's existing LIOS sleeve mapping. Do not reclassify
 without explicit instruction.
@@ -90,7 +88,7 @@ Title: # LIOS Portfolio Snapshot
 Metadata block:
   Date: [current date]
   Source: portfolio print
-  Sleeves: A / B / C / Z (LIOS v5)
+  Sleeves: A / B / C (LIOS v5)
   Net Liquidation Value: [NLV]
 
 Sleeve tables:
@@ -105,21 +103,19 @@ Sleeve tables:
 [Same columns]
 
 ## Sleeve C — Duration
-[Same columns; add a Duration column in years if available in state]
-
-## Sleeve Z — Cash Equivalents
-[Same columns; money-market and T-bill positions render as rows, cash renders as a
- single Cash row]
+[Same columns, plus Duration (years) per holding. Add a summary: weighted average
+ duration against the 1–6y band, money duration in dollars, and the cost of a 1pp
+ move. Cash renders as one row at duration 0. Say so explicitly if the composition
+ is a barbell — bills plus long bonds — even when the average is inside the band]
 
 ## Portfolio Summary
 | Metric | Value | % of NLV | Target % | Delta pp |
 |---|---|---|---|---|
 | Sleeve A | ... | ... | ... | ... |
 | Sleeve B | ... | ... | no target — ceiling | ... |
-| Sleeve C | ... | ... | ... | ... |
-| Sleeve Z | ... | ... | ... | ... |
+| Sleeve C | ... | ... | residual | ... |
 | Risky block (A + B) | ... | ... | per glidepath | ... |
-| Defensive block (C + Z) | ... | ... | ... | ... |
+| Defensive block (C) | ... | ... | residual | ... |
 | Net Liquidation Value | ... | 100% | — | — |
 
 If avg cost and P/L are unavailable, print those columns as "—"
@@ -142,7 +138,7 @@ Begin.
 ## What this command produces
 
 A standardized Markdown portfolio snapshot that:
-- Splits holdings by the four v5 sleeves, A / B / C / Z
+- Splits holdings by the three v6 sleeves, A / B / C
 - Includes Average Cost + Unrealized P/L (when available)
 - Sorts holdings by sleeve
 - Shows each sleeve against its target, and Sleeve B against its ceiling

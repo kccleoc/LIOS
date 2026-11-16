@@ -1,5 +1,5 @@
 > **v5 conformance note.** Written for LIOS v2.x. In v5 the portfolio has four
-> sleeves — **A, B, C, Z** — measured against NLV, Sleeve B is cap-only, the Kelly
+> sleeves — **A, B, C** — measured against NLV, Sleeve B is cap-only, the Kelly
 > Model and the Strategic Reserve are repealed, and the current rules are
 > **P1′–P8′**. Where this file and `constitution/constitution.md` disagree, the
 > constitution wins.
@@ -29,11 +29,11 @@ modified across versions**.
 
 | Layer | Examples | May change? |
 |---|---|---|
-| Four-sleeve capital architecture (A/B/C/Z) | Sleeves, funding sources, one denominator (P1′) | **No.** Major version bump + ADR. |
+| Four-sleeve capital architecture (A/B/C) | Sleeves, funding sources, one denominator (P1′) | **No.** Major version bump + ADR. |
 | Sleeve A holdings and view statements (P1′, P5′) | A holds ETFs only — broad-index and thematic — each thematic holding carrying a written view statement, horizon and invalidation condition | **No.** (form); tickers and weights live in `state.yaml: sleeves.a.*` |
 | Sleeve B cap-only rule (P2′, P6′) | B has a ceiling, no target, no Top-up, ever | **No.** (form); ceiling and position cap values live in `state.yaml: sleeves.b.*` |
 | Deployment: two operations (P3′, P4′) | Top-up, Rebalance, direction limits, quarterly tolerance | **No.** |
-| Caps and look-through (P6′, P7′) | Company, sector, B ceiling, C, Z floor, US-situs | **No.** |
+| Caps and look-through (P6′, P7′) | Company, sector, B ceiling, C duration, US-situs | **No.** |
 | Regime Index dimensions and weights | The five dimensions and their weights | **No.** (form); it is a dashboard with no mechanical effect |
 | Replacement Index metrics | Three metrics and weights, governing Sleeve B | **No.** (form); scores are dynamic |
 | Permanently-exited list (moved to state in v3.0) | `state.yaml: sleeves.a.permanently_exited` is binding for your own portfolio; re-entry is a rule violation | **No** (your own list is binding once declared) |

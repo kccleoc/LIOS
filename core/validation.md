@@ -3,7 +3,7 @@
 **Version:** 5.0.0
 **Last updated:** 2026-11-16
 
-Every report generation runs these **10 checks** against
+Every report generation runs these **11 checks** against
 `portfolio/state/portfolio.yaml`. If any check fails, generation is aborted.
 
 ## Validation Pipeline
@@ -62,11 +62,12 @@ cannot pass is a pipeline nobody runs.
 
 **Source:** `positions[].sleeve`
 
-**Failure:** any sleeve value not in `{a, b, c, z}`.
+**Failure:** any sleeve value not in `{a, b, c}`. A `z` value is a v5 file that was
+not migrated — v6 has three sleeves.
 
 **Abort:** "Validation failed: invalid sleeve assignment for [TICKER]."
 
-**Note:** the v5 sleeve set is **A, B, C, Z**. `sleeve: sr` is invalid —
+**Note:** the v5 sleeve set is **A, B, C**. `sleeve: sr` is invalid —
 the Strategic Reserve was repealed in v3.0.
 
 ---
@@ -76,7 +77,7 @@ the Strategic Reserve was repealed in v3.0.
 **Verifies:** sleeve allocation reconciles to NLV and the risky target matches the age band in `glidepath`.
 
 **Source:** `sleeves.a.target_pct`, `sleeves.b.ceiling_pct`, `sleeves.c.target_pct`,
-`sleeves.z.*`, `glidepath.bands`
+`sleeves.c.duration_*`, `glidepath.bands`
 
 **Failure:**
 - sleeve totals do not sum to 100% of NLV (±0.1)
@@ -167,7 +168,7 @@ cash.
 not abort.
 
 **Abort:** "RECONCILIATION FAILED. Delta: $X.XX. Do not generate reports until
-state is corrected and all 10 checks pass."
+state is corrected and all 11 checks pass."
 
 ---
 
@@ -194,6 +195,28 @@ is the one number in the file that no other number constrains.
 
 ---
 
+### Check 11 · Sleeve C Duration Band
+
+**Verifies:** the defensive sleeve's duration is measured, and inside its band.
+
+**Source:** `positions[].duration_years` for every position with `sleeve: c`;
+`sleeves.c.duration_band` and `duration_single_max_years`.
+
+**Failure:**
+- any C position with a missing or non-numeric `duration_years`
+- the value-weighted average outside `[duration_band.min_years, duration_band.max_years]`
+- any single C holding above `duration_single_max_years` — this one is a **hard
+  breach** (P7′), not a soft flag
+
+**Abort:** "Validation failed: Sleeve C duration (avg X, band min–max)."
+
+**Why this check exists.** v6 merged cash and bonds into one sleeve, so the sleeve's
+risk is no longer implied by its name. "Defensive" is a role; duration is the
+measurement. Without this check the sleeve is a label, and a label is exactly what a
+future decision will lean on when it puts the whole sleeve in long duration.
+
+---
+
 ## Validation Log
 
 Every run records, in `logs/validation/`:
@@ -210,7 +233,7 @@ Every run records, in `logs/validation/`:
 Before generating any report:
 
 1. Load `portfolio/state/portfolio.yaml`
-2. Run all 10 checks in order
+2. Run all 11 checks in order
 3. If any check fails → abort, record in `logs/validation/`, report the failure
 4. If all pass → record, proceed
 
@@ -224,7 +247,7 @@ Never generate a report from an unvalidated or failed state.
 |---|---|
 | Strategic Reserve non-negative | Deleted — no SR exists |
 | Kelly Reserve non-negative | Deleted — no KR exists |
-| Cash sub-bucket reconciliation (SR/KR/TC/DCA) | Deleted — one cash balance, one Z sleeve |
+| Cash sub-bucket reconciliation (SR/KR/TC/DCA) | Deleted — one cash balance, inside C |
 
 Replaced by Check 5 (target consistency) and Check 6 (risk-factor purity), which
 catch the class of error the old cash checks could not see.

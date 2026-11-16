@@ -80,7 +80,7 @@ qualitative conditions. Sleeve C is the only sleeve that takes new ideas.
 
 ---
 
-## Health Check — 15 sections, fixed order
+## Health Check — 14 sections, fixed order
 
 1. Portfolio Health
 2. Gap and Drift
@@ -89,7 +89,7 @@ qualitative conditions. Sleeve C is the only sleeve that takes new ideas.
 5. Sleeve A Review
 6. Sleeve B Review
 7. Sleeve C Review
-8. Sleeve Z Review
+8. Top-up Plan
 9. Top-up Plan
 10. Rebalance Status
 11. Look-Through Concentration

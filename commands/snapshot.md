@@ -32,7 +32,7 @@ Output the snapshot template with:
 2. Holdings: ticker, shares, price, market value, sleeve
 3. Totals: gross position value, cash, NLV
 4. Sleeve breakdown against targets:
-     A ETFs (core index + sector/thematic) | B satellites | C duration | Z cash
+     A ETFs (core index + sector/thematic) | B satellites | C defensive (cash/bills/bonds)
    Show MV, % of NLV, target %, delta pp, band status
    B has a CEILING and no target: show its distance to the ceiling instead of a
    target and a delta
@@ -42,8 +42,8 @@ Output the snapshot template with:
 6. Replacement Index line: B holdings ranked, weakest named, date scored
 
 Rules:
-- Sleeves are A/B/C/Z. There is no Sleeve D, no SR, no Kelly Reserve, no ABC denominator
-- C is bonds with duration greater than 3 years, hedged. Z is cash equivalents only
+- Sleeves are A/B/C. There is no Sleeve D, no SR, no Kelly Reserve, no ABC denominator
+- C is the defensive sleeve: cash, bills and bonds, with average duration 1–6 years and no single holding above 10
   (duration near zero). A cash-like instrument is never rendered inside A or C
 - All percentages are of NLV. One denominator only
 - B is cap-only. Do not render a target or a gap for B

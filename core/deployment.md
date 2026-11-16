@@ -52,8 +52,7 @@ band_s = clamp(0.5 × target_s, 2pp, 8pp)
 |---|---:|---:|---:|---:|
 | A | per state | ±8.0pp max | — | — |
 | B | **cap-only** | ceiling ± tolerance | ceiling | floor 0 |
-| C | 15% | ±7.5pp | 22.5% | 7.5% |
-| Z | 5% | ±2.5pp | 7.5% | floor 3% |
+| C | residual | ±8pp (clamped) | — | — |
 
 **Sleeve B has no band.** It has a ceiling. A sleeve with no target cannot drift
 from a target; it can only breach a ceiling.
@@ -84,14 +83,15 @@ Runs monthly. Never sells. No discretion.
 
 ```
 NLV' = NLV + DCA
-T_s  = w_s × NLV'  for s in {A, C, Z}        ← B is excluded: no target
+T_s  = w_s × NLV'  for s in {A, C}           ← B is excluded: no target
+                                              ← w_C = 1 − risky_target
 G_s  = T_s − V_s                              positive = underweight
 G+   = max(G_s, 0)
 
 risky_now = (A + B) / NLV                     ← C is bonds, NOT risky
 
 if risky_now >= risky_cap:
-        allocate the whole DCA to C and Z, pro-rata to their POSITIVE gaps (G+)
+        allocate the whole DCA to C
 else if sum(G+) = 0:
         allocate by target weight w_s
 else:
@@ -110,22 +110,24 @@ else:
    share of the contribution. This is the mechanical expression of "B is never
    topped up."
 
-3. **The risky-cap fallback targets C and Z.** Not "D and Z" — D does not exist.
+3. **The risky-cap fallback targets C.** Not "D and Z" — neither exists. With one
+   defensive sleeve there is nowhere else for it to go, which removes a branch that
+   used to be able to starve C while feeding Z.
 
 **Fourth gate — the US-situs stop-adding line.** The formula above allocates to
 *sleeves*. Inside A, an allocated dollar buys A's lines pro-rata to their within-A
 targets. Before that happens, test `state.yaml: constraints.us_situs_exposure`
 against its stop-adding line. At or above 80% of the ceiling, A's share is directed
 only to A's **non-US-domiciled** lines; where A has none to buy, that share goes to
-C and Z instead. This exists because a US-domiciled line inside A will otherwise be
+C instead. This exists because a US-domiciled line inside A will otherwise be
 bought every month by the calendar, and a hard cap will be crossed by accumulation
 rather than by any decision. The Top-up is the only operation that runs without a
 trigger, so it is the only one that can breach a cap silently.
 
 **The fallback splits by gap, not by target weight.** Splitting 75/25 by target weights
-looks tidy and feeds whichever of C or Z is already overweight — today that is Z. If neither
-has a positive gap, hold the contribution in Z and report it; do not force money into an
-overweight sleeve to make the arithmetic close. This branch also gives A nothing even when A
+looks tidy and feeds whichever defensive sleeve is already overweight. With one defensive
+sleeve that failure mode is gone: the fallback is simply "all of it to C", and C's gap is
+whatever the residual says it is. This branch also gives A nothing even when A
 is underweight, which is correct (risk is at its cap) but must be **reported**, because an
 underweight sleeve receiving zero is indistinguishable from one that was forgotten.
 
@@ -160,7 +162,7 @@ is the only routine operation that sells.
 - look-through single-company exposure above cap
 - single-sector exposure above cap
 - US-situs above the ceiling
-- Z below its floor
+- a single C holding above its duration cap
 
 **Soft — quarterly review, beyond tolerance:**
 - a sleeve outside its band
@@ -173,15 +175,14 @@ is the only routine operation that sells.
 
 | Sell → buy | Permitted |
 |---|---|
-| C or Z → A, B | ✅ the crash response |
-| Z → C | ✅ fixes a cash overweight |
+| C → A | ✅ the crash response |
 | B → A | ✅ fixes concentration |
 | A → B | ✅ **IC decision only**, never automatic |
-| C → Z | ✅ funds a Sleeve Z floor breach (defensive → defensive) |
+| inside C (any rotation) | ✅ not a transfer; cures the duration band |
 | A → A (within-sleeve) | ✅ cures a look-through cap inside A; a rotation, not an exit |
-| A → C or Z | ❌ **prohibited** — that is de-risking |
+| A → C | ❌ **prohibited** — that is de-risking |
 
-Under a *hard* glidepath the A → C/Z restriction is lifted. `state.yaml:
+Under a *hard* glidepath the A → C restriction is lifted. `state.yaml:
 glidepath.policy` says which applies.
 
 ### Action
@@ -193,7 +194,7 @@ glidepath.policy` says which applies.
 4  B is bought only under an explicit IC decision, within `names_max` and
    `position_cap_pct` — a decision that breaches either is not an IC decision,
    it is a cap breach
-5  Z is never sold below its floor
+5  C is never sold below the money needed to keep the risky block in band
 6  Disposition any A holding carrying a 0% target (dust rule); proceeds to the
    most underweight A line
 ```
@@ -204,7 +205,7 @@ glidepath.policy` says which applies.
 |---|---|
 | **A** | the largest within-A holding, back to its within-A weight |
 | **B** | the **largest** position — trims reduce concentration |
-| C / Z | no intra-sleeve selection; sell pro-rata |
+| C | no intra-sleeve selection for sizing; sell pro-rata, then re-cure duration |
 
 **A trim is not an exit.** Exits are governed by P5′.
 
@@ -259,7 +260,7 @@ the look-through caps on the post-swap book.
 | Strategic Reserve and trigger ladder | Deleted (v3.0) |
 | `ABC` denominator | Deleted (v3.0) |
 | Single absolute 8pp band | Replaced by per-sleeve bands (v4.1) |
-| **Sleeve D in the risky-cap fallback** | **Deleted (v5)** — C and Z |
+| **Sleeve D in the risky-cap fallback** | **Deleted (v5)** — and the C split with it in v6 |
 | **`risky_now = (A+B+C)`** | **Deleted (v5)** — C is bonds |
 | **Targets for Sleeve B** | **Deleted (v5)** — cap-only |
 | **"Trim the weakest in C by Replacement Index"** | **Deleted (v5)** |

@@ -1,6 +1,6 @@
 > **Source:** Replaces the v4.1 five-sleeve architecture. Governed by P1′, P2′, P6′.
 
-# The Four Sleeves — A / B / C / Z
+# The Four Sleeves — A / B / C
 
 **Component version:** v5
 **Status:** Constitutional (P1′, P2′, P6′)
@@ -11,19 +11,19 @@
 ## Structure
 
 ```
-NLV = A + B + C + Z
+NLV = A + B + C
 ```
 
 | Sleeve | Name | Holds | Risk role |
 |---|---|---|---|
 | **A** | Conviction ETFs | Broad-index **and** sector/thematic ETFs | Systematic and thematic beta |
 | **B** | Satellites | Individual companies and narrow bets | Idiosyncratic alpha, **cap-only** |
-| **C** | Duration | Bonds, > 3y duration, hedged | Ballast and ammunition |
-| **Z** | Cash Equivalents | Duration ≈ 0 | Liquidity |
+| **C** | Defensive | Cash, money market, bills, bond ETFs of any duration | Ballast and ammunition, **residual** |
 
-**A + B = the risky block. C + Z = the defensive block.**
+**A + B = the risky block. C = the defensive block and the residual.**
 
-Every weight, cap and floor is a percentage of NLV. No second denominator.
+Every weight, cap and floor is a percentage of NLV. No second denominator. Nothing
+is defined by an absolute target except the risky total: A and C are both residual.
 
 ---
 
@@ -45,8 +45,8 @@ Every weight, cap and floor is a percentage of NLV. No second denominator.
   company*. A constituent's management failure does not invalidate the view.
 - **Look-through concentration is measured fund by fund** (P6′). Two funds holding
   the same company are one exposure.
-- No cash-like instrument sits inside A. A 0–1y Treasury fund is Z.
-- A is never sold to fund C or Z (P4′).
+- No cash-like instrument sits inside A. A 0–1y Treasury fund is C.
+- A is never sold to fund C (P4′).
 - A rotation of a thematic ETF is permitted under the Transition Mandate rules, and
   only then. A rotation inside A is a Rebalance, not a discretionary trade.
 - **A holding at a 0% target has no claim on capital.** A position listed at
@@ -75,7 +75,7 @@ quarterly Rebalance review; both are enforced, not merely declared.
 - **B receives no Top-up. Ever.** The monthly contribution never touches B.
 - B is funded only by an **Investment Committee decision** from Sleeve A, and only
   while B is below its ceiling.
-- B is never funded from C or Z.
+- B is never funded from C.
 
 **Two jobs B does:**
 
@@ -104,37 +104,38 @@ quarterly Rebalance review; both are enforced, not merely declared.
 
 ---
 
-## Sleeve C — Duration
+## Sleeve C — Defensive (cash, bills, bonds)
 
-**Target:** `state.yaml: sleeves.c.target_pct` — **15% of NLV**
-**Instrument:** duration > 3 years, hedged to the liability currency.
+**Target:** **residual** — `C = NLV − A − B`. No stored target, no floor, no ceiling.
+**Contents:** cash, money market, T-bills, 0–1y funds, and bond ETFs of any
+duration. Anything that is not equity beta and settles in a day.
 
 **Rules:**
 
-- T-bills, money-market funds and 0–1y instruments are **not** C — they are Z.
-- C is the designated source for Rebalance into an underweight risky sleeve.
+- **One sleeve, one control: the duration band.** Average effective duration 1–6
+  years; no single holding above 10 years. The average is tested at the quarterly
+  review; the single-holding cap is a hard breach.
+- **No internal distribution.** There is no cash target, no bond target, no split
+  between them, and no sub-sleeve. Composition is a measurement, not an allocation
+  rule. The v5 split into a bond sleeve and a cash sleeve generated most of that
+  version's defects and changed no behaviour: a T-bill ETF and a bond ETF are both
+  T+1 sellable and both non-risky in role.
+- C is the designated source for Rebalance into an underweight risky sleeve, and
+  that is the permitted de-cashing direction (P4′).
 - C never funds B directly under P4′; it funds A, and A may fund B only by IC
   decision.
+- **Rotation inside C is not a transfer.** Moving from one defensive instrument to
+  another stays inside the sleeve and needs no direction permission; it is how the
+  duration band is cured.
 - C hedges growth and deflation shocks. **It does not hedge inflation shocks** — in
-  an inflation-driven selloff duration falls alongside equities. That is accepted,
-  and is why long duration is not held exclusively.
-- C is bought, not rotated. There is no ranking, no Replacement Index, no
-  winner-weighting. Those rules are deleted with the v4.1 satellite sleeve.
+  an inflation-driven selloff duration falls alongside equities. That is why the
+  average is capped and why a barbell is not a loophole.
+- C is bought, not rotated for performance. There is no ranking, no Replacement
+  Index, no winner-weighting. Those rules are deleted with the v4.1 satellite
+  sleeve.
+- The emergency fund sits **outside NLV**. C is not an emergency fund.
 
----
 
-## Sleeve Z — Cash Equivalents
-
-**Target / floor / ceiling:** `state.yaml: sleeves.z.*`
-**Contents:** duration ≈ 0 — T-bills, money market, bank cash.
-
-**Rules:**
-
-- Defined by risk factor, not issuer or ticker.
-- Never reported as a bond sleeve or a hedge.
-- The emergency fund sits **outside** NLV. Z is not an emergency fund.
-- Above ceiling → redeploy to C, or to a risky sleeve if one is underweight.
-- Below floor → funded first from Top-up.
 
 ---
 
@@ -144,11 +145,10 @@ quarterly Rebalance review; both are enforced, not merely declared.
 |---|---|---|
 | 1 | Look-through single-company exposure | `constraints.lookthrough_company_cap_pct` |
 | 2 | Single-sector exposure | `constraints.factor_cap_pct` |
-| 3 | Duration sleeve | `sleeves.c.target_pct` |
+| 3 | Sleeve C duration (avg 1–6y, none > 10y) | `sleeves.c.duration_*` |
 | 4 | Total risky weight | `glidepath.bands` |
 | 5 | US-situs assets | `constraints.us_situs_ceiling` |
 | 6 | Sleeve B ceiling | `sleeves.b.ceiling_pct` |
-| 7 | Sleeve Z floor | `sleeves.z.floor_pct` |
 
 A target that violates a constraint is invalid and must be re-solved. When a
 constraint and a rule conflict, **the constraint wins** (P6′), and a hard breach is
@@ -178,11 +178,14 @@ and is not restricted by this line.
 
 ## Funding matrix
 
-| From ↓ / To → | A | B | C | Z |
-|---|---|---|---|---|
-| Top-up | ✅ | ❌ **never** | ✅ | ✅ |
-| Rebalance | ✅ | ✅ **IC only** | ✅ | ✅ |
-| **Prohibited** | — | A→B automatic | **A → C/Z** | **A → C/Z** |
+| From ↓ / To → | A | B | C |
+|---|---|---|---|
+| Top-up | ✅ | ❌ **never** | ✅ |
+| Rebalance | ✅ | ✅ **IC only** | ✅ (only out of C, into A) |
+| **Prohibited** | — | A→B automatic | **A → C** |
+
+Rotation **inside** C is not a transfer and needs no row: moving between two
+defensive instruments is how the duration band is cured.
 
 ---
 

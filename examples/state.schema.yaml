@@ -1,18 +1,19 @@
-# LIOS v5.0 — State Contract
+# LIOS v6.0 — State Contract
 # Every field marked # TODO must be populated by the user.
 # This file is the schema. Copy examples/state.example.yaml for a populated demo.
 # NEVER commit a real state file to the public framework repo.
 
-version: "v5.0"
+version: "v6.0"
 
 # ── Valuation ──────────────────────────────────────────────────────────────
-nlv: 0                        # TODO: Σ(position.market_value) + Σ(cash pools)
+nlv: 0                        # TODO: Σ(position.market_value) + cash
 as_of: "YYYY-MM-DD"           # TODO: price date
 source: ""                    # TODO: broker / print source
 
 # ── Sleeves ────────────────────────────────────────────────────────────────
-# Four sleeves, one denominator: NLV. A + B is the risky block, C + Z the
-# defensive block. B is cap-only: no target, no Top-up, ever (P2′, P6′).
+# Three sleeves, one denominator: NLV. A + B is the risky block. C is the
+# defensive block and the RESIDUAL: c = 100% − risky − 0, i.e. whatever A and B
+# do not take. B is cap-only: no target, no Top-up, ever (P2′, P6′).
 sleeves:
   a:
     target_pct: 0             # residual: risky_target − B_actual; never hand-set
@@ -22,48 +23,51 @@ sleeves:
         target_pct: 0
   b:
     ceiling_pct: 0            # TODO: soft ceiling — 10% of NLV by default (P6′)
-    position_cap_pct: 0       # TODO: single-name EFFECTIVE exposure ceiling
+    position_cap_pct: 0       # TODO: single-name effective exposure ceiling
+    names_max: 0              # TODO: maximum name count
     names:                    # individual companies; no target, no equal weight
       - ticker: "EXAMPLE-B1"  # TODO: thesis, LOS and horizon live in research records
   c:
-    target_pct: 0             # TODO: duration weight — 15% of NLV by default
-    instrument: "EXAMPLE-C"   # TODO: >3y duration, hedged to the liability currency
-  z:
-    target_pct: 0             # TODO: cash equivalents
-    floor_pct: 0              # TODO: hard floor — 3% of NLV by default; breach
-                              # fires an immediate Rebalance (P6′, P7′)
-    ceiling_pct: 0            # TODO
+    # No target_pct. No floor. No ceiling. C is the residual.
+    duration_band:            # P6′ — the only control inside C
+      min_years: 1            # average must not fall below this
+      max_years: 6            # average must not exceed this
+    duration_single_max_years: 10   # hard cap on any one holding
+    # Composition is reported, never targeted: no cash target, no bond target,
+    # no sub-sleeve. Cash, bills and bonds are all C.
 
 # ── Constraints ────────────────────────────────────────────────────────────
 constraints:
   lookthrough_company_cap_pct: 0   # TODO: single-company exposure cap — direct +
                                    # fund look-through + index-embedded (P6′)
   factor_cap_pct: 0           # TODO: single-sector exposure ceiling
+  sector_basis: ""            # TODO: the taxonomy that cap is measured on
+                              # (gics_industry_group by default). A cap with no
+                              # recorded basis is NON-COMPLIANT, not passing.
   rebalance_tolerance_pct: 2.5   # soft-limit tolerance; inside = report, not trade
   # sleeve bands are computed: clamp(0.5 × target, 2pp, 8pp)
   us_situs_ceiling: 0         # TODO: estate-tax exemption in your jurisdiction
-  us_situs_exposure: 0        # TODO: current US-domiciled ETFs + US shares
+  us_situs_exposure: 0        # TODO: US-domiciled positions + broker cash
+  us_situs_includes_cash: false   # TODO: confirm with the custodian
 
 # ── Glidepath ──────────────────────────────────────────────────────────────
 glidepath:
   policy: contribution_tilt      # contribution_tilt | hard (hard lifts the P4′
-                                 # prohibition on selling A into C/Z)
-  bands:                      # TODO: one row per age band; risky + c + z = 100
+                                 # prohibition on selling A into C)
+  bands:                      # TODO: one row per age band; risky + c = 100
     - age_min: 45
       age_max: 50
       risky: 0                # TODO: total risky weight (A + B), set by age (P2′)
       b_ceiling: 0            # TODO: Sleeve B ceiling within the band
-      c: 0                    # TODO: duration target
-      z: 0                    # TODO: cash target
-      # a is the residual: a = risky − b_actual
+      # a = risky − b_actual,  c = 100 − risky. Both residual, neither stored.
 
 # ── Contributions ──────────────────────────────────────────────────────────
 monthly_dca: 0                # TODO: current monthly contribution
 dca_step_up: "min(salary growth, 5%)"   # never decrease
 dca_review_month: 1
 
-# ── Regime Index ───────────────────────────────────────────────────────────
-bbi:
+# ── Regime Index (dashboard, gates nothing) ────────────────────────────────
+regime:
   as_of: "YYYY-MM-DD"
   market_valuation: 0         # TODO 0-100, higher = more bearish
   portfolio_valuation: 0
@@ -76,20 +80,20 @@ bbi:
 # ── Positions ──────────────────────────────────────────────────────────────
 positions:
   - ticker: "EXAMPLE-A1"
-    sleeve: a                 # a | b | c | z
+    sleeve: a                 # a | b | c
     shares: 0
     avg_cost: 0
     market_price: 0
     market_value: 0
     us_situs: false           # true if US-domiciled ETF or US corporation
+    duration_years: 0         # REQUIRED for sleeve c — effective duration from
+                              # the fact sheet; 0 for cash. Check 11 aborts without it
 
 # ── Cash ───────────────────────────────────────────────────────────────────
 cash:
-  balance: 0                  # uninvested broker cash
-  vehicles:
-    - pool: "z-main"
-      ticker: "EXAMPLE-Z1"
-      duration_years: 0
+  balance: 0                  # uninvested broker cash; belongs to C
+  # No separate vehicle list. A money-market or T-bill fund is a position in C,
+  # with its own duration_years.
 
 # ── Computed (do not hand-edit) ────────────────────────────────────────────
 portfolio_total: 0            # Σ market_value + cash

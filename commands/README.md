@@ -25,7 +25,7 @@ Every command respects:
 | Command | Job | Replaces |
 |---|---|---|
 | [`regime-recalc.md`](./regime-recalc.md) | Score the five RI dimensions, return the band | `kelly-recalc` |
-| [`health-check.md`](./health-check.md) | Full 15-section report | — |
+| [`health-check.md`](./health-check.md) | Full 14-section report | — |
 | [`drift-check.md`](./drift-check.md) | Gap table only | old drift report |
 | [`live-health-check.md`](./live-health-check.md) | Health Check against live data | — |
 | [`snapshot.md`](./snapshot.md) | Generate a dated snapshot | — |

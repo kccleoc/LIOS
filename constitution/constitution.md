@@ -26,27 +26,34 @@ else is method.
 
 ### P1′ · Four sleeves, one denominator
 
-The portfolio is partitioned into four sleeves:
+The portfolio is partitioned into three sleeves:
 
 | Sleeve | Holds | Risk role |
 |---|---|---|
 | **A** | ETFs — broad-index **and** sector/thematic | Systematic and thematic beta |
 | **B** | Satellites — individual companies and narrow bets | Idiosyncratic alpha, **cap-only** |
-| **C** | Bonds, duration > 3 years, hedged | Ballast and ammunition |
-| **Z** | Duration ≈ 0 — T-bills, money market, cash | Liquidity |
+| **C** | Everything defensive — cash, money market, bills, bond ETFs of any duration | Ballast and ammunition, **residual** |
 
 Every weight, cap, floor and ceiling is a percentage of **NLV**. No second
 denominator exists.
 
-**A + B is the risky block. C + Z is the defensive block.**
+**A + B is the risky block. C is the defensive block, and it is the residual:**
+whatever risky does not take. One target, one arithmetic, nothing to disagree
+with.
 
 "Conviction" in Sleeve A means a documented, reviewable view expressed through a
 basket — not confidence in one company. A sector or thematic ETF is a legitimate
 A holding provided it carries a written view statement, a horizon, and an
 invalidation condition.
 
-A cash-like instrument may not sit inside A or C. A duration-bearing instrument
-may not sit inside Z.
+**C is defined by risk role, not by duration.** Cash, bills and bonds all belong
+in C, because none of them is equity beta and all of them settle in a day. The
+old split between a bond sleeve and a cash sleeve was a second target that
+generated defects without changing behaviour, and it is deleted. What replaces it
+is one measurement rather than two sleeves: the **duration band** in P6′.
+
+A cash-like instrument may not sit inside A. A duration-bearing instrument may
+not sit inside B.
 
 ---
 
@@ -63,6 +70,10 @@ writes down why. Nothing else may move it.
 Sleeve B carries a **ceiling, not a target**. It is excluded from the glidepath's
 target arithmetic: the glidepath sets A + B, and B's ceiling constrains how much
 of that total may sit in satellites.
+
+**C is the residual**, `C = NLV − A − B`. There is no separate defensive target.
+The glidepath decides one number — how much is risky — and C is whatever is left,
+which makes it arithmetically impossible for the defensive targets to disagree.
 
 ---
 
@@ -82,8 +93,9 @@ and rebalanced only when the deviation exceeds the tolerance band in
 reported, not traded: a rebalance cannot strike targets exactly, and a rule that
 demands an exact strike will be ignored.
 
-**Hard caps** — look-through single-company, single-sector, US-situs and the
-sleeve floors — fire immediately as a Rebalance trigger (P7′).
+**Hard caps** — look-through single-company, single-sector, US-situs, and a single
+defensive holding above its duration cap — fire immediately as a Rebalance trigger
+(P7′).
 
 A time-boxed **transition mandate** may exist (P3a) to migrate the portfolio from
 one structure to another. It has a sunset date and cannot exceed the caps in P6′.
@@ -96,10 +108,10 @@ Rebalance may sell:
 
 | Direction | Permitted? |
 |---|---|
-| Defensive → risky (C/Z → A, B) | ✅ The crash response |
-| Defensive → defensive (Z → C) | ✅ Fixes a cash overweight |
+| Defensive → risky (C → A) | ✅ The crash response |
 | Risky → risky (B → A) | ✅ Fixes concentration |
-| **A → C or Z** | ❌ **Prohibited** |
+| Rotation **inside** C | ✅ Not a transfer — the duration band is cured here |
+| **A → C** | ❌ **Prohibited** — that is de-risking |
 
 Selling core equity to buy bonds or cash is de-risking, and de-risking is what the
 glidepath decides — not a rebalance. Under a hard glidepath this restriction is
@@ -152,9 +164,9 @@ rules in P3a.
 | **Look-through single-company exposure** (direct + fund look-through + index-embedded) | 5% of NLV |
 | **Single-sector exposure** (including sector weight inside broad-index funds) | 25% of NLV |
 | Sleeve B ceiling | 10% of NLV |
-| Duration sleeve (C) | 15% of NLV |
+| Sleeve C — **average** effective duration | 1–6 years |
+| Sleeve C — **any single holding** | ≤ 10 years |
 | US-situs assets (non-US investor) | below the jurisdiction's estate-tax exemption |
-| Sleeve Z floor | 3% of NLV |
 
 When a cap and any other rule disagree, **the cap wins**. A target that violates a
 cap is invalid and must be re-solved.
@@ -177,8 +189,24 @@ learns to ignore. The same word must not mean two things in two reports.
 **The stop-adding line binds the Top-up, not just the trade.** When US-situs
 exposure is at or above 80% of the ceiling, the A share of a contribution is
 directed only to A's non-US-domiciled lines; where A has none to buy, that share
-goes to C and Z. A rule that restrains deliberate trades but not the monthly
+goes to C. A rule that restrains deliberate trades but not the monthly
 waterfall is a rule breached by the calendar.
+
+**Duration is the one control inside C, and it replaces the old split.** With cash
+and bonds in a single sleeve, the sleeve's risk is no longer implied by its name:
+"defensive" describes the role, not the measurement. Average effective duration of
+C must sit between **1 and 6 years**, and no single holding may exceed **10 years**.
+The average is a style guard, tested at the quarterly review as its own unit — not
+against a percentage-point tolerance, because years are not percentage points. The
+single-holding cap is a hard breach. Measure from fact-sheet effective duration,
+weighted by market value, and report **money duration in dollars** beside the
+average: an average alone hides how much is actually at stake.
+
+The lower bound exists so the sleeve is not a parked cash balance earning nothing;
+the upper bound exists so a labelling decision cannot become a duration bet. A
+barbell of bills and one long bond can satisfy the average while behaving in two
+directions at once — the single-holding cap is what bounds it, which is why both
+numbers are required.
 
 **Sleeve B ceiling is soft.** It enforces at the quarterly Rebalance review within
 the tolerance band. A satellite that appreciates past the ceiling is trimmed back
@@ -199,8 +227,8 @@ exposure and is not restricted by this line.
 
 No separate mechanism is needed.
 
-- **Hard cap breach** — look-through single-company, single-sector, US-situs,
-  sleeve floor — triggers Rebalance immediately.
+- **Hard cap breach** — look-through single-company, single-sector, US-situs, or a
+  single C holding above 10 years — triggers Rebalance immediately.
 - **Soft limit breach** — sleeve band beyond tolerance, Sleeve B ceiling beyond
   tolerance — triggers Rebalance at the next quarterly review, and is reported as
   a flag in the interim.
@@ -218,7 +246,7 @@ Every report:
 - states dollar amounts, not percentages alone
 - separates facts from assessments
 - carries a confidence percentage on each recommendation
-- follows the **15-section** Health Check order when producing a full review
+- follows the **14-section** Health Check order when producing a full review
 
 ---
 
@@ -238,14 +266,14 @@ There is no soft-amendment pathway.
 
 | v4.1 | v5 |
 |---|---|
-| P1 five sleeves | **P1′ four sleeves** |
+| P1 five sleeves | **P1′ three sleeves** |
 | P2 targets from glidepath | **P2′** — risky = A + B; B is cap-only |
 | P3 two operations | **P3′** — plus quarterly tolerance for soft limits |
 | P4 direction limits | **P4′** — C replaces D; A→B only by IC |
 | P5 exits on thesis break | **P5′** — split by instrument; replacement is not an exit |
 | P6 caps (single-name) | **P6′** — look-through company and sector caps |
 | P7 breach is a trigger | **P7′** — hard immediate, soft quarterly |
-| P8 16 sections | **P8′ 15 sections** |
+| P8 16 sections | **P8′ 14 sections** |
 | Sleeve D | **deleted** — duration role absorbed by C |
 
 ---

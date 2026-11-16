@@ -1,4 +1,4 @@
-> **v5 conformance note.** The portfolio has four sleeves — A, B, C, and Z —
+> **v6 conformance note.** The portfolio has three sleeves — A, B and C —
 > measured against NLV. The Kelly Factor and Strategic Reserve are repealed.
 > Where this file and `constitution/constitution.md` disagree, the constitution wins.
 
@@ -186,7 +186,7 @@ Confidence: 78%
 - Sleeve A (broad-index ETFs) does not receive LOS scoring (not applicable to index vehicles).
 
 ### Health Check
-- P8′ requires the 15-section fixed order.
+- P8′ requires the 14-section fixed order.
 - Sleeve C is the duration sleeve. The satellite review is Sleeve B in section 6,
   where each holding shows LOS.
 

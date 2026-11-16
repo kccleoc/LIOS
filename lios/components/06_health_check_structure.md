@@ -1,4 +1,4 @@
-> **Source:** Rebuilt for four sleeves in v5. Replaces the v4.1 sixteen-section order.
+> **Source:** Rebuilt for three sleeves in v5. Replaces the v4.1 sixteen-section order.
 > Structure is constitutional (P8′); content is method.
 
 # 06 · Health Check Structure (15 Sections)
@@ -13,7 +13,7 @@
 
 The Health Check is the canonical output format for a full session review.
 
-**Always 15 sections, always this order.** Deviating breaks cross-session
+**Always 14 sections, always this order.** Deviating breaks cross-session
 comparability.
 
 **Why 15 and not 16.** v4.1 carried a separate Sleeve D Review. v5 deletes sleeve D
@@ -35,15 +35,14 @@ summary.
 | 4 | Constraint Check | Look-through name, sector, duration, risky, US-situs |
 | 5 | Sleeve A Review | Holdings, view statements, within-A split, thematic drift |
 | 6 | Sleeve B Review | LOS, thesis-exit status, ceiling status, replacement ranking |
-| 7 | Sleeve C Review | Duration, currency hedge, ammunition, build progress |
-| 8 | Sleeve Z Review | Floor and ceiling, vehicle policy |
-| 9 | Top-up Plan | Allocation in dollars — A, C, Z. Never B |
-| 10 | Rebalance Status | Triggered? Hard or soft? Executed? Escalated? |
-| 11 | Look-Through Concentration | Name and sector exposure through every wrapper |
-| 12 | Satellite Scoreboard | B names by Replacement Index, plus candidates |
-| 13 | Execution Calendar | Earnings, macro, index events |
-| 14 | Execution Plan | Buy / Hold / Reduce / Exit, with dollars |
-| 15 | Risk Assessment & CIO Resolution | Drawdown ladder in dollars, then the decision |
+| 7 | Sleeve C Review | Composition, duration table, money duration, band status, ammunition |
+| 8 | Top-up Plan | Allocation in dollars — A and C. Never B |
+| 9 | Rebalance Status | Triggered? Hard or soft? Executed? Escalated? |
+| 10 | Look-Through Concentration | Name and sector exposure through every wrapper |
+| 11 | Satellite Scoreboard | B names by Replacement Index, plus candidates |
+| 12 | Execution Calendar | Earnings, macro, index events |
+| 13 | Execution Plan | Buy / Hold / Reduce / Exit, with dollars |
+| 14 | Risk Assessment & CIO Resolution | Drawdown ladder in dollars, then the decision |
 
 ---
 
@@ -61,7 +60,7 @@ G_s = w_s × NLV − V_s
 ```
 
 Gap and drift are the same number; never compute both. **B appears with a ceiling, not
-a target** — its distance to the ceiling is not fundable. Gaps over {A, C, Z} sum to
+a target** — its distance to the ceiling is not fundable. Gaps over {A, C} sum to
 zero. Bands follow `band_s = clamp(0.5 × target_s, 2pp, 8pp)`.
 
 ## Section 3 — Regime Index (dashboard)
@@ -111,16 +110,11 @@ instrument list with maturity and credit quality. Build progress if C is below
 target, and the Top-up path that closes it. Ammunition available: the amount C could
 deploy without leaving its band. No ranking and no laggard cut list — C is bonds.
 
-## Section 8 — Sleeve Z Review
-
-Total, percent of NLV, floor and ceiling status, vehicle policy compliance, and
-confirmation that the emergency fund sits outside NLV.
-
-## Section 9 — Top-up Plan
+## Section 8 — Top-up Plan
 
 Show `NLV'`, the gap per sleeve, `ΣG⁺` and the allocation in dollars across A, C and
 Z only. State `risky_now = (A + B) / NLV` and whether the risky-cap fallback applied
-— that fallback allocates to C and Z. State that Sleeve B receives nothing by rule:
+— that fallback allocates to C. State that Sleeve B receives nothing by rule:
 B is excluded from the target set and cannot receive a share. If a Rebalance
 triggered **and executed a trade**, say that it absorbs the contribution and Top-up
 is not run separately.

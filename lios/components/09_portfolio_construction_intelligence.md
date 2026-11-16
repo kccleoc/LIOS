@@ -1,4 +1,4 @@
-> **v5 conformance note.** The portfolio has four sleeves — A, B, C, and Z — measured
+> **v5 conformance note.** The portfolio has three sleeves — A, B, C, and Z — measured
 > against NLV. The Kelly Model and the Strategic Reserve are repealed; deployment is
 > governed by P3′ and LFS sizes nothing. Where this file and
 > `constitution/constitution.md` disagree, the constitution wins.
@@ -267,7 +267,7 @@ Execution
 
 ### Deployment (P2′, P3′)
 - The Kelly Model and its Factor are repealed. Sizing is gap-driven:
-  `core/deployment.md` Top-up, across A, C and Z only.
+  `core/deployment.md` Top-up, across A, C only.
 - LFS informs **priority ranking** among LOS-qualified candidates. It does not
   size the contribution.
 - When multiple LOS-qualified candidates compete for capital, higher LFS receives
@@ -280,7 +280,7 @@ Execution
 - B is cap-only: a 10% ceiling and no target. LFS can rank B candidates but cannot
   raise B above the ceiling.
 - A thematic ETF in Sleeve A is judged by its written view statement, not by LFS.
-- LFS does not score Sleeve C or Sleeve Z.
+- LFS does not score Sleeve C.
 
 ### Replacement Index (Sleeve B)
 - The Replacement Index governs every Sleeve B replacement, and replacement is
@@ -291,7 +291,7 @@ Execution
   (P6′).
 
 ### Health Check (P8′)
-- The report structure is the fixed **15-section** order.
+- The report structure is the fixed **14-section** order.
 - LFS appears beside LOS in section 6, the Sleeve B Review, and in section 12, the
   Satellite Scoreboard.
 - Section 15 carries a portfolio construction note inside the risk assessment.

@@ -39,7 +39,7 @@ The IC may **NOT**:
 
 - Modify a P-rule (P1′–P8′) without a major version bump and a
   constitutional amendment
-- Skip Health Check sections (P8′ — 15-section fixed order)
+- Skip Health Check sections (P8′ — 14-section fixed order)
 - Change total risky exposure because of a market view (P2′)
 - Move money outside the two deployment operations (P3′)
 - Override the Sleeve B cap (P6′)
@@ -53,7 +53,7 @@ rebalance band), which requires no approval — it is mechanical.
 
 ## Meeting Workflow
 
-1. **Review** — load state, validate, review the 15-section Health Check
+1. **Review** — load state, validate, review the 14-section Health Check
 2. **Discuss** — gaps, constraints, RI band, research changes, risks
 3. **Decide** — issue directives: Buy / Hold / Reduce / Exit / Pass
 4. **Record** — update workspace notes, issue the CIO Resolution

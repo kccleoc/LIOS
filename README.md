@@ -17,10 +17,10 @@ and recover full context instantly.
 
 LIOS is **not a stock-picking service**. It is:
 
-1. A **capital architecture** — four sleeves (A/B/C/Z) measured against one denominator, with a constraint set that outranks every rule
+1. A **capital architecture** — three sleeves (A/B/C) measured against one denominator, with a constraint set that outranks every rule
 2. A **scoring framework** — Regime Index (5 dimensions, dashboard only) + LOS/LFS research gates + Replacement Index (3 metrics)
 3. A **deployment engine** — exactly two operations: Top-up and Rebalance
-4. A **report structure** — 15-section Health Check, fixed order, always
+4. A **report structure** — 14-section Health Check, fixed order, always
 5. A **constitution** — eight rules, P1′–P8′, and nothing else
 
 The system is executed in parallel across any LLM. Every session reads the same initialization prompt → identical framework, identical voice, identical evaluation discipline.
@@ -62,8 +62,8 @@ must be populated.
 Your `state.yaml` defines:
 - `sleeves.a.*` — ETF targets, within-sleeve weights, thematic cap
 - `sleeves.b.ceiling_pct` — satellite ceiling (cap-only: no target, no Top-up)
-- `sleeves.c.target_pct` / `sleeves.z.*` — duration and cash parameters
-- `glidepath` — age bands: total risky weight, B ceiling, C and Z targets
+- `sleeves.c.duration_band` — the one control inside the defensive sleeve
+- `glidepath` — age bands: total risky weight, B ceiling, C targets
 - `constraints` — look-through company cap, sector cap, tolerance, US-situs ceiling
 - `monthly_dca` — your monthly contribution
 
@@ -97,7 +97,7 @@ LIOS/                              ← public framework repo
 │   ├── principles.md              Communication standards
 │   └── governance.md              "Rules permanent, decisions dynamic"
 ├── core/                          Framework implementation
-│   ├── sleeves.md                 Four sleeves A/B/C/Z, constraints, funding matrix
+│   ├── sleeves.md                 Four sleeves A/B/C, constraints, funding matrix
 │   ├── deployment.md              Top-up and Rebalance — the two operations
 │   ├── regime-index.md            Regime Index (0–100, dashboard only)
 │   ├── glidepath.md               Age bands, step-up, decumulation
@@ -105,10 +105,10 @@ LIOS/                              ← public framework repo
 │   ├── strategic-reserve.md       RETIRED — v2.x SR stub + rationale
 │   ├── replacement-index.md       Sleeve B replacement rules
 │   ├── research-layer.md          LOS/RIL scoring framework
-│   ├── health-check.md            15-section structure
+│   ├── health-check.md            14-section structure
 │   ├── investment-committee.md    IC authority + workflow
 │   ├── execution-engine.md        PCI / LFS integration layer
-│   ├── validation.md              10-check auto-validation
+│   ├── validation.md              11-check auto-validation
 │   └── event-pipeline.md          LIOS workflow
 ├── examples/                      Synthetic demo data
 │   ├── state.schema.yaml          Empty contract — every field with # TODO
@@ -144,7 +144,7 @@ LFS       →  decides PRIORITY among investments that pass LOS
 Glidepath →  sets TOTAL risky exposure by age (P2′)
 Top-up    →  allocates this month's contribution to the gaps (never sells)
 Rebalance →  corrects a band or cap breach (sells, direction-limited by P4′)
-Sleeves   →  decide WHERE the capital lives (A/B/C/Z)
+Sleeves   →  decide WHERE the capital lives (A/B/C)
 ```
 
 Two operations only. There is no reserve, no trigger ladder, no discretionary
@@ -175,7 +175,7 @@ With LIOS initialized and portfolio loaded, paste any command from
 `commands/`. Example workflow:
 ```
 Paste commands/regime-recalc.md  →  AI returns the Regime Index band
-Paste commands/health-check.md   →  AI returns full 15-section report
+Paste commands/health-check.md   →  AI returns full 14-section report
 Paste commands/los-lfs.md        →  AI returns LOS + LFS for a candidate
 ```
 
@@ -235,7 +235,8 @@ These never change across versions. They are the constitution.
 
 ## Versioning
 
-- **v5.0** (current) — Four sleeves (D deleted): conviction ETFs in A, cap-only satellites in B, duration in C, cash in Z. Look-through caps. 15-section Health Check. Soft limits rebalance quarterly within a tolerance. Constitution rewritten as P1′–P8′.
+- **v6.0** (current) — Three sleeves: conviction ETFs in A, cap-only satellites in B, and one defensive sleeve C holding cash, bills and bond ETFs. C is the residual (100% − risky) with a duration band of 1–6 years and no holding above 10. Look-through caps. 14-section Health Check, 11 validation checks. Soft limits rebalance quarterly within a tolerance, escalating to hard at 3× tolerance or after two reviews. Constitution P1′–P8′.
+- **v5.0** — Four sleeves: D deleted, duration in C, cash in Z. Superseded in v6 when C and Z merged.
 - **v3.0** — Open-source bifurcation: public framework repo + private personal-data repo. L2/L3 reframed (form preserved, parameters moved to `state.yaml`). L7 removed (was portfolio-local). All framework files ticker-neutral. Synthetic `examples/` for cloner onboarding.
 - **v2.1.2** — Computed-NLV SSOT; `portfolio/state/portfolio.yaml` canonical
 - **v2.0.0** — Modular agent-native architecture

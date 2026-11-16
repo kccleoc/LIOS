@@ -18,13 +18,13 @@ or build artifacts — there are none. Adjust expectations.
 - **Eight Portfolio Rules, P1′–P8′, are constitutional** (see
   `constitution/constitution.md`). Do not propose changes that violate them
   without flagging a major version bump plus an ADR.
-  - **The eight rules:** P1′ four sleeves, one denominator · P2′ targets from
+  - **The eight rules:** P1′ three sleeves, one denominator · P2′ targets from
     the glidepath, risky weight by age, Sleeve B cap-only · P3′ two operations
     only (Top-up, Rebalance), soft limits quarterly within tolerance · P4′
     Rebalance direction limits · P5′ exits follow the instrument: B exits only
     on thesis break, via a 30-day review · P6′ look-through caps outrank every
     rule · P7′ a cap breach is a Rebalance trigger (hard immediate, soft
-    quarterly) · P8′ reporting: 15 sections, dollars, confidence.
+    quarterly) · P8′ reporting: 14 sections, dollars, confidence.
   - **Method lives elsewhere.** `constitution/method.md` holds LOS/LFS weights,
     bands, the Replacement Index and report templates. Change it with a CHANGELOG
     entry — no version bump.

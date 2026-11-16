@@ -1,6 +1,6 @@
 > **v5 conformance note.** Written for LIOS v2.x. In v5 the sleeves are
-> **A/B/C/Z** measured against NLV, Sleeve B is cap-only, the Kelly Model and
-> the Strategic Reserve are repealed, and the report structure is **15 sections**.
+> **A/B/C** measured against NLV, Sleeve B is cap-only, the Kelly Model and
+> the Strategic Reserve are repealed, and the report structure is **14 sections**.
 > Where this file and `constitution/constitution.md` disagree, the constitution wins.
 
 
@@ -71,5 +71,5 @@ When a new AI session absorbs the current init prompt in `lios/`, this component
 
 ## Related
 - See `02_capital_architecture.md` — the four-sleeve system being communicated about
-- See `06_health_check_structure.md` — the 15 sections where these standards get exercised
+- See `06_health_check_structure.md` — the 14 sections where these standards get exercised
 - See `commands/` — every command follows these rules

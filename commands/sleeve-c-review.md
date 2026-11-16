@@ -18,7 +18,7 @@ Use:
 - `../core/replacement-index.md` — the replacement test
 - `../core/sleeves.md` — sleeve definitions
 
-Sleeve C appears in section 7 of the 15-section Health Check: total, duration,
+Sleeve C appears in section 7 of the 14-section Health Check: total, duration,
 currency hedge, ammunition available. It has no standalone review command.
 
 The v4.1 body of this command is preserved in git history if needed.

@@ -10,7 +10,7 @@ Where this file's function now lives:
 | Old function | Current home |
 |---|---|
 | Satellite review (companies, narrow bets) | `los-sleeve-b.md` — reviewed under Sleeve B |
-| Duration review (ballast and ammunition) | Sleeve C, in section 7 of the 15-section Health Check (`health-check.md`). C is bought, not ranked — there is no rotation review |
+| Duration review (ballast and ammunition) | Sleeve C, in section 7 of the 14-section Health Check (`health-check.md`). C is bought, not ranked — there is no rotation review |
 | Replacement Index ranking | `../core/replacement-index.md` + `replacement-candidates.md` |
 
 This file is retained as history only. The v2.x body is preserved in git history.
