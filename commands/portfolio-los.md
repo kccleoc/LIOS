@@ -38,7 +38,7 @@ Output sections:
 | Ticker | Shares | MV | % NLV | LOS | Band | LVS | LGS | LQS | LMS | Rec |
 | ... | ... | ... | ... | ... | ... | ... | ... | ... | ... |
 
-### B. Sleeve B LOS + Replacement Index (Health Check §6 / §12)
+### B. Sleeve B LOS + Replacement Index (Health Check §6 / §11)
 
 | Ticker | Shares | MV | % NLV | LOS | Frontier | Momentum | Diversification | RI | Rec |
 | ... | ... | ... | ... | ... | ... | ... | ... | ... | ... | ... |

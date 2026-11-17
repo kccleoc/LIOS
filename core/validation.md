@@ -98,16 +98,28 @@ the Strategic Reserve was repealed in v3.0.
 **Source:** `positions[]` joined with instrument metadata
 
 **Failure:**
-- a cash-like instrument (duration < 1y) assigned to sleeve `a` or `c`
-- a duration-bearing instrument (duration > 3y) assigned to sleeve `z`
-- an individual equity assigned to sleeve `a`
-- a broad-index ETF assigned to sleeve `b`
+- a cash-like instrument (duration < 1y) assigned to sleeve `a` — A is conviction
+  ETFs, and a 0–1y Treasury fund belongs in C
+- an individual equity assigned to sleeve `a` or `c` — A is ETFs by definition, and
+  C is defensive
+- a duration-bearing instrument (duration > 1y) assigned to sleeve `a` or `b` —
+  duration lives in C, and only there
+- a broad-index ETF assigned to sleeve `b` — B is individual companies and narrow bets
+
+**Explicitly not a failure:** cash and cash-like instruments (duration < 1y) held in
+sleeve `c`. C is the defensive sleeve and holds cash, bills and bonds by definition, so a
+short-duration line in C is the sleeve working as designed. Duration inside C is bounded by
+Check 11, not prohibited here.
 
 **Abort:** "Validation failed: [TICKER] violates the risk-factor definition of
 sleeve [X]."
 
-**Note:** this is the check that prevents the v2.x error of booking a 0–1y
-Treasury fund as a bond sleeve. Duration is the test, not the issuer.
+**Note:** v5's version of this check forbade cash-like instruments in C and tested a
+`sleeve z` that held the near-cash. v6 deleted Z and merged it into C (ADR-008), which
+inverted the first bullet: it failed the one sleeve it was written to protect, and the
+second bullet tested a sleeve that no longer exists. Rewritten 2026-11-17. The original
+purpose stands — **duration is the test, not the issuer** — so the check now asks whether
+each sleeve matches its risk role.
 
 ---
 

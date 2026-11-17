@@ -95,33 +95,33 @@ fallback applies; with one defensive sleeve it allocates to C.
 If Rebalance triggers **and executes a trade**, state that it absorbs the
 contribution and Top-up is not run separately that month.
 
-## 10. Rebalance Status
+## 9. Rebalance Status
 
 Not triggered / triggered and executed / triggered but no legal move (escalate
 under P7′). Which sleeves or caps breached, by how much, and the direction of
 any trade. Direction limits (P4′): C → A yes · B → A yes · rotation inside C is
 not a transfer · A → B IC decision only · A → C prohibited.
 
-## 11. Look-Through Concentration
+## 10. Look-Through Concentration
 
 Top single-company exposures measured through the wrapper: direct holding +
 fund look-through + index-embedded, ranked against the 5% cap. Two funds
 holding the same company are one exposure.
 
-## 12. Satellite Scoreboard
+## 11. Satellite Scoreboard
 
 Sleeve B names and candidates: LOS, Replacement Index, trend, action.
 
-## 13. Execution Calendar
+## 12. Execution Calendar
 
 Upcoming earnings, macro events, index events, scheduled reviews.
 
-## 14. Execution Plan
+## 13. Execution Plan
 
 | # | Action | Amount | Sleeve | Confidence |
 |---|---|---:|---|---:|
 
-## 15. Risk Assessment & CIO Resolution
+## 14. Risk Assessment & CIO Resolution
 
 Drawdown ladder in dollars: ordinary bad quarter, bad quarter, bad year, severe
 drawdown. Restate that the policy accepts them. Then one paragraph: directive,

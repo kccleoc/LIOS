@@ -176,7 +176,9 @@ permanently, because the gap the Top-up was closing simply stops closing.
 ## Rebalance
 
 Runs on a hard-cap breach immediately, or at the quarterly review otherwise. This
-is the only routine operation that sells.
+is the only routine operation that sells. The review's dates and standing agenda are
+fixed in `constitution/method.md`; nothing here depends on when the owner happens to
+remember to look.
 
 ### Trigger
 
@@ -185,11 +187,19 @@ is the only routine operation that sells.
 - single-sector exposure above cap
 - US-situs above the ceiling
 - a single C holding above its duration cap
+- a B name above `position_cap_pct` — the per-name 5% test. It is hard on every report,
+  not merely at a review: at the default settings a B name above 5% of NLV is also a
+  look-through breach, so a soft reading would have the same fact firing immediately
+  under one rule and waiting a quarter under another. Listed here because P6′'s hard list
+  is written in risk terms, and this is the same cap expressed per name
 
 **Soft — quarterly review, beyond tolerance:**
 - a sleeve outside its band
 - Sleeve B above its ceiling
-- Sleeve B above `sleeves.b.names_max`, or a B name above `position_cap_pct`
+- Sleeve B above `sleeves.b.names_max` — the **count**, not the addition. The next
+  addition is refused when it is proposed (P6′); a count already above the limit is
+  settled at the review, and this line never authorises a forced sale to make a count
+  come out
 - an A holding carrying a 0% target and still holding value (the dust rule)
 - an age-band change, after the 12-month grace period
 

@@ -89,7 +89,7 @@ Rules:
 - A to B is an Investment Committee decision, never an automatic Rebalance
   output, and is limited by B's ceiling headroom. A to C is prohibited
 - Deviations inside rebalance_tolerance_pct are reported, not traded
-- Every directive in section 14 must cite the rule that produced it. An action
+- Every directive in section 13 must cite the rule that produced it. An action
   with no rule citation is deleted from the plan
 - End with CIO Resolution as one paragraph
 
@@ -102,12 +102,12 @@ Begin.
 
 A complete 14-section report in the fixed P8′ order, specified in
 `../core/health-check.md` and rendered from `../templates/HealthCheck.md`.
-Section 14 (Execution Plan) is the actionable core — that's where the
+Section 13 (Execution Plan) is the actionable core — that's where the
 Buy / Hold / Reduce / Exit directives live.
 
 ## What the prompt enforces
 
-Every directive in section 14 must trace to a rule:
+Every directive in section 13 must trace to a rule:
 
 - **P1′** — three sleeves, one denominator (NLV)
 - **P2′** — targets from the glidepath; risky = A + B; B is cap-only

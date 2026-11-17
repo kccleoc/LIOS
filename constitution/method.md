@@ -1,8 +1,8 @@
 # Method — Scoring, Reports and Workflow
 
-**Component version:** v4.1
+**Component version:** v6
 **Status:** Method, not constitution. **Editable with a CHANGELOG entry. No version bump required.**
-**Last updated:** 2026-11-15
+**Last updated:** 2026-11-17
 
 ---
 
@@ -90,15 +90,67 @@ qualitative conditions. Sleeve C is the only sleeve that takes new ideas.
 6. Sleeve B Review
 7. Sleeve C Review
 8. Top-up Plan
-9. Top-up Plan
-10. Rebalance Status
-11. Look-Through Concentration
-12. Satellite Scoreboard
-13. Execution Calendar
-14. Execution Plan
-15. Risk Assessment & CIO Resolution
+9. Rebalance Status
+10. Look-Through Concentration
+11. Satellite Scoreboard
+12. Execution Calendar
+13. Execution Plan
+14. Risk Assessment & CIO Resolution
 
 Full specification: `core/health-check.md`.
+
+---
+
+## Quarterly Review — fixed calendar and standing agenda
+
+**Dates.** The Quarterly Review is held on the **last Saturday of February, May, August
+and November**. Under this rule the reviews are Saturday **27 February 2027**, Saturday
+**29 May 2027**, Saturday **28 August 2027** and Saturday **27 November 2027**, then the
+same rule every year.
+
+**Marks.** The review is struck on **quarter-end closing prices** — 31 December, 31 March,
+30 June or 30 September, whichever falls immediately before the review — and on the
+**latest reported earnings** for each holding. A review that marks the book at the prices
+of the week it is held tests the caps against a number nobody agreed to.
+
+**Why a weekend.** By the last Saturday of those months the reporting season is complete
+for the portfolio's holdings, quarter-end prices are available, and the markets are shut,
+so no decision taken at the review is a decision taken at a price the review created.
+
+**Standing agenda** — the same items, in this order, every quarter:
+
+1. **Recompute every cap at quarter-end prices.** Sleeve B at or under 10% of NLV;
+   look-through single-company at or under 5%; single-sector at or under 25% on GICS
+   industry group; US-situs below the ceiling; Sleeve C average effective duration
+   between 1 and 6 years, with no single holding above 10 years.
+2. **Re-score LOS for every B name.** A name below 60 opens the 30-day review under P5′.
+3. **Decide the B name count** against `names_max`. The cap is forward-looking: it refuses
+   the next addition, and a count already above the limit is settled here, never by a
+   forced sale. This is the only place that count is resolved.
+4. **Check the DCA Top-up tilt.** The monthly contribution is the only instrument that
+   closes a risky-weight gap, so the tilt is reviewed, not the gap.
+
+**Every decision is an Investment Committee record. No record, no funding.** The record
+names the candidate and the sleeve, the LOS and Replacement Index against the weakest
+incumbent, the dollar amount free of the ceiling and the look-through it creates, the
+alternative that was rejected, and the condition that would reverse the decision.
+
+**Hard caps are never deferred to a review.** Look-through, single-sector, US-situs and the
+single-holding duration cap fire the moment they are breached (P7′); a review cannot
+schedule them. Only soft limits — sleeve bands, the risky band, the B ceiling and a B count
+already above `names_max` — wait for this date.
+
+**Scope.** This section fixes dates and an agenda. It changes no cap, target, tolerance,
+sleeve or operation, and it may not be used to introduce one: those live in
+`constitution/constitution.md` and move only by the amendment rule there.
+
+**Pinned.** This section is the operative definition of "quarterly" in P3′ and P7′, so it
+is not free method text like the rest of this file. Changing a date, the marks convention,
+or the order of the agenda is a **constitutional amendment — major version bump plus an
+ADR — not a CHANGELOG entry.** The latitude in the header covers everything else here; it
+does not reach this section. Without that lock, the meaning of a constitutional term could
+be moved by the cheapest edit in the system, which is the loophole the Amendment table
+exists to close.
 
 ---
 

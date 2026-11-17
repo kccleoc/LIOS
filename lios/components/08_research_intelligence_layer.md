@@ -189,7 +189,7 @@ Confidence: 78%
 - The report structure is the fixed **14-section** order.
 - LOS appears in section 6, the Sleeve B Review. Sleeve C's review is section 7 and
   carries no company scores.
-- The Satellite Scoreboard is section 12.
+- The Satellite Scoreboard is section 11.
 
 ### Replacement Index (Sleeve B)
 - The Replacement Index governs Sleeve B replacement, subject to P6′ caps.

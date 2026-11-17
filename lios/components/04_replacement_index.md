@@ -194,5 +194,5 @@ See `08_research_intelligence_layer.md` for the LOS specification.
 - `02_capital_architecture.md` — Sleeve B ceiling, funding, exit rules
 - `core/replacement-index.md` — the method source for this component
 - `08_research_intelligence_layer.md` — LOS framework
-- `06_health_check_structure.md` §6 and §12 — B Review and Satellite Scoreboard
+- `06_health_check_structure.md` §6 and §11 — B Review and Satellite Scoreboard
 - `commands/los-replace.md` — the joint workflow command

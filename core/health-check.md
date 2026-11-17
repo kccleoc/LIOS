@@ -1,6 +1,6 @@
 > **Source:** Extracted from LIOS v1.5, rebuilt for three sleeves in v6. P8′ — the 14-section fixed order.
 
-# Health Check Structure (15 Sections)
+# Health Check Structure (14 Sections)
 
 **Component version:** v6
 **Status:** Constitutional (P8′) for structure; method for content
@@ -17,9 +17,10 @@ conditions.
 **Always 14 sections, always this order.** Deviating breaks cross-session
 comparability.
 
-**Why 14 and not 16.** v4.1 had a separate Sleeve D Review; v5 merged it into C and still carried a separate cash review; v6 deleted that sleeve too and merged the two defensive reviews.
-moves duration into C, so the "ballast and ammunition" section is now C's. A section
-that reports an empty sleeve is a section nobody reads.
+**Why 14 and not 16.** v4.1 had a separate Sleeve D Review. v5 deleted Sleeve D and moved
+duration into C, but still carried a separate cash review. v6 deleted that sleeve too and
+merged the two defensive reviews into one, so the "ballast and ammunition" section is now
+C's. A section that reports an empty sleeve is a section nobody reads.
 
 ---
 
@@ -119,14 +120,14 @@ that reports an empty sleeve is a section nobody reads.
 - State `risky_now = (A + B) / NLV` and whether the risky-cap branch was taken
 - **State that Sleeve B receives $0.00 by rule**
 
-### 10. Rebalance Status
+### 9. Rebalance Status
 - Any hard-cap breach: which one, how large in dollars, cure plan
 - Any soft breach: which sleeve, how far beyond tolerance, and whether the quarterly
   review is due
 - Whether a triggered Rebalance executed a trade or not
 - Escalation status under P7′ if a breach cannot be cured within the P4′ limits
 
-### 11. Look-Through Concentration
+### 10. Look-Through Concentration
 - Top 10 underlying companies across the entire book, in dollars and % of NLV
 - Each against the look-through cap
 - Sector totals against the sector cap, **stating the taxonomy** (industry group by
@@ -137,25 +138,25 @@ that reports an empty sleeve is a section nobody reads.
 - **Name the double-counting risk explicitly:** which companies appear in more than
   one wrapper, and the combined weight
 
-### 12. Satellite Scoreboard
+### 11. Satellite Scoreboard
 - B names ranked by Replacement Index, with the weakest flagged
 - Watchlist candidates with LOS and LFS
 - The replacement test: composite superiority plus two of four qualitative conditions
 - Whether any candidate has IC approval to be funded from A
 - Name count against `names_max`, and each name against `position_cap_pct`
 
-### 13. Execution Calendar
+### 12. Execution Calendar
 - Earnings dates for B names
 - Index rebalance and fund distribution dates for A holdings
 - Macro events and scheduled reviews
 - The next quarterly Rebalance review date
 
-### 14. Execution Plan
+### 13. Execution Plan
 - Per line: Buy / Hold / Reduce / Exit, with dollars and share counts
 - Every action traces to a rule: band, cap, Top-up, or mandate
 - An action with no rule citation is deleted from the plan
 
-### 15. Risk Assessment & CIO Resolution
+### 14. Risk Assessment & CIO Resolution
 - Drawdown ladder in dollars against the owner's stated tolerance
 - Factor and concentration risk in dollars
 - Then one paragraph: the decision, the reasoning, the confidence %

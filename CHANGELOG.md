@@ -5,6 +5,83 @@ LIOS follows semver: major bumps only on Locked Decision changes.
 
 ---
 
+## [6.0.5] — 2026-11-17
+
+### Method — the Quarterly Review has dates, an agenda, and a marks convention
+
+P3′ and P7′ both say soft limits are reviewed quarterly, and P7′ escalates a deviation that
+survives two consecutive reviews. Nothing anywhere said *when*. A deadline with no date is a
+sentence, not a control: it can be read as "whenever it is convenient", and the two-review
+escalation could not start counting.
+
+`constitution/method.md` now carries a **Quarterly Review** section: the review is held on
+the **last Saturday of February, May, August and November** — 27 Feb, 29 May, 28 Aug and
+27 Nov 2027, then the same rule every year. It is struck on **quarter-end closing prices**
+(31 Dec, 31 Mar, 30 Jun, 30 Sep) and the latest reported earnings, so the caps are tested
+against an agreed number rather than against the week the review happened to be held. The
+weekend matters for the same reason: by then the reporting season is closed and the market
+is shut, so the review cannot move the price it is measuring.
+
+It also records the standing agenda (recompute every cap at quarter-end prices; re-score
+LOS for every B name; decide the B count against `names_max`; check the Top-up tilt), and
+restates that **every decision is an IC record — no record, no funding** and that **hard
+caps are never deferred to a review**.
+
+**Why method and not the constitution.** The Amendment table makes any P-rule edit a major
+bump plus an ADR. The dates change no cap, target, tolerance, sleeve or operation, so the
+calendar lives where the framework already put workflow — `method.md`, "editable with a
+CHANGELOG entry". The section says so explicitly and forbids carrying a rule change in with
+it. Moving the dates into P3′/P7′ proper would be v7.0.0 + an ADR, and that is the owner's
+call, not a side effect of this patch.
+
+**The section is pinned.** Because it now defines what P3′ and P7′ mean by "quarterly", it
+is not free method text: changing a date, the marks convention or the agenda order needs a
+major version bump and an ADR, not a CHANGELOG entry. Otherwise the cheapest edit in the
+system could move the meaning of a constitutional term, which is the loophole the Amendment
+table exists to close.
+
+**`names_max` re-stated as two different things.** `core/sleeves.md` and the Rebalance
+trigger now separate the forward cap's two halves: the **block on the next addition is
+immediate and undeferrable**, while a **count already above the limit is a soft item settled
+at the review**. `core/deployment.md` listed the count under "soft — quarterly" while
+`constitution/constitution.md` called the cap "hard"; both readings were defensible and
+that is exactly what made the sentence dangerous. The wording now says which half is which.
+The count also comes down by decision — which name, on its thesis, LOS and Replacement
+Index — never by selling the smallest position to make arithmetic work.
+
+### Validation — two checks could not pass under v6
+
+`core/validation.md` Check 6 banned "a cash-like instrument (duration < 1y) assigned to
+sleeve `a` or `c`", and tested a `sleeve z` for duration-bearing instruments. Both are v5
+statements. v5's C was bonds above three years and sleeve Z held the near-cash, so the rule
+was coherent then. v6 deleted Z and merged it into C (ADR-008), which inverted the first
+bullet: it failed the one sleeve it was written to protect. Run literally, Check 6 fails
+every v6 book and, under "never generate a report from an unvalidated state", blocks every
+report. Rewritten: cash-like in C is correct by definition, duration lives only in C, and
+the `sleeve z` bullet is gone. The original purpose is intact — duration is the test, not
+the issuer.
+
+### Classification — `position_cap_pct` is hard, and it now says so
+
+`core/sleeves.md` called it "a hard test on every report", `core/research-layer.md` called
+it "binding under P6′", and `core/deployment.md` listed a B name above it under "soft —
+quarterly review". Three documents, two answers. Moved to the hard list, with the reason
+written down: at the default settings a B name above 5% of NLV is *also* a look-through
+breach, so the soft reading had the same fact firing immediately under one rule and waiting
+a quarter under another. No operative outcome changes today — nothing is near it.
+
+### Structure — the Health Check is 14 sections, and now it is numbered like it
+
+The v6.0.0 restructure merged the two defensive reviews and left the numbering damaged in
+four places: `core/health-check.md` was titled "(15 Sections)", its specs ran 1–8 then
+jumped to 10 and ended at 15; `templates/HealthCheck.md` carried the same jump; the
+`lios/components/06` summary said 15 in its title and 14 in its table; and
+`constitution/method.md` listed fifteen items with "9. Top-up Plan" written twice.
+All four now read 1–14. Cross-references were re-pointed to match: Execution Plan is §13
+(was §14), Satellite Scoreboard is §11 (was §12), Top-up Plan is §8.
+
+---
+
 ## [6.0.4] — 2026-11-16
 
 ### Documentation — v6 is the current version everywhere it is read

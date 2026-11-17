@@ -1,7 +1,7 @@
 > **Source:** Rebuilt for three sleeves in v5. Replaces the v4.1 sixteen-section order.
 > Structure is constitutional (P8′); content is method.
 
-# 06 · Health Check Structure (15 Sections)
+# 06 · Health Check Structure (14 Sections)
 
 **Component version:** v6
 **Status:** Constitutional (P8′) — structure; method — content
@@ -16,16 +16,17 @@ The Health Check is the canonical output format for a full session review.
 **Always 14 sections, always this order.** Deviating breaks cross-session
 comparability.
 
-**Why 15 and not 16.** v4.1 carried a separate Sleeve D Review. v5 deletes sleeve D
-and moves duration into C, so C's review carries ballast and ammunition. A section
-that reports an empty sleeve is a section nobody reads.
+**Why 14 and not 16.** v4.1 carried a separate Sleeve D Review. v5 deleted sleeve D and
+moved duration into C, but still kept a separate cash review; v6 merged the two defensive
+reviews into one, so C's review carries ballast and ammunition. A section that reports an
+empty sleeve is a section nobody reads.
 
 The authoritative specification is `core/health-check.md`. This file is a reference
 summary.
 
 ---
 
-## The 15 Sections
+## The 14 Sections
 
 | # | Section | Output |
 |---|---|---|
@@ -119,39 +120,39 @@ B is excluded from the target set and cannot receive a share. If a Rebalance
 triggered **and executed a trade**, say that it absorbs the contribution and Top-up
 is not run separately.
 
-## Section 10 — Rebalance Status
+## Section 9 — Rebalance Status
 
 Any hard-cap breach: which one, how large in dollars, cure plan. Any soft breach:
 which sleeve, how far beyond `rebalance_tolerance_pct`, and whether the quarterly
 review is due. Whether a triggered Rebalance executed a trade. Escalation status if a
 breach cannot be cured within the P4′ direction limits.
 
-## Section 11 — Look-Through Concentration
+## Section 10 — Look-Through Concentration
 
 Top ten underlying companies across the whole book, in dollars and percent of NLV,
 each against the look-through cap. Sector totals against the sector cap. Name the
 double-counting explicitly: which companies appear in more than one wrapper, and at
 what combined weight. Broad-index funds are included — index-embedded weight counts.
 
-## Section 12 — Satellite Scoreboard
+## Section 11 — Satellite Scoreboard
 
 B names ranked by Replacement Index with the weakest flagged. Watchlist candidates
 with LOS and LFS. The replacement test: composite superiority plus two of four
 qualitative conditions, size-neutral. Whether any candidate has IC approval to be
 funded from A.
 
-## Section 13 — Execution Calendar
+## Section 12 — Execution Calendar
 
 Earnings dates for B names. Index rebalance and distribution dates for A holdings.
 Macro events and scheduled reviews. The next quarterly Rebalance review date.
 
-## Section 14 — Execution Plan
+## Section 13 — Execution Plan
 
 Per line: Buy / Hold / Reduce / Exit, with dollars and share counts. Every action
 cites the rule that produced it — band, cap, Top-up, or the transition mandate. An
 action with no rule citation is deleted from the plan.
 
-## Section 15 — Risk Assessment & CIO Resolution
+## Section 14 — Risk Assessment & CIO Resolution
 
 Restate the drawdown ladder **in dollars**: ordinary bad quarter, bad quarter, bad
 year, severe drawdown. Add factor and concentration risk in dollars. If any number is
@@ -165,7 +166,7 @@ decision, the reasoning, and a confidence percentage.
 - Conclusions first, reasoning second
 - Dollar amounts always, never percentages alone
 - Facts separated from assessments
-- Confidence % on sections 5, 6, 7, 14 and 15
+- Confidence % on sections 5, 6, 7, 13 and 14
 - No skipped sections — "no action" plus a one-line rationale is acceptable
 - No Kelly Factor, no Strategic Reserve, no `ABC` denominator, no Regime Index acting
   on allocation

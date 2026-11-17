@@ -287,7 +287,7 @@ Execution
 - P8′ requires the 14-section fixed order.
 - Sleeve C is the duration sleeve. The satellite review is Sleeve B in section 6,
   where each holding shows LFS beside LOS.
-- New subsection in §15 (Risk Assessment) for portfolio construction intelligence.
+- New subsection in §14 (Risk Assessment) for portfolio construction intelligence.
 
 ---
 

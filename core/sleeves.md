@@ -70,7 +70,15 @@ never become the portfolio's dominant exposure by drift. The cap lives in
 `sleeves.b.position_cap_pct` (default 5% of NLV per name).
 `position_cap_pct` is a hard test on every report. `names_max` is a **forward cap**: it
 binds additions, not incumbents — no new name above the limit, and no forced sale of an
-existing one to make a count come out. Both are reported every cycle.
+existing one to make a count come out. Both are reported every cycle. The block on the
+next addition is immediate and cannot be deferred; a count already above the limit is a
+soft item settled at the Quarterly Review (`constitution/method.md`), and it never
+justifies a sale made only to bring the number down.
+
+**The B count comes down by decision, not by arithmetic.** When the count must fall, the
+choice is which name — its thesis, its LOS and its Replacement Index against the weakest
+incumbent — and the proceeds go to an IC decision or to A. Selling the smallest position
+because it is smallest is the dust rule applied to a name that is not dust.
 
 **Funding:**
 

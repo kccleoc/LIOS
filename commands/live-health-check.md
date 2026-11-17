@@ -143,7 +143,7 @@ Fixed order, no deviations:
 - C is bought, not rotated. No ranking, no Replacement Index inside C
 - Money moves by two operations only: Top-up and Rebalance
 - A to B is an Investment Committee decision; A to C is prohibited
-- Every directive in section 14 cites the rule that produced it
+- Every directive in section 13 cites the rule that produced it
 - End with CIO Resolution as one paragraph
 ```
 
@@ -154,11 +154,11 @@ Fixed order, no deviations:
 A complete 14-section report in the fixed P8′ order, preceded by a
 Delta Summary. Every dollar figure is marked to market at the moment
 the command runs. Structure is specified in `../core/health-check.md`.
-Section 14 (Execution Plan) is the actionable core.
+Section 13 (Execution Plan) is the actionable core.
 
 ## What the prompt enforces
 
-Every directive in section 14 must trace to a rule:
+Every directive in section 13 must trace to a rule:
 
 - **P1′** — three sleeves, one denominator (NLV)
 - **P2′** — targets from the glidepath; risky = A + B; B is cap-only

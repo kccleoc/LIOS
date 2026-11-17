@@ -292,9 +292,9 @@ Execution
 
 ### Health Check (P8′)
 - The report structure is the fixed **14-section** order.
-- LFS appears beside LOS in section 6, the Sleeve B Review, and in section 12, the
+- LFS appears beside LOS in section 6, the Sleeve B Review, and in section 11, the
   Satellite Scoreboard.
-- Section 15 carries a portfolio construction note inside the risk assessment.
+- Section 14 carries a portfolio construction note inside the risk assessment.
 
 ---
 
