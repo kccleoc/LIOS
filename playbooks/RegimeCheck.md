@@ -40,6 +40,6 @@ Mechanical effect on the portfolio: none.
 ```
 
 ## Related
-- `../core/regime-index.md`
+- `../core/health-check.md` §3 — dashboard specification
 - `../commands/regime-recalc.md`
 - `HealthCheck.md` §3

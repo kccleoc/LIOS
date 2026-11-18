@@ -1,2 +1,9 @@
-6.0.5
-LIOS v6.0.5 — patch release. The Quarterly Review has dates: the last Saturday of February, May, August and November (27 Feb, 29 May, 28 Aug, 27 Nov 2027, then the same rule), struck on quarter-end closing prices and the latest reported earnings, with a standing agenda and an IC-record requirement. It lives in constitution/method.md because the Amendment table makes any P-rule edit a major bump plus an ADR; the section is pinned, so moving it does need that path. names_max is re-stated as two halves (the block on the next addition is immediate, a count already above the limit waits for the review) and position_cap_pct is hard wherever it is described. Check 6 is rewritten for v6: cash-like in C is correct, duration lives only in C, and the sleeve-z bullet is gone. Health Check renumbered to 14 sections in all four places that carried the v6.0.0 damage. No cap, target, tolerance, sleeve or operation changed.
+# LIOS Version
+
+**Current version: 7.0.0** — adopted 2026-11-18.
+
+Three sleeves (A/B/C), no score, thesis-break exits, mandate windows
+bounded by 31 January, 31 July, 31 October, 30 validation checks.
+
+See `CHANGELOG.md` for the full history and `constitution/constitution.md`
+Part I for the single amendment table.

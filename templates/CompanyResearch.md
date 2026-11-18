@@ -1,45 +1,34 @@
 ---
 ticker: TBD
 sleeve: TBD
-economic_engine: TBD
-los: TBD
-lfs: TBD
+thesis: TBD
+break_condition: TBD
 review_date: TBD
 next_catalyst: TBD
-risk_level: TBD
 ---
 
 # Company Research: <TICKER>
 
-## Scores
-| Score | Value | Band | Rationale |
+## Written Thesis
+TBD — the thesis this position is held on, in one paragraph.
+
+## Invalidation Condition
+TBD — the specific condition that, if met, breaks the thesis.
+
+## Evidence
+| Date | Source | For / Against | Note |
 |---|---|---|---|
-| LOS | TBD | TBD | TBD |
-| LVS | TBD | — | TBD |
-| LGS | TBD | — | TBD |
-| LQS | TBD | — | TBD |
-| LMS | TBD | — | TBD |
-| LFS | TBD | TBD | TBD |
+| TBD | TBD | TBD | TBD |
 
-## LFS Components
-| Component | Score | Rationale |
+## Verification
+| Date | Verifier | Verdict |
 |---|---|---|
-| Diversification Value | TBD | TBD |
-| Strategic Fit | TBD | TBD |
-| Overlap | TBD | TBD |
-| Conviction Compatibility | TBD | TBD |
-| Portfolio Balance | TBD | TBD |
-
-## Decision Matrix
-LOS (TBD) + LFS (TBD) → TBD
-
-## Investment Thesis
-TBD
+| TBD | TBD | TBD |
 
 ## Recommendation
 **TBD** — Confidence: TBD%
 
 ## Review History
-| Date | LOS | LFS | Action | Notes |
-|---|---|---|---|---|
-| TBD | TBD | TBD | TBD | TBD |
+| Date | Verdict | Action | Notes |
+|---|---|---|---|
+| TBD | TBD | TBD | TBD |

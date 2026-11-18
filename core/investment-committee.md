@@ -1,73 +1,41 @@
-> **Source:** Derived from the LIOS governance principle and P1′–P8′.
-> **Version:** v6
+# Investment Committee (Part V — IC section)
 
-# Investment Committee
+**LIOS v7.0.0 — adopted 2026-11-18. Supersedes v6.0.5 and every earlier version.**
+**Status:** in force from adoption. This file is the single source for what the Investment Committee may and may not do. The full IC record test and limits are stated here and in `constitution/method.md` (Part V); where they disagree, Part I (the constitution) governs.
 
-## Composition
+---
 
-The Investment Committee (IC) is the investor plus the active AI session. All
-recommendations are advisory. The IC holds final decision authority.
+### Investment Committee — record test and limits
 
-**That is one human and whichever session happens to be open, so "an IC decision" needs a
-written test, or it is just a word for "I decided".** Sleeve B is funded by IC decision and
-receives no contribution, which is the only thing separating it from the discretionary sleeve
-v4.1 retired. A decision exists only if all five are recorded, dated, in the SSOT's history:
+The Investment Committee is the owner plus the active AI session. All recommendations are advisory. **The IC decides only the decisions this constitution assigns to it (thesis breaks, B funding, mandates, breach acceptances); everything else is arithmetic.** There is no override in V7.
+
+A decision exists only if all six are recorded, dated, in the SSOT's history:
 
 1. the candidate, and the sleeve it enters;
-2. its LOS and its Replacement Index against the weakest incumbent;
+2. its written thesis (for B) or view statement (for A), and the evidence;
 3. the dollar amount, the B ceiling headroom it consumes, and the look-through it creates;
-4. the alternative that was rejected, and why;
-5. the condition that would reverse it.
+4. the alternatives considered — at least two — compared head-to-head with the candidate on thesis and evidence, and why each was rejected (for a B replacement: the candidate against the incumbent it would replace and against leaving the money in A, compared on the structured dimensions in Part III — catalyst horizon, invalidation clarity, and look-through overlap with existing holdings);
+5. the condition that would reverse it;
+6. the source of the dollars, where the decision moves money — for an A→B funding transfer: which pre-existing A holdings the dollars come from, and the date of the most recent capital injection (so the 30-day bar can be tested); for a mandate or an injection deployment: the source of the injected money. Where the decision moves no money, this part is recorded as "no dollars moved".
 
-No record, no funding. A verbal or chat-only approval is a deferral, not a decision. This is
-deliberately bureaucratic: it is the only control on the one sleeve where judgment replaces
-arithmetic.
+Benchmark performance must not appear in any of the six parts: it is not evidence, not a factor in selection, and not part of the rationale.
 
-## Authority
-
-The IC has **sole authority** on:
-
-- Approval, deferral or rejection of any trade recommendation
-- Sleeve B entry (rare) and any thesis-break exit (P5′)
-- Sleeve B replacement decisions (Replacement Index method)
-- The Investment Committee has no discretionary deployment channel. A drawdown
-  response is Rebalance, which is mechanical and needs no approval
-- Economic-engine classification
-- Portfolio-construction changes that do not touch a P-rule
+No record, no funding. A verbal or chat-only approval is a deferral, not a decision. This is deliberately bureaucratic: it is the only control on the one sleeve where judgment replaces arithmetic.
 
 The IC may **NOT**:
 
-- Modify a P-rule (P1′–P8′) without a major version bump and a
-  constitutional amendment
+- Modify a P-rule (P1′–P8′, P3a) without a major version bump and a constitutional amendment
 - Skip Health Check sections (P8′ — 14-section fixed order)
 - Change total risky exposure because of a market view (P2′)
 - Move money outside the two deployment operations (P3′)
-- Override the Sleeve B cap (P6′)
+- Override a framework output, with or without a rationale
+- Override a Sleeve B cap (P6′)
 - Sell a Sleeve B name on price (P5′)
 - Re-enter a ticker on the portfolio-local permanently-exited list
-  (`state.yaml: sleeve_a.permanently_exited`)
+- Raise a transition mandate outside a free window, or while another is processing (P3a)
+- Cite benchmark performance as evidence or rationale for any decision
+- Cite the Regime Index or the confidence percentage as evidence for a thesis break or a replacement decision (both are reporting, not evidence)
 
-**Removed in v3.0:** the IC no longer authorises Strategic Reserve deployment,
-because the Strategic Reserve does not exist. Drawdown response is Rebalance (the
-rebalance band), which requires no approval — it is mechanical.
+The list above is illustrative; the remit sentence is the rule.
 
-## Meeting Workflow
-
-1. **Review** — load state, validate, review the 14-section Health Check
-2. **Discuss** — gaps, constraints, RI band, research changes, risks
-3. **Decide** — issue directives: Buy / Hold / Reduce / Exit / Pass
-4. **Record** — update workspace notes, issue the CIO Resolution
-5. **Export** — update the snapshot via `/snapshot`
-
-## CIO Resolution
-
-Every meeting produces a one-paragraph resolution: what happens next, in dollars,
-with a confidence percentage.
-
-## Related
-
-- `constitution/governance.md` — governance principle
-- `constitution/constitution.md` — the eight Portfolio Rules (P1′–P8′)
-- `constitution/method.md` — scoring, reports, workflow
-- `core/deployment.md` — the two deployment operations
-- `playbooks/InvestmentCommittee.md` — meeting workflow
+---

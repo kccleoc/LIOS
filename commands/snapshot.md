@@ -22,7 +22,7 @@ analysis, no recommendations — a faithful render of state.
 ---
 
 ```
-Generate a LIOS v6 portfolio snapshot from this state file.
+Generate a LIOS v7 portfolio snapshot from this state file.
 
 State:
 <paste state.yaml here>
@@ -38,13 +38,14 @@ Output the snapshot template with:
    target and a delta
 5. Constraint snapshot:
      look-through single-company exposure, single-sector exposure, duration,
-     total risky = (A + B) / NLV, US-situs, B ceiling headroom
-6. Replacement Index line: B holdings ranked, weakest named, date scored
+     total risky = (A + B) / NLV, true US-situs (book figure beside it),
+     B ceiling headroom, thematic block share of A
+6. B name count against names_max and each name against position_cap_pct
 
 Rules:
-- Sleeves are A/B/C. There is no Sleeve D, no SR, no Kelly Reserve, no ABC denominator
-- C is the defensive sleeve: cash, bills and bonds, with average duration 1–6 years and no single holding above 10
-  (duration near zero). A cash-like instrument is never rendered inside A or C
+- Sleeves are A/B/C. One denominator: NLV
+- C is the defensive sleeve: cash, bills and bonds, with average duration 1–6 years and no single holding above 10y.
+  Cash renders as one row at duration 0. A cash-like instrument is never rendered inside A
 - All percentages are of NLV. One denominator only
 - B is cap-only. Do not render a target or a gap for B
 - If a field is unavailable in state, write "not in state" — never estimate

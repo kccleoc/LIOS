@@ -1,4 +1,4 @@
-> Quick reference — full methodology at core/regime-index.md
+> Quick reference — full specification at `core/health-check.md` §3
 
 # Regime Index — Quick Reference
 
@@ -37,4 +37,4 @@ RI = 0.30·MV + 0.25·PV + 0.20·ML + 0.15·T + 0.10·O
 If a session proposes any of these, refuse: it is market timing with a score
 attached.
 
-Core: `core/regime-index.md` | Command: `commands/regime-recalc.md`
+Spec: `core/health-check.md` §3 | Command: `commands/regime-recalc.md`

@@ -67,20 +67,20 @@ appear here.
 
 ## 6. Sleeve B Review
 
-| Ticker | Value | % NLV | Ceiling status | LOS | Thesis-exit? | Verdict |
+| Ticker | Value | % NLV | Ceiling status | Written thesis | Thesis-break status | Verdict |
 |---|---:|---:|---|---:|---|---|
 
 B is cap-only: no target, no Top-up. The only sell trigger is a thesis break
-(P5′). State explicitly whether any name is below LOS 60 — that opens a 30-day
-deep-dive review.
+(P5′), established by documented research and verification, decided at the
+quarterly review. State explicitly whether any thesis-break review is open,
+its deadline date, and whether second-session verification is recorded.
 
 ## 7. Sleeve C Review — one sleeve, one measurement
 
 Composition (cash / bills / bonds, in dollars and % of C — reported, never
 targeted), the duration table for every holding, the weighted average against
 the 1–6y band, and **money duration in dollars** with the cost of a 1pp move.
-Ammunition available for Rebalance. C is not ranked: no rotation, no Replacement
-Index — those judgments live in B. Say explicitly if the composition is a
+Ammunition available for Rebalance. C is not ranked: no rotation. Say explicitly if the composition is a
 barbell, even when the average is inside the band.
 
 ## 8. Top-up Plan
@@ -108,9 +108,9 @@ Top single-company exposures measured through the wrapper: direct holding +
 fund look-through + index-embedded, ranked against the 5% cap. Two funds
 holding the same company are one exposure.
 
-## 11. Satellite Scoreboard
+## 11. Satellite Review
 
-Sleeve B names and candidates: LOS, Replacement Index, trend, action.
+Sleeve B names and candidates: written thesis, evidence for and against, review status — a list, not a score, not a ranking.
 
 ## 12. Execution Calendar
 

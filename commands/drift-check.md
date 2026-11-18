@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Report the distance between each sleeve and its target. In v6, **gap and drift are
+Report the distance between each sleeve and its target. In v7, **gap and drift are
 the same number** — there is one calculation, not two.
 
 Sleeve B is the exception: it has a **ceiling, not a target**, so it has no gap to
@@ -19,8 +19,8 @@ fund. Its line reports distance to the ceiling.
 
 1. `portfolio/state/portfolio.yaml`
 2. Sleeve targets from the glidepath band for the current age
-3. Per-sleeve bands: `clamp(0.5 × target, 2pp, 8pp)`, and the tolerance from
-   `state.yaml: rebalance_tolerance_pct`
+3. The tolerance from `portfolio/state/portfolio.yaml: rebalance_tolerance_pct`
+   (2.5pp)
 4. Look-through holdings data for the funds in Sleeve A
 
 ## Command
@@ -28,13 +28,12 @@ fund. Its line reports distance to the ceiling.
 ---
 
 ```
-Produce the LIOS v6 gap / drift report.
+Produce the LIOS v7 gap / drift report.
 
 State:
 <paste state.yaml here>
 
-One denominator only: NLV. There are three sleeves: A, B, C. There is no
-Sleeve D, no ABC base, no Strategic Reserve line, no Kelly Reserve line.
+One denominator only: NLV. There are three sleeves: A, B, C.
 
 For each sleeve in A, B, C:
   value ($ and % of NLV)
@@ -45,7 +44,7 @@ For each sleeve in A, B, C:
 
 Then:
 1. Confirm Σ gaps over {A, C} = 0
-2. Compute risky weight as (A + B) / NLV — NOT (A + B + C). C is bonds.
+2. Compute risky weight as (A + B) / NLV — NOT (A + B + C). C is defensive.
 3. Name every sleeve whose deviation exceeds the tolerance band
 4. State whether each trigger is HARD (immediate) or SOFT (next quarterly review)
 5. If a hard breach: give the cure in dollars, subject to the P4′ direction limits
@@ -71,7 +70,10 @@ Begin.
 ## Definitions
 
 ```
-G_s = w_s × (NLV + DCA) − V_s      for s in {A, C}
+T_A = risky_target × NLV' − B_actual_value
+T_C = (1 − risky_target) × NLV'
+G_A = T_A − A_value      G_C = T_C − C_value
+NLV' = NLV + eligible_new_money
 ```
 
 Positive = underweight. Negative = overweight. **B is excluded** — it has no target.
@@ -80,8 +82,7 @@ Positive = underweight. Negative = overweight. **B is excluded** — it has no t
 |---|---|---|
 | A | ETFs, broad-index **and** thematic | target band |
 | B | Satellites — individual companies | **ceiling only** |
-| C | Duration > 3y, hedged | target band |
-| C | cash / bills / bonds | residual target; duration 1–6y average |
+| C | cash / bills / bonds | residual target; duration 1–6y average, no single holding above 10y, holdings above 6y ≤ 50% of C |
 
 ## Thresholds
 
@@ -91,7 +92,6 @@ Positive = underweight. Negative = overweight. **B is excluded** — it has no t
 | Soft breach beyond tolerance | SOFT | Rebalance at the next quarterly review |
 | Look-through company or sector above cap | **HARD** | Rebalance now |
 | US-situs above ceiling | **HARD** | Rebalance now |
-| Z below floor | **HARD** | Rebalance now |
 | Sleeve B above ceiling beyond tolerance | SOFT | Trim to ceiling at the next review |
 
 ## Related

@@ -5,6 +5,92 @@ LIOS follows semver: major bumps only on Locked Decision changes.
 
 ---
 
+## [7.0.0] — 2026-11-18
+
+### Major — fresh redesign of the framework (ADR-009)
+
+LIOS v7.0.0 is a fresh redesign, not a patch of v6. The owner asked for a
+full hostile review of v6 on 2026-11-18; the review returned 19 findings,
+one of them severity S1 (the governance document granted the Investment
+Committee an override the constitution forbids). The owner decided to
+upgrade as a redesign: keep what works in v6, simplify where there are too
+many rules, no contradictions. The v7 draft was then red-teamed by three
+independent reviewers, and the findings were fixed before adoption.
+
+**What changed:**
+
+- **No score.** No numeric score governs any decision in v7; the Regime
+  Index dashboard (Part V) is the single named exception. The Regime
+  Index is a dashboard only: it sizes nothing, shifts no target, gates no
+  operation, and is not evidence for a thesis break or a replacement
+  decision. Sleeve B exits only on a thesis break, established by
+  documented research and verification, decided at the quarterly review.
+  Price and drawdown are never exit triggers.
+- **One amendment table.** Part I carries the only amendment table. A
+  P-rule amendment takes effect 30 days after its ADR is recorded. The
+  second table in the agent reference is deleted.
+- **Mandate windows.** A transition mandate may be raised only inside one
+  of three windows per year, bounded by 31 January, 31 July and 31
+  October; at most one mandate per window, at most three raised in any
+  actual calendar year, at least 90 days between raisings, sunset at most
+  92 days after raising. A mandate has eight requirements: sunset,
+  completion criteria, fallback, cap compliance,
+  window/window-year/actual-calendar-year cap, no overlap, minimum
+  interval, and what a mandate may not do.
+- **True figures for caps.** The US-situs ceiling is tested on the true
+  figure — the book plus listed external holdings — not the book figure
+  alone. The scope record lists external securities and the operating
+  cash held outside the book, so no holding is invisible to a cap.
+- **Venue-aware execution.** Execution windows are per listing venue:
+  LSE-listed lines 10:00–11:30 ET, US-listed lines 10:00–15:30 ET.
+  Limit orders only, within the band.
+- **Thirty validation checks.** Twelve data checks (abort on failure) and
+  eighteen constitutional checks (report, never abort), including a trade
+  ledger that tags every sale with its direction and operation. The
+  Control map in Part VI records what each control is, whether it is
+  defined, implemented and tested, and what happens on failure.
+- **The agent never trades — as a rule.** Part VII makes the agent's role
+  constitutional: advisor to the owner, never an executor. The repo AI
+  agent no longer handles LIOS; Muse implements directly after owner
+  approval.
+- **Grandfathering is explicit.** Where the adopted book exceeds a v7
+  limit on day one, the position is recorded as a grandfathered soft
+  breach with a re-decision date — never a forced or comparative sale.
+- **Trims only at quarterly reviews**, and never below 1.0% of NLV.
+- **The DCA step-up is a fixed owner-declared rate, 0–5%, floored at
+  zero.** The salary link is dropped.
+- **Glidepath bands are non-overlapping** (45–49, 50–54, 55–59, 60–64,
+  65+), and the Sleeve B ceiling is 10% at every age.
+- **The thematic block is capped and tested.** Sector/thematic holdings
+  inside Sleeve A are capped at 25% of A, tested by a new check.
+
+**What was deleted:**
+
+- Every scoring mechanism: the scoring layers, the replacement ranking,
+  the satellite scoreboard, and the commands that invoked them. Their
+  definitions live only in git history and the frozen archives.
+- The five named dead files (`governance.md`, `research-layer.md`,
+  `replacement-index.md`, `event-pipeline.md`, `regime-index.md`) and the
+  whole dead-mechanism files (the v1.5 execution engine, the Kelly and
+  Strategic Reserve stubs, the score cards).
+- The superseded derived documents carrying the old 50/30/20 ruling and
+  the Kelly flow.
+
+**Leak gate.** `bin/push-framework.sh` now generates its ticker list from
+the SSOT's current holdings plus the permanently-exited list, and its
+dollar check from the SSOT's current dollar figures, with a completeness
+test run before every push. The PUBLIC-FORK marker check is no longer
+anchored to line start. This changelog entry contains no live portfolio
+figures and no tickers, by rule.
+
+**Adoption.** Approved by the owner 2026-11-18. Adoption needs no trade:
+v7 is a rulebook change and the portfolio already fits it, except for the
+recorded adoption position on the true US-situs figure, which is cured by
+a named December action. Tagging follows a fresh hostile review of the
+implemented files.
+
+---
+
 ## [6.0.5] — 2026-11-17
 
 ### Method — the Quarterly Review has dates, an agenda, and a marks convention

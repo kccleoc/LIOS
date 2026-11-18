@@ -22,17 +22,17 @@ no target, and gates no operation.
 ---
 
 ```
-Recompute the LIOS v4.1 Regime Index.
+Recompute the LIOS v7 Regime Index (dashboard).
 
 State:
 <paste state.yaml here>
 
-Score the five dimensions 0-100, higher = more bearish:
-1. Market Valuation (30%)
-2. Portfolio Valuation (25%)
-3. Macro & Liquidity (20%)
-4. Technical Conditions (15%)
-5. Opportunity Set (10%)
+Score the five dimensions 0-100, higher = more hostile on every dimension:
+1. Market Valuation (30%) — 0 = cheap against history, 100 = expensive
+2. Portfolio Valuation (25%) — 0 = cheap against its history, 100 = expensive
+3. Macro & Liquidity (20%) — 0 = loose and ample, 100 = tight and restrictive
+4. Technical Conditions (15%) — 0 = strong uptrend, 100 = breakdown
+5. Opportunity Set (10%) — 0 = many attractive opportunities, 100 = few or none
 
 For each: score + one-line rationale citing a specific data point.
 
@@ -41,10 +41,10 @@ Output:
 - Band: Risk-on 0-35 | Constructive 36-50 | Cautious 51-65 | Defensive 66-100
 - Change versus the prior cycle, for context only
 
-Do NOT output a Kelly Factor.
 Do NOT propose an allocation change.
 Do NOT change total risky exposure.
-The index has no mechanical effect (P2).
+Do NOT cite the index as evidence for a thesis break or a replacement decision.
+The index has no mechanical effect (P2′).
 
 Confidence: XX% on the band.
 ```
@@ -68,6 +68,5 @@ Confidence: XX%
 
 ## Related
 
-- `../core/regime-index.md` — full specification and prohibitions
-- `../scores/Regime.md` — quick reference
+- `../core/health-check.md` §3 — dashboard specification (formula, bands, directions)
 - `health-check.md` §3 — dashboard placement

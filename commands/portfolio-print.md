@@ -1,5 +1,5 @@
-> **v6 conformance note.** Sleeves are **A/B/C** measured against NLV. Sleeve D
-> is deleted; duration lives in C. Cash is one sleeve (Z) with no sub-buckets.
+> **v7 conformance note.** Sleeves are **A/B/C** measured against NLV.
+> Cash is part of Sleeve C; there is no separate cash sleeve.
 
 # `/portfolio-print` — Canonical Portfolio Export
 
@@ -43,7 +43,7 @@ Obtain from your connected brokerage (IBKR or equivalent):
 
 ### Step 2 — Confirm cash
 
-LIOS v6 has one defensive sleeve. Do not ask for sub-buckets, and do not ask for a
+LIOS v7 has one defensive sleeve. Do not ask for sub-buckets, and do not ask for a
 cash target — there isn't one.
 
     Cash balance: ____   (part of sleeve C)
@@ -52,9 +52,8 @@ Never assume the value. Always ask.
 
 ### Step 3 — Validate cash
 
-Cash is part of the defensive sleeve. There is no Strategic Reserve, no Kelly
-Reserve, no free-tactical bucket, no ABC denominator, and since v6 no separate cash
-sleeve. If a cash sub-bucket or a cash target is offered, reject it: composition is
+Cash is part of the defensive sleeve. There is no separate cash sleeve.
+If a cash sub-bucket or a cash target is offered, reject it: composition is
 reported, never targeted.
 
 C carries one control — average duration 1–6 years, no single holding above 10. That
@@ -88,7 +87,7 @@ Title: # LIOS Portfolio Snapshot
 Metadata block:
   Date: [current date]
   Source: portfolio print
-  Sleeves: A / B / C (LIOS v6)
+  Sleeves: A / B / C (LIOS v7)
   Net Liquidation Value: [NLV]
 
 Sleeve tables:
@@ -138,7 +137,7 @@ Begin.
 ## What this command produces
 
 A standardized Markdown portfolio snapshot that:
-- Splits holdings by the three v6 sleeves, A / B / C
+- Splits holdings by the three v7 sleeves, A / B / C
 - Includes Average Cost + Unrealized P/L (when available)
 - Sorts holdings by sleeve
 - Shows each sleeve against its target, and Sleeve B against its ceiling
@@ -148,7 +147,7 @@ A standardized Markdown portfolio snapshot that:
 
 This Markdown format is the **canonical portfolio interchange
 format** for LIOS. Every command that consumes a snapshot — health-check,
-drift-check, sleeve reviews, replacement analysis — accepts the
+drift-check, sleeve reviews — accepts the
 portfolio-print output directly, without manual reformatting.
 
 ## Related
@@ -156,14 +155,12 @@ portfolio-print output directly, without manual reformatting.
 - See `../core/sleeves.md` — sleeve definitions
 - See `../constitution/constitution.md` — what may not change
 - See `snapshot.md` — simpler raw-to-snapshot converter (no avg cost / P/L prompt)
-- See `portfolio-los.md` — LOS-only dashboards (complementary, not overlapping)
 
 ## Discipline reminders
 
 - This is an **export-only** command. Never execute trades.
 - Cash allocation is **user-provided**, never assumed.
-- Cash is one sleeve. No Strategic Reserve, no Kelly Reserve, no free-tactical
-  bucket — those are deleted concepts, not categories.
+- Cash is part of Sleeve C. There is no separate cash sleeve.
 - Sleeve B has a ceiling, not a target. Print it that way.
 - If avg cost / P/L are unavailable from brokerage, omit them with
   "—" but keep column positions for parser consistency.
