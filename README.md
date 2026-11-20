@@ -11,7 +11,7 @@ and recover full context instantly.
 > from prior reasoning. LIOS solves this by making the system
 > itself the source of truth — versioned, modular, paste-ready.
 
-**LIOS v7.0.0 — adopted 2026-11-18. Supersedes v6.0.5 and every earlier version.**
+**LIOS v7.0.1 — adopted 2026-11-18. Supersedes v6.0.5 and every earlier version.**
 **Status:** in force from adoption.
 
 ---
@@ -90,7 +90,7 @@ full bifurcation design.
 ```
 LIOS/                              ← public framework repo
 ├── README.md                      ← You are here
-├── VERSION.md                     Current release: 7.0.0
+├── VERSION.md                     Current release: 7.0.1
 ├── CHANGELOG.md                   Version history
 ├── LICENSE                        Open-source (MIT)
 ├── constitution/                  Permanent knowledge — rarely changes
@@ -110,13 +110,7 @@ LIOS/                              ← public framework repo
 │   ├── state.schema.yaml          Empty contract — every field with # TODO
 │   ├── state.example.yaml         Fully synthetic populated demo
 │   └── snapshots/                 Generated synthetic snapshot
-├── lios/                          Frozen historical version documents
-│   ├── v4.1.md                    Frozen history — not a live rule
-│   ├── v2.1.md                    Frozen history — not a live rule
-│   ├── v2.0.md                    Frozen history — not a live rule
-│   └── components/                Frozen historical reference docs
 ├── commands/                      Paste-ready command library (V7 only)
-├── playbooks/                     Agent workflow definitions
 ├── templates/                     Reusable document templates
 ├── rfcs/                          Proposed changes (archive)
 ├── decisions/                     Architecture Decision Records (ADR-001 … ADR-009)

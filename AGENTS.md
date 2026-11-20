@@ -1,6 +1,6 @@
-# AGENTS.md — LIOS Framework Quick Reference (v7.0.0)
+# AGENTS.md — LIOS Framework Quick Reference (v7.0.1)
 
-**LIOS v7.0.0 — adopted 2026-11-18. Supersedes v6.0.5 and every earlier version.**
+**LIOS v7.0.1 — adopted 2026-11-18. Supersedes v6.0.5 and every earlier version.**
 **Status:** in force from adoption.
 
 This is a **documentation-only repo**. No code, no build, no tests,
@@ -58,7 +58,7 @@ owner runs, not a standing delegation.
   marks convention, and agenda order are pinned: changing them is a
   constitutional amendment (major bump + ADR).
 - **State the framework version before acting.** Confirm
-  `framework/VERSION` is v7.0.0 before reading the framework or running
+  `framework/VERSION` is v7.0.1 before reading the framework or running
   a validation. An agent that has not confirmed the version has not read
   the framework.
 - **Make every output reproducible by a second session.** Record the
@@ -102,9 +102,7 @@ owner runs, not a standing delegation.
 | ADRs | `decisions/ADR-NNN.md` — permanent architectural decisions | `decisions/ADR-009.md` |
 | Docs | `docs/*.md` — glossary and agent reference | `docs/glossary.md` |
 
-**Archives — do not edit, do not follow as live rules:** `lios/v2.0.md`,
-`lios/v2.1.md`, `lios/v4.1.md` and `lios/components/*.md` are frozen
-historical version documents. `rfcs/RFC-NNN.md` and
+**Archives — do not edit, do not follow as live rules:** `rfcs/RFC-NNN.md` and
 `decisions/ADR-001.md` through `decisions/ADR-008.md` are the historical
 record. A document may describe an old version only when it is describing
 the past.
@@ -126,7 +124,7 @@ Run before claiming a multi-file change is done:
 
 ```bash
 # 1. Cross-link sanity (catches broken `../foo.md` refs)
-grep -rn "components/\|commands/\|snapshots/\|docs/" --include="*.md" .
+grep -rn "commands/\|snapshots/\|docs/" --include="*.md" .
 
 # 2. No stale version refs (live files point at the current version;
 #    the "Supersedes v6.0.5" header line in the constitution and method is

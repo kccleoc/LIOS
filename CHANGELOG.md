@@ -1,7 +1,79 @@
 # LIOS Changelog
 
 All notable changes to the Leo Investment Operating System.
-LIOS follows semver: major bumps only on Locked Decision changes.
+LIOS follows semver: major bumps only on P-rule changes — see the single amendment table in Part I.
+
+---
+
+## [7.0.2] — 2026-11-20
+
+### Patch — the last six stale playbooks removed
+
+`framework/playbooks/` held six files, none of which was a live workflow:
+
+- `DriftCheck.md`, `HealthCheck.md`, `InvestmentCommittee.md`, `PortfolioPrint.md` and
+  `ResearchWorkflow.md` were 17-line scaffolds reading `Purpose: TBD — agent-native
+  workflow definition`, `Procedure: 1. TBD`, and requiring "LIOS v2.0 acknowledged".
+  They defined nothing and claimed to define everything.
+- `RegimeCheck.md` had real content and said "LIOS v4.1 acknowledged", duplicating
+  `commands/regime-recalc.md`, which is the V7 version of the same job.
+
+v7.0.1 deleted `SleeveDReview.md`, `KellyCheck.md` and `ReplacementWorkflow.md` from the
+same directory and stopped there. These six are the remainder: the same cleanup, finished.
+
+The directory is gone, and the `playbooks/` line is out of the README tree. Commands are
+the paste-ready workflow layer (`commands/*.md`); `core/*.md` is the reference. A third
+category that is neither only creates places for a stale rule to hide.
+
+---
+
+## [7.0.1] — 2026-11-19
+
+### Patch — dead commands, wrappers and stale references removed
+
+A cleanup pass after the v7.0.0 release, closing the owner's 2026-11-18
+instruction that the latest commit show only V7-related things.
+
+**Deleted from `framework/commands/` (11 files):** the four retired stubs
+(`kelly-recalc`, `sr-rank`, `sleeve-d-review`, `trigger-check`) and seven
+v6 files built on the cancelled LOS score and Replacement Index (`lfs`,
+`replacement-candidates`, `portfolio-rotation`, `portfolio-fit`,
+`best-diversifiers`, `economic-engine-map`, `portfolio-balance`). The v7
+command set is the seven commands listed in `framework/commands/README.md`.
+
+**Deleted from `.opencode/commands/` (17 files):** the ten `los-*` wrappers
+(including `portfolio-los`) and the seven wrappers for the deleted framework
+commands. The eight surviving wrappers are rewritten for v7: three sleeves
+A/B/C, one denominator (NLV), P1′–P8′ + P3a, 14-section Health Check, and
+the drift-check thresholds from the v7 spec. `portfolio-refresh` is
+rewritten for v7 (NLV derivation, no ABC math, no trigger scan, no L1–L18).
+`lios-commands.md` is rewritten as the v7 router.
+
+**Deleted:** `framework/playbooks/SleeveDReview.md` (its redirect pointed at
+a deleted command), the retired stub `framework/playbooks/KellyCheck.md`
+(it pointed at the deleted `core/regime-index.md`), and the empty TBD shell
+`framework/playbooks/ReplacementWorkflow.md` (17 lines, required LIOS v2.0).
+
+**Deleted:** `framework/scores/Frontier.md` (Replacement Index score card;
+the Index and Sleeve D are cancelled in v7 — `Regime.md`, the dashboard-only
+Regime Index card, stays).
+
+**Deleted:** the frozen-history init prompts `framework/lios/v2.0.md`,
+`v2.1.md`, `v4.1.md` (superseded; v7 sessions start from the constitution),
+and the nine frozen `framework/lios/components/*.md` files that described
+the cancelled LOS/Kelly/Replacement Index pipeline. No frozen init or
+component history remains; the historical record is now `rfcs/` and
+`decisions/ADR-001.md` through `ADR-008.md` only.
+
+**README fixes:** the private-repo playbook (`README.md`) no longer points
+at `framework/lios/v4.1.md` as the init prompt — v7 sessions start from
+`framework/constitution/constitution.md` Part I; the Play 3 examples and
+the cadence table list v7 commands only; the workspace layout drops
+`framework/scores/` and `portfolio/current/`; the version-bump policy
+points at the single amendment table in Part I.
+
+Historical reports, research and workspace files are untouched — a document
+may describe an old version only when it is describing the past.
 
 ---
 
